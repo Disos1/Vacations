@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Париж · Dima &amp; Natalia · 5–10 июня 2026</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f4ef; --card:#fff; --ink:#1f2430; --muted:#6b7280; --line:#e7e2d8;
+    --navy:#27384f; --wine:#7a2e3a; --gold:#b8893b; --green:#2f6b4f; --sky:#3b6ea5;
+    --chip:#efeae0; --shadow:0 1px 3px rgba(0,0,0,.08),0 6px 20px rgba(0,0,0,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  header.hero{background:linear-gradient(135deg,var(--navy),#3a5170);color:#fff;padding:22px 18px 18px}
+  .hero h1{margin:0 0 2px;font-size:1.4rem;letter-spacing:.2px}
+  .hero .sub{opacity:.85;font-size:.86rem}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .hero .meta span{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);
+    padding:4px 9px;border-radius:20px;font-size:.74rem}
+  .wrap{max-width:780px;margin:0 auto;padding:0 14px 70px}
+
+  nav.days{position:sticky;top:0;z-index:1000;background:rgba(246,244,239,.96);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+    display:flex;gap:6px;overflow-x:auto;padding:9px 10px;scrollbar-width:none}
+  nav.days::-webkit-scrollbar{display:none}
+  nav.days button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);
+    color:var(--ink);padding:7px 12px;border-radius:20px;font-size:.8rem;cursor:pointer;
+    white-space:nowrap;font-weight:600}
+  nav.days button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  nav.days button small{display:block;font-weight:400;opacity:.7;font-size:.66rem}
+
+  .panel{display:none}
+  .panel.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .dayhead{padding:16px 4px 6px}
+  .dayhead h2{margin:0;font-size:1.1rem}
+  .dayhead p{margin:3px 0 0;color:var(--muted);font-size:.83rem}
+  .progress{font-size:.74rem;color:var(--muted);margin-top:4px}
+
+  .daymap{height:250px;border-radius:12px;overflow:hidden;margin:10px 0 4px;border:1px solid var(--line);z-index:1}
+  .leg{font-size:.74rem;color:#5a5347;background:var(--chip);border-radius:9px;padding:7px 10px;margin-bottom:4px}
+  .numic span{display:grid;place-items:center;width:26px;height:26px;background:var(--wine);
+    color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
+    font-size:.82rem;font-weight:700}
+  .flexic span{display:grid;place-items:center;width:24px;height:24px;background:var(--gold);
+    color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
+    font-size:.72rem;font-weight:700}
+  .pin{font-size:.63rem;font-weight:700;padding:2px 7px;border-radius:20px}
+  .pin-fixed{background:#fbe1e1;color:#9a2b2b}
+  .pin-flex{background:#e2eee6;color:var(--green)}
+  .slotrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:13px 14px;margin:11px 0;box-shadow:var(--shadow)}
+  .card .top{display:flex;align-items:flex-start;gap:10px}
+  .chk{appearance:none;-webkit-appearance:none;min-width:21px;height:21px;border:2px solid #c9c2b4;
+    border-radius:6px;margin-top:2px;cursor:pointer;position:relative;flex:0 0 auto;background:#fff}
+  .chk:checked{background:var(--green);border-color:var(--green)}
+  .chk:checked::after{content:"✓";color:#fff;position:absolute;left:3px;top:-2px;font-size:14px;font-weight:700}
+  .card.done{opacity:.55}
+  .card.done .name{text-decoration:line-through}
+  .slot{font-size:.7rem;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);font-weight:700}
+  .name{font-size:1.02rem;font-weight:700;margin:1px 0 3px}
+  .desc{font-size:.86rem;color:#454b57}
+  .meta{font-size:.74rem;color:#6b6256;background:#f7f4ee;border:1px solid var(--line);border-radius:8px;padding:5px 8px;margin-top:7px;line-height:1.6}
+  .badges{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 0}
+  .badge{font-size:.68rem;padding:2px 8px;border-radius:20px;background:var(--chip);color:#5a5347;font-weight:600}
+  .badge.book{background:#fbe9d6;color:#9a5a14}
+  .badge.pass{background:#e2eee6;color:var(--green)}
+  .badge.free{background:#e6eef6;color:var(--sky)}
+  .badge.time{background:#eee;color:#555}
+  .actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .btn{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;
+    text-decoration:none;padding:7px 11px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .btn.map{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .btn.book{background:var(--wine);color:#fff;border-color:var(--wine)}
+  .btn.reel{background:#eef0f4;color:#3b3f59}
+  .btn.route{background:var(--green);color:#fff;border-color:var(--green);margin-top:8px}
+  .options{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+  .options .olabel{font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;margin-bottom:6px}
+  .opt{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f1ede4}
+  .opt:last-child{border-bottom:none}
+  .opt .on{font-weight:600;font-size:.88rem}
+  .opt .od{font-size:.76rem;color:var(--muted)}
+  .opt a{flex:0 0 auto;font-size:.74rem;font-weight:600;text-decoration:none;color:#fff;background:var(--navy);padding:5px 9px;border-radius:8px}
+
+  section.block{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;box-shadow:var(--shadow)}
+  section.block h3{margin:0 0 8px;font-size:1.05rem}
+  section.block p{font-size:.87rem;color:#454b57;margin:6px 0}
+  .tip{display:flex;gap:9px;align-items:flex-start;font-size:.86rem;margin:9px 0}
+  .tip .ic{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:var(--chip);display:grid;place-items:center;font-size:.9rem}
+  .qbar{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .footer{text-align:center;color:var(--muted);font-size:.74rem;padding:20px 8px}
+  .reset{display:inline-block;margin-top:8px;font-size:.72rem;color:var(--sky);background:none;border:none;cursor:pointer;text-decoration:underline}
+  details.flex{margin:10px 0}
+  details.flex>summary{cursor:pointer;font-weight:700;font-size:.9rem;padding:6px 0}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>Париж — Dima &amp; Natalia</h1>
+  <div class="sub">5–10 июня 2026 · поездка вдвоём · база: Hôtel Monte Cristo, Латинский квартал (5-й округ)</div>
+  <div class="meta">
+    <span>☀️ Днём ~21°C, вечером ~13°C</span>
+    <span>🌧️ Возможны лёгкие дожди — возьмите зонт</span>
+    <span>🌇 Закат ~21:53</span>
+    <span>🍳 Завтрак включён</span>
+    <span>🧳 Камера хранения — приезд и отъезд</span>
+  </div>
+</header>
+
+<nav class="days" id="dayNav"></nav>
+
+<div class="wrap">
+  <div class="leg" style="margin:12px 0 0">📌 <b>фиксировано</b> — привязано ко времени или брони (нельзя просто «зайти позже») · 🔁 <b>гибко</b> — двигается свободно · 🟡 жёлтые метки на карте — запасные места рядом</div>
+  <div id="app"></div>
+
+  <section class="block" id="booking">
+    <h3>🎟️ Что забронировать заранее — три первых пункта на этой неделе</h3>
+    <p>Поездка совсем скоро, поэтому окна бронирования уже открыты, и первые три быстро разбирают. Нажмите, чтобы открыть официальный сайт (бронируете вы — я ничего не оплачиваю и не резервирую).</p>
+    <div class="qbar" id="bookBar"></div>
+    <p style="margin-top:10px"><strong>Порядок:</strong> ① вершина Эйфелевой башни (вс, вечер) → ② Museum Pass и слоты к нему (сначала Louvre, пн 9:00) → ③ популярные ужины. Notre-Dame — бесплатно и только в день визита.</p>
+  </section>
+
+  <section class="block" id="discounts">
+    <h3>💳 Скидки по картам (Isracard / Cal / Max / finiti)</h3>
+    <p>По вашим скриншотам: аттракционы у Isracard — это маркетплейс <strong>Viator</strong> (Tripadvisor), у finiti — похожий перепродавец. Их цена — билет посредника (часто «без очереди»), а скидка «−7%» / «от €…» считается от <em>его</em> цены, а не от официальной кассы.</p>
+    <div class="tip"><div class="ic">🏛️</div><div><strong>Музеи через посредника — не выгодно.</strong> Их цены равны или ДОРОЖЕ кассы: Orsay €20–23 против €16, Лувр €68 (это экскурсия к «Моне Лизе»), Orangerie/Пантеон/Триумфальная арка — как касса. А ваш <strong>Museum Pass и так покрывает все 8 платных точек</strong> (€105 против ~€122 по кассам) и даёт проход без очереди.</div></div>
+    <div class="tip"><div class="ic">🗼</div><div><strong>Эйфелева башня:</strong> у клуба €59 (2-й этаж + опция вершины) — это <strong>дороже</strong> официальных ~€36–37 за вершину. Берите на офиц. сайте.</div></div>
+    <div class="tip"><div class="ic">⛵</div><div><strong>Где посредник реально помогает:</strong> круиз по Сене ~€15 (против ~€17–20 напрямую) и то, чего НЕТ в плане — <strong>Disneyland Paris</strong> €66 вместо €82, Версаль с трансфером, Atelier des Lumières, гастро- и винные туры (скидки ~10–20%).</div></div>
+    <div class="qbar">
+      <a class="btn" target="_blank" href="https://isracard-fun.co.il/">Isracard-Fun</a>
+      <a class="btn" target="_blank" href="https://cal-travel.co.il/">Cal-Travel</a>
+      <a class="btn" target="_blank" href="https://www.max-adventure.co.il/?SourceGA=abroad-lobby&property=Max">Max-Adventure</a>
+      <a class="btn" target="_blank" href="https://hvr.finiti.fun/?mid=91987&sig=a239f5117991a4fe7f2d9149b601569b">finiti.fun</a>
+    </div>
+    <div class="tip"><div class="ic">✅</div><div><strong>Итог:</strong> для вашего плана берите <strong>Museum Pass</strong>, а Эйфелеву башню — на офиц. сайте; посредник тут не дешевле. Viator/клубы используйте точечно: круиз по Сене и доп. впечатления вне плана. Это не «развод», но и не экономия на музеях — просто магазин билетов с наценкой за гибкость и проход без очереди.</div></div>
+    <div style="overflow-x:auto;margin-top:10px"><table style="width:100%;border-collapse:collapse;font-size:.75rem">
+      <tr style="background:var(--chip)"><th style="text-align:right;padding:5px 7px">Объект</th><th style="padding:5px">Посредник</th><th style="padding:5px">Касса</th><th style="padding:5px">Вывод</th></tr>
+      <tr><td style="padding:4px 7px">Louvre</td><td style="text-align:center">€68*</td><td style="text-align:center">€22</td><td style="text-align:center">Pass</td></tr>
+      <tr><td style="padding:4px 7px">Orsay</td><td style="text-align:center">€20–23</td><td style="text-align:center">€16</td><td style="text-align:center">Pass</td></tr>
+      <tr><td style="padding:4px 7px">Orangerie</td><td style="text-align:center">€13–15</td><td style="text-align:center">€12.5</td><td style="text-align:center">Pass</td></tr>
+      <tr><td style="padding:4px 7px">Panthéon</td><td style="text-align:center">€14</td><td style="text-align:center">€13</td><td style="text-align:center">Pass</td></tr>
+      <tr><td style="padding:4px 7px">Conciergerie</td><td style="text-align:center">~€14</td><td style="text-align:center">€13</td><td style="text-align:center">Pass</td></tr>
+      <tr><td style="padding:4px 7px">Arc de Triomphe</td><td style="text-align:center">€16–19</td><td style="text-align:center">€16</td><td style="text-align:center">Pass</td></tr>
+      <tr><td style="padding:4px 7px">Эйфелева (вершина)</td><td style="text-align:center">€59</td><td style="text-align:center">~€36</td><td style="text-align:center">офиц.</td></tr>
+      <tr><td style="padding:4px 7px">Круиз по Сене</td><td style="text-align:center">€15</td><td style="text-align:center">€17–20</td><td style="text-align:center">✅ можно</td></tr>
+      <tr><td style="padding:4px 7px">Disneyland Paris</td><td style="text-align:center">€66</td><td style="text-align:center">€82</td><td style="text-align:center">✅ если едете</td></tr>
+    </table><div style="font-size:.68rem;color:var(--muted);margin-top:4px">*Лувр €68 — экскурсия с гидом, не обычный вход. Цены из ваших скриншотов; проверяйте перед оплатой.</div></div>
+  </section>
+
+  <section class="block" id="adapt">
+    <h3>🔄 Как менять план на ходу</h3>
+    <p>Отмечайте сделанное — прогресс сохраняется на этом устройстве, и страница помнит, где вы остановились, даже после закрытия.</p>
+    <div class="tip"><div class="ic">🟢</div><div><strong>Улицы и виды на открытом воздухе прощают всё.</strong> Сады, смотровые, Монмартр, Сена, Rue Mouffetard — без билетов и без расписания. Что-то пропустили? Вставьте в любой свободный промежуток или в последнее утро — ничего не теряется.</div></div>
+    <div class="tip"><div class="ic">🟠</div><div><strong>Слоты в музеи по времени — единственное жёсткое ограничение.</strong> Louvre, Orsay, Orangerie, Sainte-Chapelle, Conciergerie требуют забронированного времени. Опаздываете или пропускаете — слот сгорает; просто забронируйте новое время на официальном сайте (часто появляются слоты на тот же день). Это не «зайдём попозже».</div></div>
+    <div class="tip"><div class="ic">🍽️</div><div><strong>С едой всё гибко.</strong> Если в бистро нет мест или вы ещё не голодны — выберите другой вариант на день или возьмите место из «Запасных вариантов» ниже. Забронируйте один-два ужина, которые действительно важны, остальное оставьте свободным.</div></div>
+    <div class="tip"><div class="ic">🧭</div><div><strong>Правило замены:</strong> дни построены по районам, поэтому меняйте <em>подобное на подобное</em> — пропущенную точку на левом берегу переносите в другой день на левом берегу, а не едьте через весь город. Один якорь на полдня, остальное пусть плавает.</div></div>
+    <div class="tip"><div class="ic">🌧️</div><div><strong>Погода испортилась?</strong> Переключитесь на крытый якорь (музей, Опера, пассаж, Марэ), а уличный план перенесите на следующие полдня с хорошей погодой.</div></div>
+    <div class="tip"><div class="ic">🔀</div><div><strong>Можно ли менять местами крупные точки?</strong> Да — до бронирования вы свободны ставить любой музей на любой день. Жёстких правил всего два: <em>дни закрытия</em> (Louvre и Orangerie — вт; Orsay — пн) и <em>забронированный слот по времени</em> (📌 — его нельзя сдвинуть, только перебронировать на сайте). Всё с меткой 🔁 двигается как угодно.</div></div>
+    <div class="tip"><div class="ic">🏰</div><div><strong>Версаль (если захотите добавить):</strong> это отдельный <em>полный день за городом</em> (~40 мин на поезде RER C / SNCF) — в текущий план из 5 дней по Парижу он не входит, добавление съест целый день. Если поедете: среда или четверг, к открытию в 9:00 или после 15:00 (избегайте 11:00–14:00); по понедельникам закрыт, во вторник и в выходные — толпы.</div></div>
+
+    <details class="flex" open>
+      <summary>🎒 Запасные варианты — замены и места из ваших Рилс</summary>
+      <p style="font-size:.82rem;color:var(--muted)">Что-то пропустили или появился свободный час? Добавьте одно из этих. Большинство — из сохранённых вами Рилс.</p>
+      <div id="flexList"></div>
+    </details>
+  </section>
+
+  <section class="block" id="dining">
+    <h3>🍽️ Где поесть — больше вариантов</h3>
+    <p>По районам, чтобы выбирать рядом с маршрутом дня. Ужин на двоих ~€60–100, если не указано иначе; bouillon — дешевле. Популярные места бронируйте за день-два.</p>
+    <div id="diningList"></div>
+  </section>
+
+  <section class="block" id="bars">
+    <h3>🍸 Коктейль-бары и «speakeasy» (секретные бары)</h3>
+    <p><strong>«Speakeasy» («спикизи») — это спрятанные бары</strong> со скрытым входом (за дверью морозилки, за прачечной, без вывески) — наследие эпохи «сухого закона», и Париж их обожает. <strong>Да, в них можно попасть самостоятельно</strong> — это настоящие бары: бронируете столик и находите вход. «Театрализованный тур по секретным барам» лишь добавляет гида, который знает двери и «пароли», и компанию — но это не обязательно. Бары маленькие и популярные — бронируйте за день-два.</p>
+    <div id="barsList"></div>
+  </section>
+
+  <section class="block" id="night">
+    <h3>🌙 Чем заняться вечером и ночью</h3>
+    <div id="nightList"></div>
+  </section>
+
+  <div class="footer">
+    Составлено по вашему плану и сохранённым Рилс · цены и часы работы — оценки, перед оплатой проверьте на официальных сайтах.<br>
+    <button class="reset" onclick="if(confirm('Сбросить все отметки?')){localStorage.removeItem(LSKEY);location.reload();}">Сбросить прогресс</button>
+  </div>
+</div>
+
+<script>
+const LSKEY = "paris_jun2026_progress";
+const done = JSON.parse(localStorage.getItem(LSKEY) || "{}");
+function mapUrl(q){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
+
+const DAYS = [
+ {id:"d1", label:"Пт", date:"5 июн", title:"Прилёт и знакомство с районом",
+  note:"Прилёт в 09:40 → такси до отеля (~11:00), оставляем вещи, входим в ритм. Спокойный день после раннего подъёма.",
+  items:[
+   {slot:"Обед", name:"Rue Mouffetard", q:"Rue Mouffetard, Paris", ll:[48.8410,2.3500],
+    desc:"Старая рыночная улица в 2 минутах от отеля — галеты, jambon-beurre, сыры, террасы кафе.", badges:["📍 рядом с отелем"]},
+   {slot:"День", name:"Jardin des Plantes", q:"Jardin des Plantes, Paris", ll:[48.8443,2.3597],
+    desc:"Спокойный ботанический сад прямо рядом с отелем — перевести дух.", badges:["🌿 бесплатно"]},
+   {slot:"День", name:"Panthéon", q:"Panthéon, Paris", ll:[48.8462,2.3464], book:{label:"Panthéon",url:"https://www.paris-pantheon.fr/en"},
+    desc:"Поднимитесь к колоннаде ради вида на Латинский квартал.", badges:["🎟️ по Museum Pass"]},
+   {slot:"Вечер", name:"Shakespeare & Company + Сена", q:"Shakespeare and Company, Paris", ll:[48.8526,2.3470],
+    desc:"Знаменитый книжный и набережная напротив Notre-Dame.", badges:["🌿 бесплатно"]},
+   {slot:"Ужин", name:"Бистро в Латинском квартале", q:"Le Reminet, Paris", ll:[48.8516,2.3492],
+    desc:"Лёгкая прогулка обратно к отелю. Два хороших варианта:",
+    options:[
+     {n:"Le Reminet",d:"При свечах, местная публика — бронируйте заранее",q:"Le Reminet, Paris"},
+     {n:"La Rôtisserie d'Argent",d:"Лионская классика, виды на Сену",q:"La Rotisserie d'Argent, Paris"}
+    ]}
+  ]},
+
+ {id:"d2", label:"Сб", date:"6 июн", title:"Острова и Марэ",
+  note:"Утром — остров Сите, днём — весь Марэ. Берём первый слот в Sainte-Chapelle.",
+  items:[
+   {slot:"Утро", name:"Sainte-Chapelle", q:"Sainte-Chapelle, Paris", ll:[48.8554,2.3450], book:{label:"Sainte-Chapelle",url:"https://www.sainte-chapelle.fr/en"},
+    desc:"Самый потрясающий витражный интерьер Парижа. Приходите рано.", badges:["🎟️ по Museum Pass","⏰ слот по времени"]},
+   {slot:"Утро", name:"Conciergerie", q:"Conciergerie, Paris", ll:[48.8560,2.3457], book:{label:"Conciergerie",url:"https://www.paris-conciergerie.fr/en"},
+    desc:"Тюрьма времён революции, рядом с Sainte-Chapelle.", badges:["🎟️ по Museum Pass","⏰ слот по времени"]},
+   {slot:"Позднее утро", name:"Notre-Dame", q:"Notre-Dame de Paris", ll:[48.8530,2.3499], book:{label:"Слот (в день визита)",url:"https://www.notredamedeparis.fr/en/"},
+    desc:"Снова открыт, бесплатно. Бронируйте слот в приложении за завтраком — открывается за пару часов.", badges:["🆓 бесплатно","📱 только в день визита"]},
+   {slot:"Обед", name:"Обед в Марэ", q:"Place des Vosges, Paris", ll:[48.8556,2.3655],
+    desc:"Фалафель на Rue des Rosiers или обед у Place des Vosges.",
+    options:[
+     {n:"L'As du Fallafel",d:"Тот самый фалафель — Rue des Rosiers",q:"L'As du Fallafel, Paris"},
+     {n:"Place des Vosges",d:"Самая элегантная площадь — кафе под аркадами",q:"Place des Vosges, Paris"}
+    ]},
+   {slot:"День", name:"Прогулка по Марэ", q:"Le Marais, Paris", ll:[48.8575,2.3626],
+    desc:"Бутики, дворики, аркады. Хотите больше искусства — добавьте музей:",
+    options:[
+     {n:"Musée Picasso",d:"В роскошном особняке Марэ",q:"Musée Picasso Paris"},
+     {n:"Musée Carnavalet",d:"Музей истории города — бесплатно",q:"Musée Carnavalet, Paris"},
+     {n:"LES FOODIES (ваш Рилс)",d:"Гастро-точка/пекарня в Марэ",q:"Les Foodies, Le Marais, Paris"}
+    ]},
+   {slot:"Ужин", name:"Ужин в Марэ", q:"Le Marais restaurants, Paris",
+    desc:"Много бистро и винных баров; останьтесь в Марэ или вернитесь к реке.", badges:[]}
+  ]},
+
+ {id:"d3", label:"Вс", date:"7 июн", title:"Импрессионисты и вечер у Эйфелевой башни",
+  note:"Orsay → Orangerie → романтический вечер у башни. Бронируем слот в Orsay и вечерний слот на вершину.",
+  items:[
+   {slot:"Утро", name:"Musée d'Orsay", q:"Musée d'Orsay, Paris", ll:[48.8600,2.3266], book:{label:"Orsay",url:"https://www.musee-orsay.fr/en"},
+    desc:"Импрессионисты в здании старого вокзала. Слот по времени обязателен.", badges:["🎟️ по Museum Pass","⏰ слот по времени"]},
+   {slot:"День", name:"Tuileries → Orangerie", q:"Musée de l'Orangerie, Paris", ll:[48.8638,2.3226], book:{label:"Orangerie",url:"https://www.musee-orangerie.fr/en"},
+    desc:"Пройдите через сад к овальным залам с «Кувшинками» Моне. Маленький, спокойный.", badges:["🎟️ по Museum Pass","⏰ слот по времени"]},
+   {slot:"День", name:"Hôtel de la Marine (ваш Рилс)", q:"Hôtel de la Marine, Paris", ll:[48.8676,2.3214], book:{label:"Hôtel de la Marine",url:"https://www.hotel-de-la-marine.paris/en"},
+    desc:"Лоджия-терраса над Place de la Concorde с видом на Эйфелеву башню.", badges:["🎟️ по Museum Pass"]},
+   {slot:"Вечер", name:"Eiffel Tower — вершина", q:"Eiffel Tower, Paris", ll:[48.8584,2.2945], book:{label:"Eiffel (бронируйте сейчас!)",url:"https://www.toureiffel.paris/en"},
+    desc:"Заранее забронированный вечерний слот на вершину (~19:30–20:30) ради долгого золотого света.", badges:["🎟️ отдельная бронь","⏰ слот по времени","⭐ быстро разбирают"]},
+   {slot:"Вечер", name:"Мерцание с Trocadéro / Champ de Mars", q:"Trocadéro, Paris", ll:[48.8617,2.2885],
+    desc:"Золотая подсветка в сумерках (~22:00); мерцание 5 минут в начале каждого часа (22/23/00/01). Займите место чуть раньше ровного часа.", badges:["✨ каждый час"]},
+   {slot:"Ужин", name:"Ужин в 7-м округе", q:"restaurants near Eiffel Tower, Paris",
+    desc:"До или после башни.", badges:[]}
+  ]},
+
+ {id:"d4", label:"Пн", date:"8 июн", title:"Лувр и большие бульвары",
+  note:"Удачный день для Лувра (Orsay по понедельникам закрыт). Бронируем слот в Лувр на 9:00.",
+  items:[
+   {slot:"Утро", name:"Louvre", q:"Louvre Museum, Paris", ll:[48.8606,2.3376], book:{label:"Louvre — слот (сначала)",url:"https://www.louvre.fr/en/visit"},
+    desc:"Самые спокойные окна — слот на 9:00 (открытие) или последние ~2 часа (~16:00; в пн закрытие в 18:00, вечернего сеанса нет). Цена для вас не важна — вход по Museum Pass. Берите 2–3 крыла (Denon — главные шедевры) и уходите до усталости.", badges:["🎟️ по Museum Pass","⏰ слот по времени","⭐ слоты исчезают"]},
+   {slot:"Обед", name:"Palais-Royal", q:"Palais-Royal, Paris", ll:[48.8636,2.3370],
+    desc:"Тихий сад и аркады сразу к северу от Лувра.", badges:["🌿 красиво"]},
+   {slot:"День", name:"Opéra Garnier", q:"Palais Garnier, Paris", ll:[48.8719,2.3316], book:{label:"Opéra Garnier",url:"https://www.operadeparis.fr/en/visits/palais-garnier"},
+    desc:"Зайдите внутрь — лестница и зал великолепны.", badges:["🎟️ билет"]},
+   {slot:"День", name:"Бесплатная смотровая на крыше", q:"Printemps Haussmann, Paris", ll:[48.8740,2.3290],
+    desc:"Тот же вид, на выбор — купол Lafayette или более тихая терраса Printemps (ваш Рилс).",
+    options:[
+     {n:"Printemps rooftop (ваш Рилс)",d:"Бесплатно, тише — меньше людей",q:"Printemps Haussmann rooftop, Paris"},
+     {n:"Galeries Lafayette rooftop",d:"Бесплатно, знаменитый стеклянный купол",q:"Galeries Lafayette Haussmann, Paris"}
+    ]},
+   {slot:"Ужин", name:"Брассери у Оперы или снова на левом берегу", q:"brasserie Grands Boulevards Paris",
+    desc:"Решите, на каком берегу реки закончить вечер.", badges:[]}
+  ]},
+
+ {id:"d5", label:"Вт", date:"9 июн", title:"Монмартр и последний большой вид",
+  note:"День на улице (Лувр и Orangerie во вторник закрыты). На Монмартр — пораньше.",
+  items:[
+   {slot:"Утро", name:"Sacré-Cœur & Монмартр", q:"Sacré-Cœur, Paris", ll:[48.8867,2.3431],
+    desc:"Вид, Place du Tertre, виноградник и тихие переулки. Опередите туристические автобусы.", badges:["🌿 храм, бесплатно"]},
+   {slot:"Обед", name:"Бистро у Abbesses", q:"Abbesses, Paris", ll:[48.8845,2.3380],
+    desc:"Улицы под холмом приятнее и менее туристические, чем у вершины.", badges:[]},
+   {slot:"День", name:"Arc de Triomphe — крыша", q:"Arc de Triomphe, Paris", ll:[48.8738,2.2950], book:{label:"Arc de Triomphe",url:"https://www.paris-arc-de-triomphe.fr/en"},
+    desc:"Лучший центральный вид (тот самый, где видна Эйфелева башня).", badges:["🎟️ по Museum Pass"]},
+   {slot:"День", name:"Прогулка по Champs-Élysées", q:"Champs-Élysées, Paris", ll:[48.8698,2.3079],
+    desc:"Вниз к Concorde, если есть силы.", badges:[]},
+   {slot:"Ранний вечер", name:"Прогулка по Сене (по желанию)", q:"Vedettes du Pont Neuf, Paris", ll:[48.8565,2.3410], book:{label:"Прогулка по Сене",url:"https://www.vedettesdupontneuf.com/en/"},
+    desc:"~1 час, подсвеченные памятники — спокойно для уставших ног в последний вечер.", badges:["🎟️ по желанию"]},
+   {slot:"Ужин", name:"Финальное бистро на левом берегу", q:"Le Perraudin, Paris", ll:[48.8485,2.3437],
+    desc:"Рядом с отелем. Классические бистро или дешёвый и красивый bouillon:",
+    options:[
+     {n:"Le Perraudin",d:"Домашняя кухня, радушно",q:"Le Perraudin, Paris"},
+     {n:"Au Moulin à Vent",d:"Крошечное, старомодное, без хайпа",q:"Au Moulin à Vent, Paris"},
+     {n:"Chez Gladines",d:"Щедрая кухня Юго-Запада",q:"Chez Gladines Paris"},
+     {n:"Bouillon Julien (ваш Рилс)",d:"Зал ар-нуво, горячее ~€10–15, без брони — будет очередь",q:"Bouillon Julien, Paris"}
+    ]}
+  ]},
+
+ {id:"d6", label:"Ср", date:"10 июн", title:"Спокойное утро — и домой",
+  note:"Рейс в 17:35 → выезд из отеля ~13:30 (в CDG к ~14:30, El Al — за 3 часа).",
+  items:[
+   {slot:"Утро", name:"Jardin du Luxembourg", q:"Jardin du Luxembourg, Paris", ll:[48.8462,2.3372],
+    desc:"Самое парижское последнее утро с кофе в руке. Недалеко от отеля.", badges:["🌿 бесплатно"]},
+   {slot:"Утро", name:"Rue Madame (ваш Рилс)", q:"Rue Madame, Paris", ll:[48.8485,2.3300],
+    desc:"Идёт вдоль западной стороны сада — «улица, которую нельзя пропустить».", badges:["🚶 прогулка"]},
+   {slot:"До полудня", name:"Последняя выпечка — Rue Mouffetard", q:"Rue Mouffetard, Paris", ll:[48.8410,2.3500],
+    desc:"Выпечка или сыр в дорогу. Вещи можно оставить на ресепшене.", badges:["📍 рядом с отелем"]},
+   {slot:"~13:30", name:"Такси в CDG", q:"Charles de Gaulle Airport",
+    desc:"Закажите через отель накануне вечером. ~€65 фикс. тариф, левый берег.", badges:["🚕 фикс. тариф"]}
+  ]}
+];
+
+const FLEX = [
+ {n:"Bouillon Chartier (Grands Boulevards)", d:"Исторический недорогой bouillon — тот самый Рилс с saucisse-purée. Подтверждено вами.", q:"Bouillon Chartier Grands Boulevards, Paris", book:{label:"Bouillon Chartier",url:"https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/"}, reel:"https://www.facebook.com/share/r/1EyLwE7HEU/"},
+ {n:"Bouillon Julien", d:"Зал ар-нуво, ужин ~€10–15, без брони.", q:"Bouillon Julien, Paris", reel:"https://www.facebook.com/share/r/16SQJfoKfX/"},
+ {n:"Petit Palais", d:"Красивый БЕСПЛАТНЫЙ музей изящных искусств — искусство без затрат.", q:"Petit Palais, Paris", book:{label:"Petit Palais",url:"https://www.petitpalais.paris.fr/en"}},
+ {n:"Printemps rooftop", d:"Бесплатная тихая смотровая у Galeries Lafayette.", q:"Printemps Haussmann rooftop, Paris", reel:"https://www.facebook.com/share/r/17TF5QMF6g/"},
+ {n:"Secret luxury second-hand shop", d:"Винтаж/комиссионка, «лучшая в городе» — заглянуть.", q:"luxury second hand consignment Paris", reel:"https://www.facebook.com/share/r/1PRzWYQmSR/"},
+ {n:"La Galerie Dior", d:"Музей моды Dior, Avenue Montaigne.", q:"La Galerie Dior, Paris", book:{label:"Galerie Dior",url:"https://www.galeriedior.com/en"}, reel:"https://www.facebook.com/share/r/17XGvhMPSW/"},
+ {n:"Place des Vosges / прогулка по Марэ", d:"Пересекается с Днём 2.", q:"Place des Vosges, Paris", reel:"https://www.facebook.com/share/r/176Ki4ZH1i/"}
+];
+
+// Nearby optional spots shown as gold lettered pins on the relevant day's map (kept to 1–2 per day so maps stay readable)
+const FLEXPINS = {
+ d4:[
+  {n:"Bouillon Chartier", ll:[48.8718,2.3428], q:"Bouillon Chartier Grands Boulevards, Paris", book:{url:"https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/"}, reel:"https://www.facebook.com/share/r/1EyLwE7HEU/"},
+  {n:"Bouillon Julien", ll:[48.8703,2.3541], q:"Bouillon Julien, Paris", reel:"https://www.facebook.com/share/r/16SQJfoKfX/"}
+ ],
+ d5:[
+  {n:"Petit Palais (бесплатно)", ll:[48.8661,2.3145], q:"Petit Palais, Paris"},
+  {n:"La Galerie Dior", ll:[48.8662,2.3036], q:"La Galerie Dior, Paris", reel:"https://www.facebook.com/share/r/17XGvhMPSW/"}
+ ]
+};
+
+const QUICKBOOK = [
+ {label:"① Eiffel (вершина)",url:"https://www.toureiffel.paris/en", cls:"book"},
+ {label:"② Paris Museum Pass",url:"https://www.parismuseumpass.fr/en", cls:"book"},
+ {label:"② Louvre — слот",url:"https://www.louvre.fr/en/visit", cls:""},
+ {label:"② Orsay — слот",url:"https://www.musee-orsay.fr/en", cls:""},
+ {label:"② Sainte-Chapelle",url:"https://www.sainte-chapelle.fr/en", cls:""},
+ {label:"③ Notre-Dame (в день визита)",url:"https://www.notredamedeparis.fr/en/", cls:""},
+ {label:"Прогулка по Сене",url:"https://www.vedettesdupontneuf.com/en/", cls:""}
+];
+
+// Suggested time of day, duration, price, opening hours (2026 — оценка, проверяйте на офиц. сайте).
+// «по Pass» = входит в Paris Museum Pass; «НЕ по Pass» = оплата отдельно.
+const INFO = {
+ "Rue Mouffetard":{time:"~13:00",dur:"1 ч",price:"бесплатно",hours:"рынок: вт–вс, утро–вечер"},
+ "Jardin des Plantes":{time:"~14:30",dur:"45 мин",price:"сад бесплатно",hours:"~08:00–20:00"},
+ "Panthéon":{time:"~15:30",dur:"1 ч",price:"€13 (по Pass)",hours:"10:00–18:30"},
+ "Shakespeare & Company + Сена":{time:"~17:30",dur:"45 мин",price:"бесплатно",hours:"книжный ~10:00–20:00"},
+ "Бистро в Латинском квартале":{time:"~20:00",dur:"1.5 ч",price:"€60–100 на двоих"},
+ "Sainte-Chapelle":{time:"09:00 (первый слот)",dur:"45 мин",price:"€13 (по Pass)",hours:"09:00–19:00"},
+ "Conciergerie":{time:"~10:00",dur:"45 мин",price:"€13 (по Pass)",hours:"09:30–18:00"},
+ "Notre-Dame":{time:"~11:00",dur:"30–45 мин",price:"бесплатно",hours:"~08:00–19:00"},
+ "Обед в Марэ":{time:"~13:00",dur:"1 ч",price:"€30–50 на двоих"},
+ "Прогулка по Марэ":{time:"день",dur:"2 ч",price:"улицы бесплатно; музеи €12–16"},
+ "Ужин в Марэ":{time:"~20:00",dur:"1.5 ч",price:"€60–100 на двоих"},
+ "Musée d'Orsay":{time:"~10:00",dur:"2 ч",price:"€16 (по Pass)",hours:"09:30–18:00, чт до 21:45, пн закр."},
+ "Tuileries → Orangerie":{time:"~14:30",dur:"1–1.5 ч",price:"€12.50 (по Pass)",hours:"09:00–18:00, вт закр."},
+ "Hôtel de la Marine (ваш Рилс)":{time:"~16:30",dur:"1 ч (лоджия — быстро)",price:"€17 (по Pass)",hours:"10:30–19:00, пт до 21:30"},
+ "Eiffel Tower — вершина":{time:"~19:30–20:30",dur:"2–2.5 ч с очередью",price:"€36.70 на чел. (НЕ по Pass)",hours:"~09:30–23:00 (лето до 00:45)"},
+ "Мерцание с Trocadéro / Champ de Mars":{time:"к 22:00",dur:"30 мин",price:"бесплатно",hours:"мерцание 22/23/00/01, 5 мин"},
+ "Ужин в 7-м округе":{time:"~21:00",dur:"1.5 ч",price:"€60–100 на двоих"},
+ "Louvre":{time:"09:00 или ~16:00",dur:"2.5–3 ч",price:"€22 (по Pass)",hours:"09:00–18:00, ср/пт до 21:45, вт закр."},
+ "Palais-Royal":{time:"~12:30",dur:"45 мин",price:"бесплатно",hours:"сад ~08:00–22:30"},
+ "Opéra Garnier":{time:"~14:30",dur:"1 ч",price:"€15 (НЕ по Pass)",hours:"10:00–17:00 (в дни спектаклей до 16:00)"},
+ "Бесплатная смотровая на крыше":{time:"~16:30",dur:"30 мин",price:"бесплатно",hours:"магазины ~10:00–20:00, вс короче"},
+ "Брассери у Оперы или снова на левом берегу":{time:"~20:00",dur:"1.5 ч",price:"€60–100 на двоих"},
+ "Sacré-Cœur & Монмартр":{time:"~09:30 (пораньше)",dur:"2 ч",price:"базилика бесплатно; купол ~€7",hours:"базилика ~06:30–22:30"},
+ "Бистро у Abbesses":{time:"~13:00",dur:"1 ч",price:"€30–60 на двоих"},
+ "Arc de Triomphe — крыша":{time:"~15:30",dur:"45 мин",price:"€16 (по Pass)",hours:"10:00–22:30 (последний вход ~22:00)"},
+ "Прогулка по Champs-Élysées":{time:"день",dur:"45 мин",price:"бесплатно"},
+ "Прогулка по Сене (по желанию)":{time:"~18:30",dur:"~1 ч",price:"€17–20 на чел. (НЕ по Pass)",hours:"рейсы каждые 30–45 мин"},
+ "Финальное бистро на левом берегу":{time:"~20:00",dur:"1.5 ч",price:"€60–100; bouillon ~€25–35 на двоих"},
+ "Jardin du Luxembourg":{time:"утро",dur:"1 ч",price:"бесплатно",hours:"~07:30–21:00 (летом)"},
+ "Rue Madame (ваш Рилс)":{time:"утро",dur:"20 мин",price:"бесплатно"},
+ "Последняя выпечка — Rue Mouffetard":{time:"~11:30",dur:"30 мин",price:"€"},
+ "Такси в CDG":{time:"13:30",dur:"~50 мин",price:"~€65 фикс."}
+};
+
+// ---------- RENDER ----------
+const nav = document.getElementById("dayNav");
+const app = document.getElementById("app");
+
+DAYS.forEach((d,i)=>{
+  const b=document.createElement("button");
+  b.innerHTML = d.label+"<small>"+d.date+"</small>";
+  b.onclick=()=>show(d.id,b);
+  if(i===0) b.classList.add("active");
+  nav.appendChild(b);
+
+  const pts=d.items.filter(it=>it.ll);
+  const routeUrl="https://www.google.com/maps/dir/"+pts.map(p=>encodeURIComponent(p.name.replace(/\s*\(.*\)/,"")+" Paris")).join("/");
+  const legHtml=pts.map((p,k)=>(k+1)+". "+p.name.replace(/\s*\(.*\)/,"")).join("  →  ");
+
+  const p=document.createElement("div");
+  p.className="panel"+(i===0?" active":"");
+  p.id="panel-"+d.id;
+  let h='<div class="dayhead"><h2>'+d.label+' '+d.date+' · '+d.title+'</h2><p>'+d.note+'</p>'
+       +'<div class="progress" id="prog-'+d.id+'"></div></div>';
+  let legFlex="";
+  if(FLEXPINS[d.id]) legFlex = '  ·  🟡 рядом: ' + FLEXPINS[d.id].map((f,k)=>String.fromCharCode(65+k)+". "+f.n).join(", ");
+  h+='<div class="daymap" id="map-'+d.id+'"></div>';
+  h+='<div class="leg">🗺️ Маршрут дня: '+legHtml+legFlex+'</div>';
+  h+='<a class="btn route" target="_blank" href="'+routeUrl+'">🧭 Открыть весь маршрут дня в Google Maps</a>';
+
+  d.items.forEach((it,j)=>{
+    const key=d.id+"-"+j;
+    const isDone=!!done[key];
+    h+='<div class="card'+(isDone?' done':'')+'" id="card-'+key+'">';
+    const isFixed=(it.badges||[]).some(b=>b.indexOf("⏰")>-1);
+    const pill=isFixed?'<span class="pin pin-fixed">📌 фиксировано</span>':'<span class="pin pin-flex">🔁 гибко</span>';
+    h+='<div class="top"><input type="checkbox" class="chk" '+(isDone?'checked':'')+' onchange="toggle(\''+key+'\',\''+d.id+'\')">';
+    h+='<div style="flex:1"><div class="slotrow"><span class="slot">'+it.slot+'</span>'+pill+'</div><div class="name">'+it.name+'</div><div class="desc">'+it.desc+'</div>';
+    const nf=INFO[it.name];
+    if(nf){let parts=[];
+      if(nf.time)parts.push("🕒 "+nf.time);
+      if(nf.dur)parts.push("⏳ "+nf.dur);
+      if(nf.price)parts.push("🎫 "+nf.price);
+      if(nf.hours)parts.push("🏛 "+nf.hours);
+      h+='<div class="meta">'+parts.join("  ·  ")+'</div>';
+    }
+    if(it.badges&&it.badges.length){h+='<div class="badges">';it.badges.forEach(bd=>{
+      let c='time'; if(/pass|Pass/.test(bd))c='pass'; else if(/🆓|🌿/.test(bd))c='free'; else if(/🎟️|⭐|📱/.test(bd))c='book';
+      h+='<span class="badge '+c+'">'+bd+'</span>';});h+='</div>';}
+    h+='<div class="actions">';
+    h+='<a class="btn map" target="_blank" href="'+mapUrl(it.q)+'">📍 Карта и фото</a>';
+    if(it.book){h+='<a class="btn book" target="_blank" href="'+it.book.url+'">🎟️ '+it.book.label+'</a>';}
+    h+='</div>';
+    if(it.options){h+='<div class="options"><div class="olabel">Варианты — выберите один</div>';
+      it.options.forEach(o=>{h+='<div class="opt"><div><div class="on">'+o.n+'</div><div class="od">'+o.d+'</div></div><a target="_blank" href="'+mapUrl(o.q)+'">📍 Карта</a></div>';});
+      h+='</div>';}
+    h+='</div></div></div>';
+  });
+  p.innerHTML=h;
+  app.appendChild(p);
+});
+
+const maps={};
+function buildMap(id){
+  const d=DAYS.find(x=>x.id===id);
+  const pts=d.items.filter(it=>it.ll);
+  const el=document.getElementById("map-"+id);
+  if(!el || !pts.length || typeof L==="undefined") return;
+  const m=L.map(el,{scrollWheelZoom:false});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
+  const coords=[];
+  pts.forEach((it,i)=>{
+    coords.push(it.ll);
+    L.marker(it.ll,{icon:L.divIcon({className:"numic",html:"<span>"+(i+1)+"</span>",iconSize:[28,28],iconAnchor:[14,14]})})
+      .addTo(m).bindPopup("<b>"+(i+1)+". "+it.name+"</b>");
+  });
+  if(coords.length>1) L.polyline(coords,{color:"#27384f",weight:3,dashArray:"5,6",opacity:.7}).addTo(m);
+  (FLEXPINS[id]||[]).forEach((f,i)=>{
+    const letter=String.fromCharCode(65+i);
+    let pop="<b>"+letter+". "+f.n+"</b><br><a target='_blank' href='"+mapUrl(f.q)+"'>📍 Карта</a>";
+    if(f.book) pop+=" · <a target='_blank' href='"+f.book.url+"'>🎟️ бронь</a>";
+    if(f.reel) pop+=" · <a target='_blank' href='"+f.reel+"'>📹 Рилс</a>";
+    L.marker(f.ll,{icon:L.divIcon({className:"flexic",html:"<span>"+letter+"</span>",iconSize:[24,24],iconAnchor:[12,12]})}).addTo(m).bindPopup(pop);
+    coords.push(f.ll);
+  });
+  m.fitBounds(L.latLngBounds(coords).pad(0.25));
+  maps[id]=m;
+}
+
+function show(id,btn){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("panel-"+id).classList.add("active");
+  document.querySelectorAll("#dayNav button").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  setTimeout(()=>{ if(!maps[id]) buildMap(id); else maps[id].invalidateSize(); },60);
+}
+function toggle(key,dayId){
+  done[key]=!done[key];
+  if(!done[key]) delete done[key];
+  localStorage.setItem(LSKEY,JSON.stringify(done));
+  document.getElementById("card-"+key).classList.toggle("done");
+  updateProg(dayId);
+}
+function updateProg(dayId){
+  const d=DAYS.find(x=>x.id===dayId);
+  let c=0; d.items.forEach((it,j)=>{if(done[d.id+"-"+j])c++;});
+  document.getElementById("prog-"+dayId).textContent="✓ Сделано: "+c+" / "+d.items.length;
+}
+DAYS.forEach(d=>updateProg(d.id));
+
+document.getElementById("flexList").innerHTML=FLEX.map(f=>{
+  let a='<a class="btn map" target="_blank" href="'+mapUrl(f.q)+'">📍 Карта</a>';
+  if(f.book)a+='<a class="btn book" target="_blank" href="'+f.book.url+'">🎟️ '+f.book.label+'</a>';
+  if(f.reel)a+='<a class="btn reel" target="_blank" href="'+f.reel+'">📹 Рилс</a>';
+  return '<div class="card" style="margin:8px 0"><div class="name">'+f.n+'</div><div class="desc">'+f.d+'</div><div class="actions">'+a+'</div></div>';
+}).join("");
+
+document.getElementById("bookBar").innerHTML=QUICKBOOK.map(q=>
+  '<a class="btn '+(q.cls==="book"?"book":"")+'" target="_blank" href="'+q.url+'">'+q.label+'</a>'
+).join("");
+
+// ---------- Dining / Bars / Night ----------
+const DINING=[
+ {area:"Латинский квартал — рядом с отелем", places:[
+   {n:"Le Reminet",d:"При свечах, местная публика",q:"Le Reminet, Paris"},
+   {n:"La Rôtisserie d'Argent",d:"Лионская классика, виды на Сену",q:"La Rotisserie d'Argent, Paris"},
+   {n:"Le Perraudin",d:"Домашняя кухня, радушно",q:"Le Perraudin, Paris"},
+   {n:"Au Moulin à Vent",d:"Старое доброе бистро, без хайпа",q:"Au Moulin a Vent, Paris"},
+   {n:"La Mosquée de Paris — чайный салон",d:"Мятный чай и пахлава, атмосферный перерыв",q:"La Grande Mosquee de Paris tea room"},
+   {n:"Les Pipos",d:"Винный бар-бистро у Пантеона",q:"Les Pipos, Paris"}
+ ]},
+ {area:"Сен-Жермен (6-й)", places:[
+   {n:"Chez Fernand",d:"Местное, под радаром туристов",q:"Chez Fernand Saint-Germain Paris"},
+   {n:"Allard",d:"Классика с 1932 (cassoulet, coq au vin)",q:"Allard restaurant Paris"},
+   {n:"Bouillon Racine",d:"Ар-нуво, недорого",q:"Bouillon Racine, Paris"}
+ ]},
+ {area:"Марэ (3–4-й)", places:[
+   {n:"Bistrot des Tournelles",d:"Традиция + аккуратная подача",q:"Bistrot des Tournelles, Paris"},
+   {n:"Parcelles",d:"Современная классика, винная карта",q:"Parcelles restaurant, Paris"},
+   {n:"L'As du Fallafel",d:"Фалафель на вынос (обед)",q:"L'As du Fallafel, Paris"},
+   {n:"Marché des Enfants Rouges",d:"Крытый рынок — обед на любой вкус",q:"Marché des Enfants Rouges, Paris"}
+ ]},
+ {area:"Рядом с Эйфелевой башней (7-й)", places:[
+   {n:"La Fontaine de Mars",d:"Классика, кусочек башни с террасы",q:"La Fontaine de Mars, Paris"},
+   {n:"Le Petit Cler",d:"Местное на рыночной улице Rue Cler",q:"Le Petit Cler, Paris"},
+   {n:"Le Florimond",d:"Уютно, 10 мин от башни",q:"Le Florimond, Paris"}
+ ]},
+ {area:"Опера / большие бульвары", places:[
+   {n:"Bouillon Chartier",d:"Исторический дешёвый bouillon (ваш Рилс)",q:"Bouillon Chartier Grands Boulevards, Paris"},
+   {n:"Bouillon Julien",d:"Ар-нуво, дёшево (ваш Рилс)",q:"Bouillon Julien, Paris"},
+   {n:"Le Bon Georges",d:"Любимое бистро 9-го, продукты с рынка",q:"Le Bon Georges, Paris"}
+ ]}
+];
+const BARS=[
+ {n:"Little Red Door",d:"Марэ, 60 Rue Charlot — за «красной дверью»; в мировом топе баров. Бронируйте.",q:"Little Red Door bar, Rue Charlot, Paris"},
+ {n:"Moonshiner",d:"За дверью морозилки в пиццерии Da Vito (Бастилия); виски и коктейли 1920-х.",q:"Moonshiner bar, Rue Sedaine, Paris"},
+ {n:"Candelaria",d:"За такерией в Марэ — спрятанный коктейль-бар.",q:"Candelaria bar, Rue de Saintonge, Paris"},
+ {n:"Lavomatic",d:"Вход через… прачечную самообслуживания (10-й).",q:"Lavomatic bar, Paris"},
+ {n:"Le Syndicat",d:"Только французский алкоголь, неприметный фасад (10-й).",q:"Le Syndicat bar, Paris"},
+ {n:"Castor Club",d:"Сен-Жермен — крошечный подвальный коктейль-бар, рядом с вами.",q:"Castor Club, Paris"},
+ {n:"Prescription Cocktail Club",d:"Сен-Жермен, стильно и оживлённо.",q:"Prescription Cocktail Club, Paris"},
+ {n:"Combat",d:"Бельвиль — авторские коктейли, женская команда.",q:"Combat bar, Belleville, Paris"},
+ {n:"Le Caveau de la Huchette",d:"Латинский квартал, рядом с отелем — исторический джаз-клуб с танцами.",q:"Le Caveau de la Huchette, Paris"}
+];
+const NIGHT=[
+ {n:"Мерцание Эйфелевой башни",d:"С Champ de Mars или Trocadéro — 5 минут в начале каждого часа до 01:00.",q:"Champ de Mars, Paris"},
+ {n:"Ночная прогулка / круиз по Сене",d:"Подсвеченные памятники; набережные у Notre-Dame особенно хороши.",q:"Pont Neuf, Paris"},
+ {n:"Джаз в Le Caveau de la Huchette",d:"Живой джаз и танцы в средневековом подвале, 5 мин от отеля.",q:"Le Caveau de la Huchette, Paris"},
+ {n:"Поздние вечера в музеях",d:"Louvre — пт до 21:45, Orsay — чт до 21:45: тихо и атмосферно.",q:"Louvre Museum, Paris"},
+ {n:"Монмартр / Sacré-Cœur ночью",d:"Вид на подсвеченный город со ступеней базилики.",q:"Sacré-Cœur, Paris"},
+ {n:"Подсвеченные пассажи и Palais-Royal",d:"Тихая вечерняя прогулка по крытым галереям и аркадам.",q:"Galerie Vivienne, Paris"},
+ {n:"Ром-бар вашего отеля",d:"Hôtel Monte Cristo — коктейль-бар внизу, спокойный финал дня.",q:"Hôtel Monte Cristo, Rue Pascal, Paris"}
+];
+document.getElementById("diningList").innerHTML=DINING.map(g=>
+  '<div class="card" style="margin:9px 0"><div class="name" style="font-size:.92rem;color:var(--navy)">'+g.area+'</div>'+
+  g.places.map(p=>'<div class="opt"><div><div class="on">'+p.n+'</div><div class="od">'+p.d+'</div></div><a target="_blank" href="'+mapUrl(p.q)+'">📍 Карта</a></div>').join("")+
+  '</div>').join("");
+document.getElementById("barsList").innerHTML='<div class="card" style="margin:9px 0">'+BARS.map(b=>
+  '<div class="opt"><div><div class="on">'+b.n+'</div><div class="od">'+b.d+'</div></div><a target="_blank" href="'+mapUrl(b.q)+'">📍 Карта</a></div>').join("")+'</div>';
+document.getElementById("nightList").innerHTML=NIGHT.map(n=>
+  '<div class="tip"><div class="ic">🌙</div><div><strong>'+n.n+'</strong> — '+n.d+' · <a target="_blank" href="'+mapUrl(n.q)+'">📍 карта</a></div></div>').join("");
+
+// build first day's map once Leaflet is ready
+window.addEventListener("load",()=>{ buildMap(DAYS[0].id); });
+</script>
+</body>
+</html>
