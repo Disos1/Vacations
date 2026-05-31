@@ -54,6 +54,9 @@
   .nightic span{display:grid;place-items:center;width:26px;height:26px;background:#5b3a7a;
     color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
     font-size:.78rem;font-weight:700}
+  .dotic span{display:block;width:13px;height:13px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45)}
+  .dotic.food span{background:#2f6b4f}
+  .dotic.bar span{background:#7a2e3a}
   .pin{font-size:.63rem;font-weight:700;padding:2px 7px;border-radius:20px}
   .pin-fixed{background:#fbe1e1;color:#9a2b2b}
   .pin-flex{background:#e2eee6;color:var(--green)}
@@ -179,12 +182,16 @@
   <section class="block" id="dining">
     <h3>🍽️ Где поесть — больше вариантов</h3>
     <p>По районам, чтобы выбирать рядом с маршрутом дня. Ужин на двоих ~€60–100, если не указано иначе; bouillon — дешевле. Популярные места бронируйте за день-два.</p>
+    <div class="daymap" id="diningmap"></div>
+    <div class="leg">🍽️ Все места для еды (зелёные точки) — нажмите точку для карты.</div>
     <div id="diningList"></div>
   </section>
 
   <section class="block" id="bars">
     <h3>🍸 Коктейль-бары и «speakeasy» (секретные бары)</h3>
     <p><strong>«Speakeasy» («спикизи») — это спрятанные бары</strong> со скрытым входом (за дверью морозилки, за прачечной, без вывески) — наследие эпохи «сухого закона», и Париж их обожает. <strong>Да, в них можно попасть самостоятельно</strong> — это настоящие бары: бронируете столик и находите вход. «Театрализованный тур по секретным барам» лишь добавляет гида, который знает двери и «пароли», и компанию — но это не обязательно. Бары маленькие и популярные — бронируйте за день-два.</p>
+    <div class="daymap" id="barsmap"></div>
+    <div class="leg">🍸 Все бары (бордовые точки) — нажмите точку для карты.</div>
     <div id="barsList"></div>
   </section>
 
@@ -193,6 +200,25 @@
     <div class="daymap" id="nightmap"></div>
     <div class="leg">🌙 Ночные места по всему городу — номера совпадают со списком ниже; нажмите метку для карты.</div>
     <div id="nightList"></div>
+  </section>
+
+  <section class="block" id="guides">
+    <h3>🎧 Аудиогиды и бесплатные экскурсии</h3>
+    <p>Аудиогиды — для музеев и крупных достопримечательностей внутри; экскурсии «за чаевые» — для прогулок по районам. Совпадают с вашими днями: бесплатные туры — <strong>День 2</strong> (острова/Марэ) и <strong>День 5</strong> (Монмартр); аудиогиды полезнее в <strong>День 3</strong> (Orsay/Orangerie) и <strong>День 4</strong> (Лувр).</p>
+    <div class="card" style="margin:9px 0">
+      <div class="name" style="font-size:.92rem;color:var(--navy)">🎧 Аудиогиды (самостоятельно)</div>
+      <div class="opt"><div><div class="on">izi.TRAVEL — лучший бесплатный (RU) ★</div><div class="od">Самая большая библиотека, русские прогулки по Парижу + бесплатные аудиогиды в музеях, офлайн. Качество разное — берите туры с высоким рейтингом.</div></div><a target="_blank" href="https://izi.travel/en/france">Открыть</a></div>
+      <div class="opt"><div><div class="on">WeGoTrip — музеи (RU, платно)</div><div class="od">Русский аудиогид по Лувру и Orsay, работает офлайн.</div></div><a target="_blank" href="https://wegotrip.com/en/paris">Открыть</a></div>
+      <div class="opt"><div><div class="on">Tripster — русские гиды и аудио (RU)</div><div class="od">Аудиогиды от историков (~€7) и живые экскурсии на русском.</div></div><a target="_blank" href="https://tripster.ru/paris/">Открыть</a></div>
+      <div class="opt"><div><div class="on">Rick Steves Audio Europe — лучший бесплатный (EN) ★</div><div class="od">Отличные бесплатные туры по Лувру, Orsay, историческому центру и Версалю.</div></div><a target="_blank" href="https://www.ricksteves.com/watch-read-listen/audio/audio-europe">Открыть</a></div>
+    </div>
+    <div class="card" style="margin:9px 0">
+      <div class="name" style="font-size:.92rem;color:var(--navy)">🚶 Бесплатные экскурсии (за чаевые) · ~€10–50 с человека</div>
+      <div class="opt"><div><div class="on">GuruWalk — лучший для тура на русском ★</div><div class="od">Площадка с фильтром по языку (есть русский). Марэ → День 2, Монмартр → День 5.</div></div><a target="_blank" href="https://www.guruwalk.com/paris">Открыть</a></div>
+      <div class="opt"><div><div class="on">Walkative! — глубже по истории</div><div class="od">Лицензированные гиды, подробные истории. Центр, Марэ, Монмартр.</div></div><a target="_blank" href="https://freewalkingtour.com/paris/">Открыть</a></div>
+      <div class="opt"><div><div class="on">SANDEMANs — веселее для новичков (EN)</div><div class="od">Динамичные гиды, юмор + история. Notre-Dame, Sainte-Chapelle, Монмартр.</div></div><a target="_blank" href="https://www.neweuropetours.eu/paris-walking-tours/">Открыть</a></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted)">Совет: возьмите бесплатный тур на русском через GuruWalk по Монмартру (День 5) или Марэ (День 2); внутри Лувра и Orsay — izi.TRAVEL (RU) или Rick Steves (EN). Аудио на иврите почти нет — для иврита реальный вариант это частный гид.</p>
   </section>
 
   <div class="footer">
@@ -588,8 +614,33 @@ function buildNightMap(){
   nightMap=m;
 }
 
+// ---------- Food & bars overview maps ----------
+const PLACECOORDS={
+ "Le Reminet, Paris":[48.8516,2.3492],"La Rotisserie d'Argent, Paris":[48.8503,2.3547],"Le Perraudin, Paris":[48.8468,2.3432],
+ "Au Moulin a Vent, Paris":[48.8478,2.3548],"La Grande Mosquee de Paris tea room":[48.8420,2.3553],"Les Pipos, Paris":[48.8476,2.3470],
+ "Chez Fernand Saint-Germain Paris":[48.8527,2.3349],"Allard restaurant Paris":[48.8537,2.3398],"Bouillon Racine, Paris":[48.8509,2.3417],
+ "Bistrot des Tournelles, Paris":[48.8546,2.3660],"Parcelles restaurant, Paris":[48.8634,2.3596],"Breizh Café Marais, Paris":[48.8602,2.3637],
+ "Marché des Enfants Rouges, Paris":[48.8628,2.3625],"La Fontaine de Mars, Paris":[48.8585,2.3011],"Le Petit Cler, Paris":[48.8567,2.3030],
+ "Le Florimond, Paris":[48.8558,2.3036],"Bouillon Chartier Grands Boulevards, Paris":[48.8718,2.3428],"Bouillon Julien, Paris":[48.8703,2.3541],
+ "Le Bon Georges, Paris":[48.8773,2.3367],
+ "Little Red Door bar, Rue Charlot, Paris":[48.8626,2.3658],"Moonshiner bar, Rue Sedaine, Paris":[48.8555,2.3722],"Candelaria bar, Rue de Saintonge, Paris":[48.8635,2.3645],
+ "Lavomatic bar, Paris":[48.8689,2.3622],"Le Syndicat bar, Paris":[48.8705,2.3535],"Castor Club, Paris":[48.8519,2.3431],
+ "Prescription Cocktail Club, Paris":[48.8540,2.3389],"Combat bar, Belleville, Paris":[48.8721,2.3790],"Le Caveau de la Huchette, Paris":[48.8530,2.3458]
+};
+function buildPointsMap(elId,items,cls){
+  const el=document.getElementById(elId);
+  if(!el||typeof L==="undefined") return;
+  const m=L.map(el,{scrollWheelZoom:false});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
+  const coords=[];
+  items.forEach(it=>{const c=PLACECOORDS[it.q]; if(!c) return; coords.push(c);
+    L.marker(c,{icon:L.divIcon({className:"dotic "+cls,html:"<span></span>",iconSize:[14,14],iconAnchor:[7,7]})}).addTo(m).bindPopup("<b>"+it.n+"</b><br><a target='_blank' href='"+mapUrl(it.q)+"'>📍 Карта</a>");
+  });
+  if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
+}
+
 // build maps once Leaflet is ready
-window.addEventListener("load",()=>{ buildMap(DAYS[0].id); buildNightMap(); });
+window.addEventListener("load",()=>{ buildMap(DAYS[0].id); buildNightMap(); buildPointsMap("diningmap",DINING.flatMap(g=>g.places),"food"); buildPointsMap("barsmap",BARS,"bar"); });
 </script>
 </body>
 </html>

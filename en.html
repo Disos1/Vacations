@@ -54,6 +54,9 @@
   .nightic span{display:grid;place-items:center;width:26px;height:26px;background:#5b3a7a;
     color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
     font-size:.78rem;font-weight:700}
+  .dotic span{display:block;width:13px;height:13px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45)}
+  .dotic.food span{background:#2f6b4f}
+  .dotic.bar span{background:#7a2e3a}
   .pin{font-size:.63rem;font-weight:700;padding:2px 7px;border-radius:20px}
   .pin-fixed{background:#fbe1e1;color:#9a2b2b}
   .pin-flex{background:#e2eee6;color:var(--green)}
@@ -182,12 +185,16 @@
   <section class="block" id="dining">
     <h3>🍽️ Where to eat — more options</h3>
     <p>By neighbourhood, so you can pick near the day's route. Dinner for two ~€60–100 unless noted; bouillon is cheaper. Book popular spots a day or two ahead.</p>
+    <div class="daymap" id="diningmap"></div>
+    <div class="leg">🍽️ All food spots (green dots) — tap a dot for its map link.</div>
     <div id="diningList"></div>
   </section>
 
   <section class="block" id="bars">
     <h3>🍸 Cocktail bars &amp; speakeasies (hidden bars)</h3>
     <p><strong>Speakeasies are hidden bars</strong> with a concealed entrance (behind a freezer door, a laundromat, no sign) — a Prohibition-era legacy, and Paris loves them. <strong>Yes, you can get in on your own</strong> — they're real bars: book a table and find the door. A "secret-bars tour" just adds a guide who knows the doors and "passwords", plus company — but it's not required. Bars are small and popular — book a day or two ahead.</p>
+    <div class="daymap" id="barsmap"></div>
+    <div class="leg">🍸 All bars (wine-red dots) — tap a dot for its map link.</div>
     <div id="barsList"></div>
   </section>
 
@@ -196,6 +203,25 @@
     <div class="daymap" id="nightmap"></div>
     <div class="leg">🌙 Night spots across the city — numbers match the list below; tap a pin for the map link.</div>
     <div id="nightList"></div>
+  </section>
+
+  <section class="block" id="guides">
+    <h3>🎧 Audio guides & free walking tours</h3>
+    <p>Self-guided audio for inside the museums and big sights; tip-based walking tours for the neighbourhoods. They map onto your days: free tours fit <strong>Day 2</strong> (islands/Marais) and <strong>Day 5</strong> (Montmartre); audio guides earn their keep on <strong>Day 3</strong> (Orsay/Orangerie) and <strong>Day 4</strong> (Louvre).</p>
+    <div class="card" style="margin:9px 0">
+      <div class="name" style="font-size:.92rem;color:var(--navy)">🎧 Audio guides (self-guided)</div>
+      <div class="opt"><div><div class="on">Rick Steves Audio Europe — best free (EN) ★</div><div class="od">Top-quality free tours: Louvre, Orsay, Historic Paris walk, Versailles. Use inside the museums.</div></div><a target="_blank" href="https://www.ricksteves.com/watch-read-listen/audio/audio-europe">Open</a></div>
+      <div class="opt"><div><div class="on">izi.TRAVEL — best free (RU) ★</div><div class="od">Largest library, Russian Paris walks + free in-museum audioguides, offline. Quality varies — pick the highly-rated tours.</div></div><a target="_blank" href="https://izi.travel/en/france">Open</a></div>
+      <div class="opt"><div><div class="on">WeGoTrip — museums (RU, paid)</div><div class="od">Russian self-guided audio for the Louvre & Orsay, works offline.</div></div><a target="_blank" href="https://wegotrip.com/en/paris">Open</a></div>
+      <div class="opt"><div><div class="on">VoiceMap — best storytelling (EN, paid)</div><div class="od">Local-narrated neighbourhood walks (Marais, Latin Quarter, Montmartre).</div></div><a target="_blank" href="https://voicemap.me/city/paris">Open</a></div>
+    </div>
+    <div class="card" style="margin:9px 0">
+      <div class="name" style="font-size:.92rem;color:var(--navy)">🚶 Free (tip-based) walking tours · ~€10–50 pp</div>
+      <div class="opt"><div><div class="on">GuruWalk — best for a Russian-language tour ★</div><div class="od">Marketplace you can filter by language (incl. Russian). Marais → Day 2, Montmartre → Day 5.</div></div><a target="_blank" href="https://www.guruwalk.com/paris">Open</a></div>
+      <div class="opt"><div><div class="on">Walkative! — best for history depth</div><div class="od">Licensed guides, deeper storytelling. Historic Centre, Marais, Montmartre.</div></div><a target="_blank" href="https://freewalkingtour.com/paris/">Open</a></div>
+      <div class="opt"><div><div class="on">SANDEMANs — most fun for first-timers (EN)</div><div class="od">Entertaining guides, humour + history. Notre-Dame, Sainte-Chapelle, Montmartre.</div></div><a target="_blank" href="https://www.neweuropetours.eu/paris-walking-tours/">Open</a></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted)">Tip: book a Russian free tour via GuruWalk for Montmartre (Day 5) or the Marais (Day 2); use izi.TRAVEL (RU) or Rick Steves (EN) inside the Louvre and Orsay. Hebrew audio is scarce — for Hebrew, a private guide is the realistic option.</p>
   </section>
 
   <div class="footer">
@@ -588,8 +614,33 @@ document.getElementById("barsList").innerHTML='<div class="card" style="margin:9
 document.getElementById("nightList").innerHTML=NIGHT.map((n,i)=>
   '<div class="tip"><div class="ic">'+(i+1)+'</div><div><strong>'+n.n+'</strong> — '+n.d+' · <a target="_blank" href="'+mapUrl(n.q)+'">📍 map</a></div></div>').join("");
 
+// ---------- Food & bars overview maps ----------
+const PLACECOORDS={
+ "Le Reminet, Paris":[48.8516,2.3492],"La Rotisserie d'Argent, Paris":[48.8503,2.3547],"Le Perraudin, Paris":[48.8468,2.3432],
+ "Au Moulin a Vent, Paris":[48.8478,2.3548],"La Grande Mosquee de Paris tea room":[48.8420,2.3553],"Les Pipos, Paris":[48.8476,2.3470],
+ "Chez Fernand Saint-Germain Paris":[48.8527,2.3349],"Allard restaurant Paris":[48.8537,2.3398],"Bouillon Racine, Paris":[48.8509,2.3417],
+ "Bistrot des Tournelles, Paris":[48.8546,2.3660],"Parcelles restaurant, Paris":[48.8634,2.3596],"Breizh Café Marais, Paris":[48.8602,2.3637],
+ "Marché des Enfants Rouges, Paris":[48.8628,2.3625],"La Fontaine de Mars, Paris":[48.8585,2.3011],"Le Petit Cler, Paris":[48.8567,2.3030],
+ "Le Florimond, Paris":[48.8558,2.3036],"Bouillon Chartier Grands Boulevards, Paris":[48.8718,2.3428],"Bouillon Julien, Paris":[48.8703,2.3541],
+ "Le Bon Georges, Paris":[48.8773,2.3367],
+ "Little Red Door bar, Rue Charlot, Paris":[48.8626,2.3658],"Moonshiner bar, Rue Sedaine, Paris":[48.8555,2.3722],"Candelaria bar, Rue de Saintonge, Paris":[48.8635,2.3645],
+ "Lavomatic bar, Paris":[48.8689,2.3622],"Le Syndicat bar, Paris":[48.8705,2.3535],"Castor Club, Paris":[48.8519,2.3431],
+ "Prescription Cocktail Club, Paris":[48.8540,2.3389],"Combat bar, Belleville, Paris":[48.8721,2.3790],"Le Caveau de la Huchette, Paris":[48.8530,2.3458]
+};
+function buildPointsMap(elId,items,cls){
+  const el=document.getElementById(elId);
+  if(!el||typeof L==="undefined") return;
+  const m=L.map(el,{scrollWheelZoom:false});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
+  const coords=[];
+  items.forEach(it=>{const c=PLACECOORDS[it.q]; if(!c) return; coords.push(c);
+    L.marker(c,{icon:L.divIcon({className:"dotic "+cls,html:"<span></span>",iconSize:[14,14],iconAnchor:[7,7]})}).addTo(m).bindPopup("<b>"+it.n+"</b><br><a target='_blank' href='"+mapUrl(it.q)+"'>📍 Map</a>");
+  });
+  if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
+}
+
 // build maps once Leaflet is ready
-window.addEventListener("load",()=>{ buildMap(DAYS[0].id); buildNightMap(); });
+window.addEventListener("load",()=>{ buildMap(DAYS[0].id); buildNightMap(); buildPointsMap("diningmap",DINING.flatMap(g=>g.places),"food"); buildPointsMap("barsmap",BARS,"bar"); });
 </script>
 </body>
 </html>
