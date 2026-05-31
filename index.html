@@ -51,6 +51,9 @@
   .flexic span{display:grid;place-items:center;width:24px;height:24px;background:var(--gold);
     color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
     font-size:.72rem;font-weight:700}
+  .nightic span{display:grid;place-items:center;width:26px;height:26px;background:#5b3a7a;
+    color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
+    font-size:.78rem;font-weight:700}
   .pin{font-size:.63rem;font-weight:700;padding:2px 7px;border-radius:20px}
   .pin-fixed{background:#fbe1e1;color:#9a2b2b}
   .pin-flex{background:#e2eee6;color:var(--green)}
@@ -187,6 +190,8 @@
 
   <section class="block" id="night">
     <h3>🌙 Чем заняться вечером и ночью</h3>
+    <div class="daymap" id="nightmap"></div>
+    <div class="leg">🌙 Ночные места по всему городу — номера совпадают со списком ниже; нажмите метку для карты.</div>
     <div id="nightList"></div>
   </section>
 
@@ -231,9 +236,9 @@ const DAYS = [
    {slot:"Позднее утро", name:"Notre-Dame", q:"Notre-Dame de Paris", ll:[48.8530,2.3499], book:{label:"Слот (в день визита)",url:"https://www.notredamedeparis.fr/en/"},
     desc:"Снова открыт, бесплатно. Бронируйте слот в приложении за завтраком — открывается за пару часов.", badges:["🆓 бесплатно","📱 только в день визита"]},
    {slot:"Обед", name:"Обед в Марэ", q:"Place des Vosges, Paris", ll:[48.8556,2.3655],
-    desc:"Фалафель на Rue des Rosiers или обед у Place des Vosges.",
+    desc:"Обед у Place des Vosges или блинчики/галеты в Марэ.",
     options:[
-     {n:"L'As du Fallafel",d:"Тот самый фалафель — Rue des Rosiers",q:"L'As du Fallafel, Paris"},
+     {n:"Breizh Café",d:"Знаменитые бретонские блины и галеты",q:"Breizh Café Marais, Paris"},
      {n:"Place des Vosges",d:"Самая элегантная площадь — кафе под аркадами",q:"Place des Vosges, Paris"}
     ]},
    {slot:"День", name:"Прогулка по Марэ", q:"Le Marais, Paris", ll:[48.8575,2.3626],
@@ -401,7 +406,7 @@ DAYS.forEach((d,i)=>{
   nav.appendChild(b);
 
   const pts=d.items.filter(it=>it.ll);
-  const routeUrl="https://www.google.com/maps/dir/"+pts.map(p=>encodeURIComponent(p.name.replace(/\s*\(.*\)/,"")+" Paris")).join("/");
+  const routeUrl="https://www.google.com/maps/dir/"+pts.map(p=>encodeURIComponent(p.q)).join("/");
   const legHtml=pts.map((p,k)=>(k+1)+". "+p.name.replace(/\s*\(.*\)/,"")).join("  →  ");
 
   const p=document.createElement("div");
@@ -525,7 +530,7 @@ const DINING=[
  {area:"Марэ (3–4-й)", places:[
    {n:"Bistrot des Tournelles",d:"Традиция + аккуратная подача",q:"Bistrot des Tournelles, Paris"},
    {n:"Parcelles",d:"Современная классика, винная карта",q:"Parcelles restaurant, Paris"},
-   {n:"L'As du Fallafel",d:"Фалафель на вынос (обед)",q:"L'As du Fallafel, Paris"},
+   {n:"Breizh Café",d:"Знаменитые бретонские блины и галеты",q:"Breizh Café Marais, Paris"},
    {n:"Marché des Enfants Rouges",d:"Крытый рынок — обед на любой вкус",q:"Marché des Enfants Rouges, Paris"}
  ]},
  {area:"Рядом с Эйфелевой башней (7-й)", places:[
@@ -551,13 +556,13 @@ const BARS=[
  {n:"Le Caveau de la Huchette",d:"Латинский квартал, рядом с отелем — исторический джаз-клуб с танцами.",q:"Le Caveau de la Huchette, Paris"}
 ];
 const NIGHT=[
- {n:"Мерцание Эйфелевой башни",d:"С Champ de Mars или Trocadéro — 5 минут в начале каждого часа до 01:00.",q:"Champ de Mars, Paris"},
- {n:"Ночная прогулка / круиз по Сене",d:"Подсвеченные памятники; набережные у Notre-Dame особенно хороши.",q:"Pont Neuf, Paris"},
- {n:"Джаз в Le Caveau de la Huchette",d:"Живой джаз и танцы в средневековом подвале, 5 мин от отеля.",q:"Le Caveau de la Huchette, Paris"},
- {n:"Поздние вечера в музеях",d:"Louvre — пт до 21:45, Orsay — чт до 21:45: тихо и атмосферно.",q:"Louvre Museum, Paris"},
- {n:"Монмартр / Sacré-Cœur ночью",d:"Вид на подсвеченный город со ступеней базилики.",q:"Sacré-Cœur, Paris"},
- {n:"Подсвеченные пассажи и Palais-Royal",d:"Тихая вечерняя прогулка по крытым галереям и аркадам.",q:"Galerie Vivienne, Paris"},
- {n:"Ром-бар вашего отеля",d:"Hôtel Monte Cristo — коктейль-бар внизу, спокойный финал дня.",q:"Hôtel Monte Cristo, Rue Pascal, Paris"}
+ {n:"Мерцание Эйфелевой башни",d:"С Champ de Mars или Trocadéro — 5 минут в начале каждого часа до 01:00.",q:"Champ de Mars, Paris",ll:[48.8556,2.2986]},
+ {n:"Ночная прогулка / круиз по Сене",d:"Подсвеченные памятники; набережные у Notre-Dame особенно хороши.",q:"Pont Neuf, Paris",ll:[48.8570,2.3410]},
+ {n:"Джаз в Le Caveau de la Huchette",d:"Живой джаз и танцы в средневековом подвале, 5 мин от отеля.",q:"Le Caveau de la Huchette, Paris",ll:[48.8530,2.3458]},
+ {n:"Поздние вечера в музеях",d:"Louvre — пт до 21:45, Orsay — чт до 21:45: тихо и атмосферно.",q:"Louvre Museum, Paris",ll:[48.8606,2.3376]},
+ {n:"Монмартр / Sacré-Cœur ночью",d:"Вид на подсвеченный город со ступеней базилики.",q:"Sacré-Cœur, Paris",ll:[48.8867,2.3431]},
+ {n:"Подсвеченные пассажи и Palais-Royal",d:"Тихая вечерняя прогулка по крытым галереям и аркадам.",q:"Galerie Vivienne, Paris",ll:[48.8667,2.3403]},
+ {n:"Ром-бар вашего отеля",d:"Hôtel Monte Cristo — коктейль-бар внизу, спокойный финал дня.",q:"Hôtel Monte Cristo, Rue Pascal, Paris",ll:[48.8385,2.3490]}
 ];
 document.getElementById("diningList").innerHTML=DINING.map(g=>
   '<div class="card" style="margin:9px 0"><div class="name" style="font-size:.92rem;color:var(--navy)">'+g.area+'</div>'+
@@ -565,11 +570,26 @@ document.getElementById("diningList").innerHTML=DINING.map(g=>
   '</div>').join("");
 document.getElementById("barsList").innerHTML='<div class="card" style="margin:9px 0">'+BARS.map(b=>
   '<div class="opt"><div><div class="on">'+b.n+'</div><div class="od">'+b.d+'</div></div><a target="_blank" href="'+mapUrl(b.q)+'">📍 Карта</a></div>').join("")+'</div>';
-document.getElementById("nightList").innerHTML=NIGHT.map(n=>
-  '<div class="tip"><div class="ic">🌙</div><div><strong>'+n.n+'</strong> — '+n.d+' · <a target="_blank" href="'+mapUrl(n.q)+'">📍 карта</a></div></div>').join("");
+document.getElementById("nightList").innerHTML=NIGHT.map((n,i)=>
+  '<div class="tip"><div class="ic">'+(i+1)+'</div><div><strong>'+n.n+'</strong> — '+n.d+' · <a target="_blank" href="'+mapUrl(n.q)+'">📍 карта</a></div></div>').join("");
 
-// build first day's map once Leaflet is ready
-window.addEventListener("load",()=>{ buildMap(DAYS[0].id); });
+let nightMap=null;
+function buildNightMap(){
+  const el=document.getElementById("nightmap");
+  if(!el || typeof L==="undefined" || nightMap) return;
+  const m=L.map(el,{scrollWheelZoom:false});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
+  const coords=[];
+  NIGHT.forEach((n,i)=>{ if(!n.ll) return; coords.push(n.ll);
+    L.marker(n.ll,{icon:L.divIcon({className:"nightic",html:"<span>"+(i+1)+"</span>",iconSize:[26,26],iconAnchor:[13,13]})})
+      .addTo(m).bindPopup("<b>"+(i+1)+". "+n.n+"</b><br><a target='_blank' href='"+mapUrl(n.q)+"'>📍 Карта</a>");
+  });
+  if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
+  nightMap=m;
+}
+
+// build maps once Leaflet is ready
+window.addEventListener("load",()=>{ buildMap(DAYS[0].id); buildNightMap(); });
 </script>
 </body>
 </html>
