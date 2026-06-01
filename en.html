@@ -221,7 +221,19 @@
       <div class="opt"><div><div class="on">Walkative! — best for history depth</div><div class="od">Licensed guides, deeper storytelling. Historic Centre, Marais, Montmartre.</div></div><a target="_blank" href="https://freewalkingtour.com/paris/">Open</a></div>
       <div class="opt"><div><div class="on">SANDEMANs — most fun for first-timers (EN)</div><div class="od">Entertaining guides, humour + history. Notre-Dame, Sainte-Chapelle, Montmartre.</div></div><a target="_blank" href="https://www.neweuropetours.eu/paris-walking-tours/">Open</a></div>
     </div>
-    <p style="font-size:.8rem;color:var(--muted)">Tip: book a Russian free tour via GuruWalk for Montmartre (Day 5) or the Marais (Day 2); use izi.TRAVEL (RU) or Rick Steves (EN) inside the Louvre and Orsay. Hebrew audio is scarce — for Hebrew, a private guide is the realistic option.</p>
+    <div class="card" style="margin:9px 0">
+      <div class="name" style="font-size:.92rem;color:var(--navy)">🇷🇺 Russian guided tours — «Туры в 15:15» (4.95–5.0★, mini-group, since 2013)</div>
+      <div class="od" style="margin-bottom:6px">Russian-language paid walks that line up beautifully with your days — booked online, small groups.</div>
+      <div class="opt"><div><div class="on">Marais, off the tourist track · €39 → Day 2</div><div class="od">2h30 mini-group walk through the Marais.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/parizh-vne-turisticheskih-marshrutov-kvartal-mare/">Open</a></div>
+      <div class="opt"><div><div class="on">Orsay masterpieces in 2h · €55 → Day 3</div><div class="od">Guided highlights of the Impressionist collection.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/shedevry-kollekczij-muzeya-orse-za-2-chasa/">Open</a></div>
+      <div class="opt"><div><div class="on">Louvre highlights, 2h, skip-the-line · €69 → Day 4 ★</div><div class="od">Guided + group entrance; the strongest single fit for your plan.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/glavnye-shedevry-luvra-za-2-chasa-s-gidom-bez-ocheredi/">Open</a></div>
+      <div class="opt"><div><div class="on">Charm of Montmartre · €32 → Day 5</div><div class="od">2h walk through the most bohemian quarter.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/ocharovanie-monmartra/">Open</a></div>
+      <div class="opt"><div><div class="on">Evening Paris in lights, Champs→Eiffel (19:00) · €35 → Day 3 eve ★</div><div class="od">Romantic 2h evening walk — pairs with the Eiffel sparkle.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/vechernij-parizh-v-ognyah-ot-elisejskih-polej-k-ejfelevoj-bashne/">Open</a></div>
+      <div class="opt"><div><div class="on">Paris by taste: snails, frogs, cheese · €60</div><div class="od">Food walk — any free afternoon.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/parizh-na-vkus-ulitki-lyagushki-i-syrnaya-klassika/">Open</a></div>
+      <div class="opt"><div><div class="on">Overview "Red route" (daily 15:15) · €30 → Day 1 intro</div><div class="od">2h15 city intro — a gentle first afternoon.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/parizh-v-1515-krasnyj-marshrut/">Open</a></div>
+      <div class="opt"><div><div class="on">Versailles from Paris (3h30, train) · €87</div><div class="od">If you decide to add the Versailles day.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/bolshoe-znakomstvo-s-versalem/">Open</a></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted)">Tip: the Russian "15:15" Louvre tour (€69, skip-line) and the evening Champs→Eiffel walk (€35) are the best fits. Note the €69 Louvre tour includes group entry — with your Museum Pass you mainly pay for the guide. Free GuruWalk tours are the budget alternative; izi.TRAVEL (RU) / Rick Steves (EN) for inside the museums. Hebrew audio is scarce — for Hebrew, a private guide is the realistic option.</p>
   </section>
 
   <div class="footer">
@@ -321,7 +333,7 @@ const DAYS = [
   note:"Outdoor day (Louvre & Orangerie closed Tuesdays). Head to Montmartre early.",
   items:[
    {slot:"Morning", name:"Sacré-Cœur & Montmartre", q:"Sacré-Cœur, Paris", ll:[48.8867,2.3431],
-    desc:"The view, Place du Tertre, the vineyard and quiet back lanes. Beat the tour buses.", badges:["🌿 church, free"]},
+    desc:"The view, Place du Tertre, the vineyard and quiet back lanes. Beat the tour buses. The dome (€8) gives the best 360° view of Paris — stunning at sunset, so consider going up in the morning for fewer crowds, or returning at sunset for the view.", badges:["🌿 church free","🎫 dome €8"]},
    {slot:"Lunch", name:"Bistro near Abbesses", q:"Abbesses, Paris", ll:[48.8845,2.3380],
     desc:"Streets below the hill are nicer and less touristy than the summit.", badges:[]},
    {slot:"Afternoon", name:"Arc de Triomphe — rooftop", q:"Arc de Triomphe, Paris", ll:[48.8738,2.2950], book:{label:"Arc de Triomphe",url:"https://www.paris-arc-de-triomphe.fr/en"},
@@ -361,7 +373,9 @@ const FLEX = [
  {n:"Printemps rooftop", d:"Free, quiet viewpoint by Galeries Lafayette.", q:"Printemps Haussmann rooftop, Paris", reel:"https://www.facebook.com/share/r/17TF5QMF6g/"},
  {n:"Secret luxury second-hand shop", d:"Vintage/consignment, 'best in the city' — a browse.", q:"luxury second hand consignment Paris", reel:"https://www.facebook.com/share/r/1PRzWYQmSR/"},
  {n:"La Galerie Dior", d:"Dior fashion museum, Avenue Montaigne.", q:"La Galerie Dior, Paris", book:{label:"Galerie Dior",url:"https://www.galeriedior.com/en"}, reel:"https://www.facebook.com/share/r/17XGvhMPSW/"},
- {n:"Place des Vosges / Marais walk", d:"Overlaps with Day 2.", q:"Place des Vosges, Paris", reel:"https://www.facebook.com/share/r/176Ki4ZH1i/"}
+ {n:"Place des Vosges / Marais walk", d:"Overlaps with Day 2.", q:"Place des Vosges, Paris", reel:"https://www.facebook.com/share/r/176Ki4ZH1i/"},
+ {n:"Fondation Louis Vuitton", d:"Frank Gehry building, modern art — in the Bois de Boulogne (16th). Timed ticket, NOT on the Museum Pass (~€16). A half-day west.", q:"Fondation Louis Vuitton, Paris", book:{label:"Fondation LV",url:"https://www.fondationlouisvuitton.fr/en"}},
+ {n:"Bois de Boulogne", d:"Huge park west of the city — lakes, gardens; pairs with the Fondation Louis Vuitton (it's inside the park).", q:"Bois de Boulogne, Paris"}
 ];
 
 const FLEXPINS = {
@@ -408,7 +422,7 @@ const INFO = {
  "Opéra Garnier":{time:"~14:30",dur:"1 h",price:"€15 (NOT on Pass)",hours:"10:00–17:00 (to 16:00 on show days)"},
  "Free rooftop view":{time:"~16:30",dur:"30 min",price:"free",hours:"stores ~10:00–20:00, shorter Sun"},
  "Brasserie near the Opéra or back on the Left Bank":{time:"~20:00",dur:"1.5 h",price:"€60–100 for two"},
- "Sacré-Cœur & Montmartre":{time:"~09:30 (early)",dur:"2 h",price:"basilica free; dome ~€7",hours:"basilica ~06:30–22:30"},
+ "Sacré-Cœur & Montmartre":{time:"~09:30 (early) or sunset",dur:"2 h",price:"basilica free; dome €8 (best 360° view, sunset)",hours:"basilica ~06:30–22:30; dome ~10:30–20:30"},
  "Bistro near Abbesses":{time:"~13:00",dur:"1 h",price:"€30–60 for two"},
  "Arc de Triomphe — rooftop":{time:"~15:30",dur:"45 min",price:"€16 (on Pass)",hours:"10:00–22:30 (last entry ~22:00)"},
  "Champs-Élysées walk":{time:"afternoon",dur:"45 min",price:"free"},
@@ -583,6 +597,11 @@ const DINING=[
    {n:"Bouillon Chartier",d:"Historic cheap bouillon (your Reel)",q:"Bouillon Chartier Grands Boulevards, Paris"},
    {n:"Bouillon Julien",d:"Art Nouveau, cheap (your Reel)",q:"Bouillon Julien, Paris"},
    {n:"Le Bon Georges",d:"Beloved 9th bistro, market produce",q:"Le Bon Georges, Paris"}
+ ]},
+ {area:"✨ Special / splurge dinners (€100+ — recommended to you)", places:[
+   {n:"Pertinence (7th, near Eiffel)",d:"Fine dining, 4.8★ — pairs with the Day 3 Eiffel evening. Reserve.",q:"Pertinence restaurant, Paris"},
+   {n:"La Truffière (5th, by the hotel)",d:"Refined French in a stone-vaulted cellar, 4.5★. Reserve.",q:"La Truffière, Paris"},
+   {n:"Le Christine (6th, Saint-Germain)",d:"Creative French + tasting menus, 4.6★. Reserve.",q:"Le Christine, Paris"}
  ]}
 ];
 const BARS=[
@@ -625,7 +644,9 @@ const PLACECOORDS={
  "Le Bon Georges, Paris":[48.8773,2.3367],
  "Little Red Door bar, Rue Charlot, Paris":[48.8626,2.3658],"Moonshiner bar, Rue Sedaine, Paris":[48.8555,2.3722],"Candelaria bar, Rue de Saintonge, Paris":[48.8635,2.3645],
  "Lavomatic bar, Paris":[48.8689,2.3622],"Le Syndicat bar, Paris":[48.8705,2.3535],"Castor Club, Paris":[48.8519,2.3431],
- "Prescription Cocktail Club, Paris":[48.8540,2.3389],"Combat bar, Belleville, Paris":[48.8721,2.3790],"Le Caveau de la Huchette, Paris":[48.8530,2.3458]
+ "Prescription Cocktail Club, Paris":[48.8540,2.3389],"Combat bar, Belleville, Paris":[48.8721,2.3790],"Le Caveau de la Huchette, Paris":[48.8530,2.3458],
+ "La Truffière, Paris":[48.8445,2.3489],"Pertinence restaurant, Paris":[48.8571,2.3035],"Le Christine, Paris":[48.8543,2.3402],
+ "Fondation Louis Vuitton, Paris":[48.8766,2.2633],"Bois de Boulogne, Paris":[48.8620,2.2520]
 };
 function buildPointsMap(elId,items,cls){
   const el=document.getElementById(elId);
