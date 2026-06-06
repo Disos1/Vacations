@@ -132,7 +132,7 @@
     <h3>🎟️ Что забронировать заранее — три первых пункта на этой неделе</h3>
     <p>Поездка совсем скоро, поэтому окна бронирования уже открыты, и первые три быстро разбирают. Нажмите, чтобы открыть официальный сайт (бронируете вы — я ничего не оплачиваю и не резервирую).</p>
     <div class="qbar" id="bookBar"></div>
-    <p style="margin-top:10px"><strong>Порядок:</strong> ① слот Passport в Версаль (вт, 14:00) — бронируйте первым → ✅ Eiffel (сб 20:30), Louvre (пн 13:30) и Orsay (вс 11:30) уже забронированы → Sainte-Chapelle (пн 09:00, комби с Консьержери), Notre-Dame (сб ~18:00) и Panthéon (ср) — без брони, билет на месте. Билеты берём по отдельности.</p>
+    <p style="margin-top:10px"><strong>Порядок:</strong> осталось забронировать только слот Passport в Версаль (вт, 14:00). ✅ Готово: Эйфелева башня (сб), Сент-Шапель + Консьержери (сб), Orsay (вс 11:30), Notre-Dame (вс 16:00), Louvre (пн 13:30). Panthéon (ср) — билет на месте. Поезд RER C до Версаля бронировать <strong>не нужно</strong> — билет в автомате (~€4 в одну сторону, зона 4).</p>
   </section>
 
   <section class="block" id="discounts">
@@ -184,7 +184,7 @@
     <h3>🍽️ Где поесть — больше вариантов</h3>
     <p>По районам, чтобы выбирать рядом с маршрутом дня. Ужин на двоих ~€60–100, если не указано иначе; bouillon — дешевле. Популярные места бронируйте за день-два.</p>
     <div class="daymap" id="diningmap"></div>
-    <div class="leg">🍽️ Все места для еды (зелёные точки) — нажмите точку для карты.</div>
+    <div class="leg">🍽️ Карта: ⭐ золотые звёзды — рекомендации от вас и друзей · зелёные точки — мои предложения (4.5★+). Нажмите метку для подробностей.</div>
     <div id="diningList"></div>
   </section>
 
@@ -272,7 +272,7 @@ const DAYS = [
   ]},
 
  {id:"d2", label:"Сб", date:"6 июн", title:"Латинский квартал, острова и Марэ",
-  note:"Поздний старт — но день полный: ваш Латинский квартал, острова, весь Марэ, Нотр-Дам в ~18:00 и вершина Эйфелевой башни в 20:30. Вечером тайминг плотный (Нотр-Дам → на запад к башне), но реальный. Sainte-Chapelle и Консьержери — вместе в понедельник утром.",
+  note:"Насыщенная суббота (сделано): Сент-Шапель, Консьержери, Дом инвалидов, прогулка Марсово поле → Эйфелева башня → Трокадеро и подъём на вершину в 20:30. Нотр-Дам — в воскресенье в 16:00 (бронь). Марэ и Латинский квартал добираем в вс/пн.",
   items:[
    {slot:"Утро/день", name:"Латинский квартал", q:"Place de la Contrescarpe, Paris", ll:[48.8430,2.3496],
     desc:"Ваш район как следует: рынок Rue Mouffetard (по субботам самый живой), Place de la Contrescarpe, церковь Saint-Étienne-du-Mont у Пантеона и римские Арены Лютеции (бесплатно, тихо).",
@@ -287,46 +287,41 @@ const DAYS = [
      {n:"Café des Musées",d:"Уютное бистро в Марэ",q:"Café des Musées, Paris"},
      {n:"Chez Janou",d:"Провансальский бистро у Place des Vosges",q:"Chez Janou, Paris"}
     ]},
-   {slot:"День", name:"Прогулка по Марэ", q:"Le Marais, Paris", ll:[48.8575,2.3626],
-    desc:"Place des Vosges, дворики, бутики, аркады. Хотите больше искусства — добавьте музей:",
-    options:[
-     {n:"Musée Picasso",d:"В роскошном особняке Марэ",q:"Musée Picasso Paris"},
-     {n:"Musée Carnavalet",d:"Музей истории города — бесплатно",q:"Musée Carnavalet, Paris"}
-    ]},
-   {slot:"~18:00", name:"Notre-Dame", q:"Notre-Dame de Paris", ll:[48.8530,2.3499], book:{label:"Проверяйте приложение",url:"https://www.notredamedeparis.fr/en/"},
-    desc:"Зайдите по пути с островов. Слотов на ваши даты нет, но вход свободный; в субботу очередь спадает после 18:00 (открыт до 19:15, посл. вход ~18:45). Коротко — впереди башня в 20:30.", badges:["🆓 бесплатно","🚶 без брони — после 18:00"]},
-   {slot:"Ужин ~19:30", name:"Ужин у Эйфелевой башни", q:"Rue Cler restaurants, Paris", ll:[48.8556,2.3045],
-    desc:"От Нотр-Дам на запад: RER C от Saint-Michel до Champ de Mars ~15 мин. Быстрый ужин у Rue Cler / Champ de Mars до подъёма — или после спуска (~22:30). Тайминг плотный, но реальный.", badges:["🍽️ перед подъёмом"]},
+   {slot:"Ужин", name:"Ужин у Эйфелевой башни", q:"Rue Cler restaurants, Paris", ll:[48.8556,2.3045],
+    desc:"Ужин у Rue Cler / Champ de Mars до подъёма — или после спуска (~22:30). Из проверенных: Le Florimond (4.6★, 10 мин).", badges:["🍽️ у башни"]},
    {slot:"20:30 (бронь)", name:"Eiffel Tower — вершина", q:"Eiffel Tower, Paris", ll:[48.8584,2.2945], book:{label:"Билет на 20:30",url:"https://www.toureiffel.paris/en"},
     desc:"Слот на вершину сегодня в 20:30 у вас на руках. Закат ~21:53 — золотой свет сверху. Возьмите слой потеплее (вечером прохладно, возможен дождь).", badges:["✅ забронировано 20:30","⏰ слот по времени"]},
    {slot:"~22:00", name:"Мерцание с Trocadéro / Champ de Mars", q:"Trocadéro, Paris", ll:[48.8617,2.2885],
     desc:"Золотая подсветка в сумерках; мерцание 5 минут в начале каждого часа (22/23/00). Снизу с Trocadéro или Champ de Mars — лучший кадр.", badges:["✨ каждый час"]}
   ]},
 
- {id:"d3", label:"Вс", date:"7 июн", title:"Импрессионисты и спокойный вечер",
-  note:"Orsay в 11:30 (забронировано) → неспешный левый берег и Сен-Жермен → свободный спокойный вечер (Нотр-Дам и башню вы делаете в субботу). Orangerie — по желанию.",
+ {id:"d3", label:"Вс", date:"7 июн", title:"Орсе, Нотр-Дам и Марэ",
+  note:"Orsay в 11:30 (бронь) → обед и левый берег / Сен-Жермен → Нотр-Дам в 16:00 (бронь) → оттуда пешком в Марэ, который вы ещё толком не видели. Orangerie — по желанию.",
   items:[
    {slot:"11:30 (бронь)", name:"Musée d'Orsay", q:"Musée d'Orsay, Paris", ll:[48.8600,2.3266], book:{label:"Билет на 11:30",url:"https://www.musee-orsay.fr/en"},
     desc:"Билет на 11:30 у вас на руках. Входите через Entrance C (со стороны Rue de Lille) — минуете общую очередь. Сразу наверх, к импрессионистам (Моне, Ренуар, Ван Гог). 7 июня — первое воскресенье месяца: вход для всех свободный, внутри людно, но ваш слот гарантирует вход.", badges:["✅ забронировано 11:30","⏰ слот по времени"]},
    {slot:"По желанию", name:"Tuileries → Orangerie", q:"Musée de l'Orangerie, Paris", ll:[48.8638,2.3226], book:{label:"Orangerie",url:"https://www.musee-orangerie.fr/en"},
     desc:"Если будет настроение — овальные залы с «Кувшинками» Моне. Маленький музей. 7-го (первое воскресенье) вход бесплатный и потому очень многолюдно.", badges:["🎟️ билет ~€14","🟡 по желанию"]},
-   {slot:"По желанию", name:"Hôtel de la Marine (ваш Рилс)", q:"Hôtel de la Marine, Paris", ll:[48.8676,2.3214], book:{label:"Hôtel de la Marine",url:"https://www.hotel-de-la-marine.paris/en"},
-    desc:"Лоджия-терраса над Place de la Concorde с видом на Эйфелеву башню.", badges:["🎟️ билет ~€17","🟡 по желанию"]},
-   {slot:"День", name:"Сен-Жермен-де-Пре", q:"Saint-Germain-des-Pres, Paris", ll:[48.8540,2.3340],
-    desc:"После Orsay — неспешный левый берег: Les Deux Magots / Café de Flore, церковь Сен-Жермен, букинисты у реки. Или отдых в отеле.", badges:["🚶 прогулка"]},
-   {slot:"Ранний вечер", name:"Кораблик по Сене (по желанию)", q:"Vedettes du Pont Neuf, Paris", ll:[48.8565,2.3410], book:{label:"Прогулка по Сене",url:"https://www.vedettesdupontneuf.com/en/"},
-    desc:"~1 час, подсвеченные памятники — спокойно для уставших ног. Вечер воскресенья свободный (башню вы делаете в субботу).", badges:["🎟️ по желанию"]},
-   {slot:"Ужин", name:"Ужин на левом берегу", q:"restaurants Latin Quarter Paris", ll:[48.8500,2.3450],
-    desc:"Неспешный ужин в Латинском квартале или Сен-Жермен.", badges:[]}
+   {slot:"Обед/день", name:"Сен-Жермен-де-Пре", q:"Saint-Germain-des-Pres, Paris", ll:[48.8540,2.3340],
+    desc:"Обед и неспешный левый берег: Les Deux Magots / Café de Flore, церковь Сен-Жермен, букинисты у реки. Обед — Chez Fernand (4.5★) рядом.", badges:["🚶 прогулка"]},
+   {slot:"16:00 (бронь)", name:"Notre-Dame", q:"Notre-Dame de Paris", ll:[48.8530,2.3499], book:{label:"Билет на 16:00",url:"https://www.notredamedeparis.fr/en/"},
+    desc:"Слот на 16:00 у вас на руках — заходите без очереди. Восстановленный интерьер. Отсюда 10 минут пешком до Марэ.", badges:["✅ забронировано 16:00","🆓 бесплатно"]},
+   {slot:"День/вечер", name:"Прогулка по Марэ", q:"Le Marais, Paris", ll:[48.8575,2.3626],
+    desc:"Наконец Марэ как следует: Place des Vosges, дворики, бутики, аркады. По желанию музей — Musée Picasso или Carnavalet (бесплатно).", badges:["🚶 наконец Марэ"]},
+   {slot:"Ужин", name:"Ужин в Марэ", q:"Les Compères, Rue de Saintonge, Paris", ll:[48.8559,2.3622],
+    desc:"Рекомендация друга — Les Compères. Или из проверенных: Bistrot des Tournelles (4.6★).", badges:["⭐ рек. друга"]}
   ]},
 
- {id:"d4", label:"Пн", date:"8 июн", title:"Сент-Шапель, Лувр и вечерний Монмартр",
-  note:"Sainte-Chapelle + Консьержери к открытию в 09:00 (рядом, один досмотр, комби-билет) → Лувр в 13:30 → Монмартр на закате. Насыщенный день — после Лувра отдохните перед вечером.",
+ {id:"d4", label:"Пн", date:"8 июн", title:"Латинский квартал, Лувр и вечерний Монмартр",
+  note:"Сент-Шапель и Консьержери вы сделали в субботу — поэтому утро понедельника свободно для Латинского квартала как следует. Потом Лувр в 13:30 → Монмартр на закате.",
   items:[
-   {slot:"09:00", name:"Sainte-Chapelle", q:"Sainte-Chapelle, Paris", ll:[48.8554,2.3450], book:{label:"Без брони — касса на месте",url:"https://www.sainte-chapelle.fr/en"},
-    desc:"Онлайн-слоты распроданы до вашего отъезда, но билет свободно продаётся в кассе. Берите сразу комби-билет с Консьержери (~€30) — она в том же комплексе. Главная очередь — общий досмотр (с Дворцом правосудия), 30–60 мин в пик; приходите к открытию в будний день. Потрясающий витражный интерьер.", badges:["🎟️ комби с Консьержери ~€30","🚶 без брони — к 09:00"]},
-   {slot:"~10:15", name:"Conciergerie", q:"Conciergerie, Paris", ll:[48.8560,2.3457], book:{label:"Conciergerie",url:"https://www.paris-conciergerie.fr/en"},
-    desc:"Сразу рядом с Sainte-Chapelle (один комплекс, один досмотр) — поэтому делаем вместе, по комби-билету. Тюрьма времён революции, камера Марии-Антуанетты.", badges:["🎟️ в комби-билете","🚶 без брони"]},
+   {slot:"Утро", name:"Латинский квартал", q:"Place de la Contrescarpe, Paris", ll:[48.8430,2.3496],
+    desc:"Ваш район без спешки: рынок Rue Mouffetard, Place de la Contrescarpe, церковь Saint-Étienne-du-Mont у Пантеона, римские Арены Лютеции (бесплатно). Сорбонну и фонтан Сен-Мишель вы уже видели — теперь остальное.",
+    options:[
+     {n:"Saint-Étienne-du-Mont",d:"Необычная церковь с резной перегородкой",q:"Saint-Etienne-du-Mont, Paris"},
+     {n:"Arènes de Lutèce",d:"Римский амфитеатр во дворе — бесплатно",q:"Arenes de Lutece, Paris"},
+     {n:"Au P'tit Grec (рек. друга)",d:"Галеты на Муфтар — на обед/перекус",q:"Au P'tit Grec, Rue Mouffetard, Paris"}
+    ]},
    {slot:"Обед", name:"Обед у Лувра", q:"Palais-Royal restaurants, Paris", ll:[48.8636,2.3370],
     desc:"Кафе у Palais-Royal или на Rue Saint-Honoré. Сам Palais-Royal и Rue de Rivoli вы прошли вчера — это просто остановка на обед.", badges:[]},
    {slot:"13:30 (бронь)", name:"Louvre", q:"Louvre Museum, Paris", ll:[48.8606,2.3376], book:{label:"Билет на 13:30",url:"https://www.louvre.fr/en/visit"},
@@ -387,13 +382,13 @@ const FLEXPINS = {
 };
 
 const QUICKBOOK = [
- {label:"✅ Eiffel — сб 20:30 (готово)",url:"https://www.toureiffel.paris/en", cls:""},
  {label:"① Versailles — слот Passport 14:00 (вт)",url:"https://en.chateauversailles.fr/", cls:"book"},
- {label:"✅ Louvre — 13:30 (готово)",url:"https://www.louvre.fr/en/visit", cls:""},
- {label:"✅ Orsay — 11:30 (готово)",url:"https://www.musee-orsay.fr/en", cls:""},
- {label:"Sainte-Chapelle — без брони, касса (пн 09:00)",url:"https://www.sainte-chapelle.fr/en", cls:""},
- {label:"Notre-Dame — без брони (сб после 18:00)",url:"https://www.notredamedeparis.fr/en/", cls:""},
- {label:"Panthéon — на месте (ср)",url:"https://www.paris-pantheon.fr/en", cls:""}
+ {label:"✅ Eiffel — сб 20:30 (готово)",url:"https://www.toureiffel.paris/en", cls:""},
+ {label:"✅ Orsay — вс 11:30 (готово)",url:"https://www.musee-orsay.fr/en", cls:""},
+ {label:"✅ Notre-Dame — вс 16:00 (готово)",url:"https://www.notredamedeparis.fr/en/", cls:""},
+ {label:"✅ Louvre — пн 13:30 (готово)",url:"https://www.louvre.fr/en/visit", cls:""},
+ {label:"✅ Sainte-Chapelle + Консьержери (сб, готово)",url:"https://www.sainte-chapelle.fr/en", cls:""},
+ {label:"Panthéon — на месте (ср) · поезд RER C без брони",url:"https://www.paris-pantheon.fr/en", cls:""}
 ];
 
 // Suggested time of day, duration, price, opening hours (2026 — оценка, проверяйте на офиц. сайте).
@@ -557,47 +552,31 @@ document.getElementById("bookBar").innerHTML=QUICKBOOK.map(q=>
 
 // ---------- Dining / Bars / Night ----------
 const DINING=[
- {area:"Латинский квартал — рядом с отелем", places:[
-   {n:"Le Reminet",d:"При свечах, местная публика",q:"Le Reminet, Paris"},
-   {n:"La Rôtisserie d'Argent",d:"Лионская классика, виды на Сену",q:"La Rotisserie d'Argent, Paris"},
-   {n:"Le Perraudin",d:"Домашняя кухня, радушно",q:"Le Perraudin, Paris"},
-   {n:"Au Moulin à Vent",d:"Старое доброе бистро, без хайпа",q:"Au Moulin a Vent, Paris"},
-   {n:"La Mosquée de Paris — чайный салон",d:"Мятный чай и пахлава, атмосферный перерыв",q:"La Grande Mosquee de Paris tea room"},
-   {n:"Les Pipos",d:"Винный бар-бистро у Пантеона",q:"Les Pipos, Paris"}
+ {area:"⭐ Рекомендации — от вас и друзей (вне фильтра 4.5★; на карте — золотые звёзды)", places:[
+   {n:"Au P'tit Grec (рынок Муфтар)",rec:1,d:"Друг: солёные галеты — «очень понравилось», есть и сладкие. Близко к отелю.",q:"Au P'tit Grec, Rue Mouffetard, Paris"},
+   {n:"Les Compères (Марэ, у Place des Vosges)",rec:1,d:"Друг ел с сестрой — «довольно хорошо». Хорошо к воскресному Марэ.",q:"Les Compères, Rue de Saintonge, Paris"},
+   {n:"MONBLEU Faubourg Montmartre (9-й)",rec:1,d:"Друг: отличные сыры, чуть в стороне от туристической Оперы.",q:"MONBLEU Faubourg Montmartre, Paris"},
+   {n:"La Marine (канал Сен-Мартен, 10-й)",rec:1,d:"Друг: классический бистро высокого уровня, лучше вечером; любителям трюфеля — закуска oeuf cocotte.",q:"La Marine, Quai de Valmy, Paris"},
+   {n:"Oscar's",rec:1,d:"Вы ели — понравилось (~4.3/5): сервис отличный, вкусно, дороже.",q:"Oscar's restaurant Paris"},
+   {n:"Bouillon Chartier (ваш Рилс)",rec:1,d:"Исторический недорогой bouillon, Grands Boulevards.",q:"Bouillon Chartier Grands Boulevards, Paris"},
+   {n:"Bouillon Julien (ваш Рилс)",rec:1,d:"Зал ар-нуво, дёшево.",q:"Bouillon Julien, Paris"},
+   {n:"Hugo & Co (5-й, у отеля)",rec:1,d:"От знакомых: современное бистро на Rue Monge.",q:"Hugo & Co, 48 Rue Monge, Paris"},
+   {n:"Les Antiquaires (7-й)",rec:1,d:"От знакомых: 13 Rue du Bac, левый берег.",q:"Les Antiquaires, 13 Rue du Bac, Paris"},
+   {n:"Café de Varenne (7-й)",rec:1,d:"От знакомых: 36 Rue de Varenne, у музея Родена.",q:"Café de Varenne, 36 Rue de Varenne, Paris"},
+   {n:"Le Bizétro (16-й, у Эйфелевой)",rec:1,d:"От знакомых: 6 Rue Georges Bizet.",q:"Le Bizétro, 6 Rue Georges Bizet, Paris"},
+   {n:"Pierre Hermé (кондитерская)",rec:1,d:"От знакомых: лучшие макароны и пирожные; 72 Rue Bonaparte.",q:"Pierre Hermé, 72 Rue Bonaparte, Paris"},
+   {n:"Le Bazar (Levallois — вне центра)",rec:1,d:"От знакомых: спросить Franc, сказать что от Azoug. NW от города.",q:"Le Bazar, 25 Avenue de l'Europe, Levallois-Perret"}
  ]},
- {area:"Сен-Жермен (6-й)", places:[
-   {n:"Chez Fernand",d:"Местное, под радаром туристов",q:"Chez Fernand Saint-Germain Paris"},
-   {n:"Allard",d:"Классика с 1932 (cassoulet, coq au vin)",q:"Allard restaurant Paris"},
-   {n:"Bouillon Racine",d:"Ар-нуво, недорого",q:"Bouillon Racine, Paris"}
- ]},
- {area:"Марэ (3–4-й)", places:[
-   {n:"Bistrot des Tournelles",d:"Традиция + аккуратная подача",q:"Bistrot des Tournelles, Paris"},
-   {n:"Parcelles",d:"Современная классика, винная карта",q:"Parcelles restaurant, Paris"},
-   {n:"Breizh Café",d:"Знаменитые бретонские блины и галеты",q:"Breizh Café Marais, Paris"},
-   {n:"Marché des Enfants Rouges",d:"Крытый рынок — обед на любой вкус",q:"Marché des Enfants Rouges, Paris"}
- ]},
- {area:"Рядом с Эйфелевой башней (7-й)", places:[
-   {n:"La Fontaine de Mars",d:"Классика, кусочек башни с террасы",q:"La Fontaine de Mars, Paris"},
-   {n:"Le Petit Cler",d:"Местное на рыночной улице Rue Cler",q:"Le Petit Cler, Paris"},
-   {n:"Le Florimond",d:"Уютно, 10 мин от башни",q:"Le Florimond, Paris"}
- ]},
- {area:"Опера / большие бульвары", places:[
-   {n:"Bouillon Chartier",d:"Исторический дешёвый bouillon (ваш Рилс)",q:"Bouillon Chartier Grands Boulevards, Paris"},
-   {n:"Bouillon Julien",d:"Ар-нуво, дёшево (ваш Рилс)",q:"Bouillon Julien, Paris"},
-   {n:"Le Bon Georges",d:"Любимое бистро 9-го, продукты с рынка",q:"Le Bon Georges, Paris"}
- ]},
- {area:"✨ Особые ужины / шик (€100+ — рекомендации вам)", places:[
-   {n:"Pertinence (7-й, у Эйфелевой)",d:"Высокая кухня, 4.8★ — отлично к вечеру Дня 3. Бронируйте.",q:"Pertinence restaurant, Paris"},
-   {n:"La Truffière (5-й, рядом с отелем)",d:"Изысканная французская кухня в каменном погребе, 4.5★. Бронируйте.",q:"La Truffière, Paris"},
-   {n:"Le Christine (6-й, Сен-Жермен)",d:"Креативная французская кухня и дегустационные меню, 4.6★. Бронируйте.",q:"Le Christine, Paris"}
- ]},
- {area:"👥 Рекомендации (от знакомых)", places:[
-   {n:"Hugo & Co (5-й, рядом с отелем)",d:"Современное бистро на Rue Monge — близко к вам.",q:"Hugo & Co, 48 Rue Monge, Paris"},
-   {n:"Les Antiquaires (7-й)",d:"13 Rue du Bac, левый берег.",q:"Les Antiquaires, 13 Rue du Bac, Paris"},
-   {n:"Café de Varenne (7-й)",d:"36 Rue de Varenne, у музея Родена.",q:"Café de Varenne, 36 Rue de Varenne, Paris"},
-   {n:"Le Bizétro (16-й, у Эйфелевой)",d:"6 Rue Georges Bizet.",q:"Le Bizétro, 6 Rue Georges Bizet, Paris"},
-   {n:"Pierre Hermé (кондитерская)",d:"Лучшие макароны и пирожные; 72 Rue Bonaparte и др.",q:"Pierre Hermé, 72 Rue Bonaparte, Paris"},
-   {n:"Le Bazar (Levallois — вне центра)",d:"Спросить Franc, сказать что от Azoug. NW от города, не в центре.",q:"Le Bazar, 25 Avenue de l'Europe, Levallois-Perret"}
+ {area:"✅ Мои предложения — только 4.5★+ на Google (на карте — зелёные точки)", places:[
+   {n:"Au Moulin à Vent (5-й, у отеля) · 4.7★",d:"Старое доброе бистро, без хайпа.",q:"Au Moulin a Vent, Paris"},
+   {n:"Le Perraudin (5-й, Латинский кв.) · 4.6★",d:"Домашняя кухня, радушно.",q:"Le Perraudin, Paris"},
+   {n:"Les Pipos (5-й, у Пантеона) · 4.6★",d:"Винный бар-бистро.",q:"Les Pipos, Paris"},
+   {n:"Chez Fernand (6-й, Сен-Жермен) · 4.5★",d:"Местная классика под радаром туристов.",q:"Chez Fernand Saint-Germain Paris"},
+   {n:"Bistrot des Tournelles (4-й, Марэ) · 4.6★",d:"Традиция и аккуратная подача — хорошо к воскресному Марэ.",q:"Bistrot des Tournelles, Paris"},
+   {n:"Le Florimond (7-й, у Эйфелевой) · 4.6★",d:"Уютно, 10 мин от башни.",q:"Le Florimond, Paris"},
+   {n:"Pertinence (7-й) · 4.8★ · шик €100+",d:"Высокая кухня, бронируйте.",q:"Pertinence restaurant, Paris"},
+   {n:"Le Christine (6-й) · 4.6★ · шик",d:"Креативная кухня и дегустации, бронируйте.",q:"Le Christine, Paris"},
+   {n:"La Truffière (5-й, у отеля) · 4.5★ · шик",d:"Изысканная кухня в каменном погребе, бронируйте.",q:"La Truffière, Paris"}
  ]}
 ];
 const BARS=[
@@ -660,7 +639,8 @@ const PLACECOORDS={
  "La Truffière, Paris":[48.8445,2.3489],"Pertinence restaurant, Paris":[48.8571,2.3035],"Le Christine, Paris":[48.8543,2.3402],
  "Fondation Louis Vuitton, Paris":[48.8766,2.2633],"Bois de Boulogne, Paris":[48.8620,2.2520],
  "Les Antiquaires, 13 Rue du Bac, Paris":[48.8585,2.3270],"Café de Varenne, 36 Rue de Varenne, Paris":[48.8548,2.3216],"Le Bizétro, 6 Rue Georges Bizet, Paris":[48.8668,2.2967],
- "Hugo & Co, 48 Rue Monge, Paris":[48.8447,2.3517],"Pierre Hermé, 72 Rue Bonaparte, Paris":[48.8530,2.3340]
+ "Hugo & Co, 48 Rue Monge, Paris":[48.8447,2.3517],"Pierre Hermé, 72 Rue Bonaparte, Paris":[48.8530,2.3340],
+ "Au P'tit Grec, Rue Mouffetard, Paris":[48.8428,2.3496],"Les Compères, Rue de Saintonge, Paris":[48.8556,2.3716],"MONBLEU Faubourg Montmartre, Paris":[48.8741,2.3421],"La Marine, Quai de Valmy, Paris":[48.8706,2.3654]
 };
 function buildPointsMap(elId,items,cls){
   const el=document.getElementById(elId);
@@ -669,7 +649,10 @@ function buildPointsMap(elId,items,cls){
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
   const coords=[];
   items.forEach(it=>{const c=PLACECOORDS[it.q]; if(!c) return; coords.push(c);
-    L.marker(c,{icon:L.divIcon({className:"dotic "+cls,html:"<span></span>",iconSize:[14,14],iconAnchor:[7,7]})}).addTo(m).bindPopup("<b>"+it.n+"</b><br><a target='_blank' href='"+mapUrl(it.q)+"'>📍 Карта</a>");
+    const icon = it.rec
+      ? L.divIcon({className:"flexic",html:"<span>★</span>",iconSize:[24,24],iconAnchor:[12,12]})
+      : L.divIcon({className:"dotic "+cls,html:"<span></span>",iconSize:[14,14],iconAnchor:[7,7]});
+    L.marker(c,{icon}).addTo(m).bindPopup("<b>"+(it.rec?"⭐ ":"")+it.n+"</b><br><a target='_blank' href='"+mapUrl(it.q)+"'>📍 Карта</a>");
   });
   addHotel(m); coords.push(HOTEL);
   if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
