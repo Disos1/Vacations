@@ -107,6 +107,10 @@
   .reset{display:inline-block;margin-top:8px;font-size:.72rem;color:var(--sky);background:none;border:none;cursor:pointer;text-decoration:underline}
   details.flex{margin:10px 0}
   details.flex>summary{cursor:pointer;font-weight:700;font-size:.9rem;padding:6px 0}
+  .locate-btn{background:#fff;border:1px solid var(--line);width:34px;height:34px;border-radius:8px;
+    font-size:16px;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .meic span{display:block;width:16px;height:16px;border-radius:50%;background:#1a73e8;
+    border:3px solid #fff;box-shadow:0 0 0 2px #1a73e8,0 1px 4px rgba(0,0,0,.5)}
 </style>
 </head>
 <body>
@@ -208,9 +212,9 @@
     <p>Аудиогиды — для музеев и крупных достопримечательностей внутри; экскурсии «за чаевые» — для прогулок по районам. Совпадают с вашими днями: бесплатные туры — <strong>День 2</strong> (острова/Марэ) и <strong>День 4</strong>, вечер (Монмартр); аудиогиды полезнее в <strong>День 3</strong> (Orsay), <strong>День 4</strong> (Лувр) и <strong>День 5</strong> (Версаль).</p>
     <div class="card" style="margin:9px 0">
       <div class="name" style="font-size:.92rem;color:var(--navy)">🎧 Аудиогиды (самостоятельно)</div>
-      <div class="opt"><div><div class="on">izi.TRAVEL — лучший бесплатный (RU) ★</div><div class="od">Самая большая библиотека, русские прогулки по Парижу + бесплатные аудиогиды в музеях, офлайн. Качество разное — берите туры с высоким рейтингом.</div></div><a target="_blank" href="https://izi.travel/en/france">Открыть</a></div>
+      <div class="opt"><div><div class="on">TouringBee / Tripster — вам понравилось ★</div><div class="od">Аудиогиды TouringBee (купили через Tripster, докупали прямо в приложении TouringBee) — понравились. Плюс живые экскурсии на русском.</div></div><a target="_blank" href="https://tripster.ru/paris/">Открыть</a></div>
+      <div class="opt"><div><div class="on">izi.TRAVEL — по-разному (RU)</div><div class="od">Вы: попадались хорошие, но часть (особенно бесплатных) — слабые. Берите только с высоким рейтингом.</div></div><a target="_blank" href="https://izi.travel/en/france">Открыть</a></div>
       <div class="opt"><div><div class="on">WeGoTrip — музеи (RU, платно)</div><div class="od">Русский аудиогид по Лувру и Orsay, работает офлайн.</div></div><a target="_blank" href="https://wegotrip.com/en/paris">Открыть</a></div>
-      <div class="opt"><div><div class="on">Tripster — русские гиды и аудио (RU)</div><div class="od">Аудиогиды от историков (~€7) и живые экскурсии на русском.</div></div><a target="_blank" href="https://tripster.ru/paris/">Открыть</a></div>
       <div class="opt"><div><div class="on">Rick Steves Audio Europe — лучший бесплатный (EN) ★</div><div class="od">Отличные бесплатные туры по Лувру, Orsay, историческому центру и Версалю.</div></div><a target="_blank" href="https://www.ricksteves.com/watch-read-listen/audio/audio-europe">Открыть</a></div>
     </div>
     <div class="card" style="margin:9px 0">
@@ -249,6 +253,23 @@ const HOTEL=[48.8378,2.3493];
 function addHotel(m){ if(typeof L==="undefined") return;
   L.marker(HOTEL,{icon:L.divIcon({className:"hotelic",html:"<span>★</span>",iconSize:[26,26],iconAnchor:[13,13]}),zIndexOffset:1000})
     .addTo(m).bindPopup("<b>★ Hôtel Monte Cristo</b><br>20 Rue Pascal, 75005 · <a target='_blank' href='"+mapUrl("Hôtel Monte Cristo, 20 Rue Pascal, Paris")+"'>📍 Карта</a>");
+}
+function addLocate(m){ if(typeof L==="undefined") return;
+  const Ctl=L.Control.extend({options:{position:"topright"},onAdd:function(){
+    const b=L.DomUtil.create("button","locate-btn"); b.type="button"; b.innerHTML="📍"; b.title="Показать моё местоположение";
+    L.DomEvent.disableClickPropagation(b);
+    b.addEventListener("click",function(){
+      if(!navigator.geolocation){alert("Геолокация недоступна в этом браузере");return;}
+      b.innerHTML="…";
+      navigator.geolocation.getCurrentPosition(function(p){
+        const ll=[p.coords.latitude,p.coords.longitude]; b.innerHTML="📍";
+        if(m._me){m._me.setLatLng(ll);}else{m._me=L.marker(ll,{icon:L.divIcon({className:"meic",html:"<span></span>",iconSize:[18,18],iconAnchor:[9,9]}),zIndexOffset:2000}).addTo(m).bindPopup("Вы здесь");}
+        m.setView(ll,15); m._me.openPopup();
+      },function(){b.innerHTML="📍";alert("Не удалось определить местоположение. Разрешите доступ к геолокации в браузере.");},{enableHighAccuracy:true,timeout:10000});
+    });
+    return b;
+  }});
+  m.addControl(new Ctl());
 }
 
 const DAYS = [
@@ -512,7 +533,7 @@ function buildMap(id){
     L.marker(f.ll,{icon:L.divIcon({className:"flexic",html:"<span>"+letter+"</span>",iconSize:[24,24],iconAnchor:[12,12]})}).addTo(m).bindPopup(pop);
     coords.push(f.ll);
   });
-  addHotel(m); coords.push(HOTEL);
+  addHotel(m); coords.push(HOTEL); addLocate(m);
   m.fitBounds(L.latLngBounds(coords).pad(0.22));
   maps[id]=m;
 }
@@ -619,7 +640,7 @@ function buildNightMap(){
     L.marker(n.ll,{icon:L.divIcon({className:"nightic",html:"<span>"+(i+1)+"</span>",iconSize:[26,26],iconAnchor:[13,13]})})
       .addTo(m).bindPopup("<b>"+(i+1)+". "+n.n+"</b><br><a target='_blank' href='"+mapUrl(n.q)+"'>📍 Карта</a>");
   });
-  addHotel(m); coords.push(HOTEL);
+  addHotel(m); coords.push(HOTEL); addLocate(m);
   if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
   nightMap=m;
 }
@@ -654,7 +675,7 @@ function buildPointsMap(elId,items,cls){
       : L.divIcon({className:"dotic "+cls,html:"<span></span>",iconSize:[14,14],iconAnchor:[7,7]});
     L.marker(c,{icon}).addTo(m).bindPopup("<b>"+(it.rec?"⭐ ":"")+it.n+"</b><br><a target='_blank' href='"+mapUrl(it.q)+"'>📍 Карта</a>");
   });
-  addHotel(m); coords.push(HOTEL);
+  addHotel(m); coords.push(HOTEL); addLocate(m);
   if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
 }
 
