@@ -57,6 +57,7 @@
   .dotic span{display:block;width:13px;height:13px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45)}
   .dotic.food span{background:#2f6b4f}
   .dotic.bar span{background:#7a2e3a}
+  .hotelic span{font-size:24px;line-height:1;color:#d4af37;-webkit-text-stroke:1px #6b4e00;text-shadow:0 1px 2px rgba(0,0,0,.6)}
   .pin{font-size:.63rem;font-weight:700;padding:2px 7px;border-radius:20px}
   .pin-fixed{background:#fbe1e1;color:#9a2b2b}
   .pin-flex{background:#e2eee6;color:var(--green)}
@@ -244,6 +245,11 @@
 const LSKEY = "paris_jun2026_progress";
 const done = JSON.parse(localStorage.getItem(LSKEY) || "{}");
 function mapUrl(q){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
+const HOTEL=[48.8378,2.3493];
+function addHotel(m){ if(typeof L==="undefined") return;
+  L.marker(HOTEL,{icon:L.divIcon({className:"hotelic",html:"<span>★</span>",iconSize:[26,26],iconAnchor:[13,13]}),zIndexOffset:1000})
+    .addTo(m).bindPopup("<b>★ Hôtel Monte Cristo</b><br>20 Rue Pascal, 75005 · <a target='_blank' href='"+mapUrl("Hôtel Monte Cristo, 20 Rue Pascal, Paris")+"'>📍 Карта</a>");
+}
 
 const DAYS = [
  {id:"d1", label:"Пт", date:"5 июн", title:"Прилёт и знакомство с районом",
@@ -516,7 +522,8 @@ function buildMap(id){
     L.marker(f.ll,{icon:L.divIcon({className:"flexic",html:"<span>"+letter+"</span>",iconSize:[24,24],iconAnchor:[12,12]})}).addTo(m).bindPopup(pop);
     coords.push(f.ll);
   });
-  m.fitBounds(L.latLngBounds(coords).pad(0.25));
+  addHotel(m); coords.push(HOTEL);
+  m.fitBounds(L.latLngBounds(coords).pad(0.22));
   maps[id]=m;
 }
 
@@ -588,6 +595,14 @@ const DINING=[
    {n:"Pertinence (7-й, у Эйфелевой)",d:"Высокая кухня, 4.8★ — отлично к вечеру Дня 3. Бронируйте.",q:"Pertinence restaurant, Paris"},
    {n:"La Truffière (5-й, рядом с отелем)",d:"Изысканная французская кухня в каменном погребе, 4.5★. Бронируйте.",q:"La Truffière, Paris"},
    {n:"Le Christine (6-й, Сен-Жермен)",d:"Креативная французская кухня и дегустационные меню, 4.6★. Бронируйте.",q:"Le Christine, Paris"}
+ ]},
+ {area:"👥 Рекомендации (от знакомых)", places:[
+   {n:"Hugo & Co (5-й, рядом с отелем)",d:"Современное бистро на Rue Monge — близко к вам.",q:"Hugo & Co, 48 Rue Monge, Paris"},
+   {n:"Les Antiquaires (7-й)",d:"13 Rue du Bac, левый берег.",q:"Les Antiquaires, 13 Rue du Bac, Paris"},
+   {n:"Café de Varenne (7-й)",d:"36 Rue de Varenne, у музея Родена.",q:"Café de Varenne, 36 Rue de Varenne, Paris"},
+   {n:"Le Bizétro (16-й, у Эйфелевой)",d:"6 Rue Georges Bizet.",q:"Le Bizétro, 6 Rue Georges Bizet, Paris"},
+   {n:"Pierre Hermé (кондитерская)",d:"Лучшие макароны и пирожные; 72 Rue Bonaparte и др.",q:"Pierre Hermé, 72 Rue Bonaparte, Paris"},
+   {n:"Le Bazar (Levallois — вне центра)",d:"Спросить Franc, сказать что от Azoug. NW от города, не в центре.",q:"Le Bazar, 25 Avenue de l'Europe, Levallois-Perret"}
  ]}
 ];
 const BARS=[
@@ -630,6 +645,7 @@ function buildNightMap(){
     L.marker(n.ll,{icon:L.divIcon({className:"nightic",html:"<span>"+(i+1)+"</span>",iconSize:[26,26],iconAnchor:[13,13]})})
       .addTo(m).bindPopup("<b>"+(i+1)+". "+n.n+"</b><br><a target='_blank' href='"+mapUrl(n.q)+"'>📍 Карта</a>");
   });
+  addHotel(m); coords.push(HOTEL);
   if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
   nightMap=m;
 }
@@ -647,7 +663,9 @@ const PLACECOORDS={
  "Lavomatic bar, Paris":[48.8689,2.3622],"Le Syndicat bar, Paris":[48.8705,2.3535],"Castor Club, Paris":[48.8519,2.3431],
  "Prescription Cocktail Club, Paris":[48.8540,2.3389],"Combat bar, Belleville, Paris":[48.8721,2.3790],"Le Caveau de la Huchette, Paris":[48.8530,2.3458],
  "La Truffière, Paris":[48.8445,2.3489],"Pertinence restaurant, Paris":[48.8571,2.3035],"Le Christine, Paris":[48.8543,2.3402],
- "Fondation Louis Vuitton, Paris":[48.8766,2.2633],"Bois de Boulogne, Paris":[48.8620,2.2520]
+ "Fondation Louis Vuitton, Paris":[48.8766,2.2633],"Bois de Boulogne, Paris":[48.8620,2.2520],
+ "Les Antiquaires, 13 Rue du Bac, Paris":[48.8585,2.3270],"Café de Varenne, 36 Rue de Varenne, Paris":[48.8548,2.3216],"Le Bizétro, 6 Rue Georges Bizet, Paris":[48.8668,2.2967],
+ "Hugo & Co, 48 Rue Monge, Paris":[48.8447,2.3517],"Pierre Hermé, 72 Rue Bonaparte, Paris":[48.8530,2.3340]
 };
 function buildPointsMap(elId,items,cls){
   const el=document.getElementById(elId);
@@ -658,6 +676,7 @@ function buildPointsMap(elId,items,cls){
   items.forEach(it=>{const c=PLACECOORDS[it.q]; if(!c) return; coords.push(c);
     L.marker(c,{icon:L.divIcon({className:"dotic "+cls,html:"<span></span>",iconSize:[14,14],iconAnchor:[7,7]})}).addTo(m).bindPopup("<b>"+it.n+"</b><br><a target='_blank' href='"+mapUrl(it.q)+"'>📍 Карта</a>");
   });
+  addHotel(m); coords.push(HOTEL);
   if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
 }
 
