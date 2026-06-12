@@ -172,7 +172,7 @@
     <h3>🍽️ Where to eat</h3>
     <p>By area, so you can pick near your day. Dinner for two ~€60–100 unless noted; bouillons are cheaper. Book popular places a day or two ahead.</p>
     <div class="daymap" id="diningmap"></div>
-    <div class="leg">🍽️ Map: <b>wine ★</b> = our favourites (excellent) · <b>gold ★</b> = you &amp; friends' picks · <b>green dot</b> = my curated 4.5★+ picks. Tap a marker.</div>
+    <div class="leg">🍽️ Map: <b>wine ★</b> = top favourites · <b>gold ★</b> = recommended · <b>green dot</b> = curated 4.5★+ picks. Tap a marker.</div>
     <div id="diningList"></div>
   </section>
 
@@ -301,9 +301,9 @@ const DAYS = [
   note:"Arrival day. Drop bags, settle in, and ease into the rhythm — a relaxed first afternoon close to base.",
   items:[
    {slot:"Lunch", name:"Rue Mouffetard", q:"Rue Mouffetard, Paris", ll:[48.8410,2.3500],
-    desc:"Old market street near base — galettes, jambon-beurre, cheese, café terraces.", badges:["📍 near base"]},
+    desc:"Old market street near your hotel — galettes, jambon-beurre, cheese, café terraces.", badges:["📍 near your hotel"]},
    {slot:"Afternoon", name:"Jardin des Plantes", q:"Jardin des Plantes, Paris", ll:[48.8443,2.3597],
-    desc:"Calm botanical garden a few minutes from base — catch your breath.", badges:["🌿 free"]},
+    desc:"Calm botanical garden a few minutes from your hotel — catch your breath.", badges:["🌿 free"]},
    {slot:"Afternoon", name:"Panthéon", q:"Panthéon, Paris", ll:[48.8462,2.3464], book:{label:"Panthéon",url:"https://www.paris-pantheon.fr/en"},
     desc:"Climb to the colonnade for a Latin Quarter view (interior optional).", badges:["🎟️ ticket ~€13"]},
    {slot:"Evening", name:"Shakespeare & Company + Seine", q:"Shakespeare and Company, Paris", ll:[48.8526,2.3470],
@@ -338,7 +338,7 @@ const DAYS = [
      {n:"Musée Carnavalet",d:"History of Paris — free",q:"Musée Carnavalet, Paris"}
     ]},
    {slot:"Dinner", name:"Dinner in the Marais", q:"Les Compères, Rue de Saintonge, Paris", ll:[48.8559,2.3622],
-    desc:"Friend's pick: Les Compères. Or verified: Bistrot des Tournelles (4.6★).", badges:["⭐ friend's pick"]}
+    desc:"Try Les Compères, or verified: Bistrot des Tournelles (4.6★).", badges:["⭐ recommended"]}
   ]},
 
  {id:"d3", label:"Day 3", date:"Orsay", title:"Impressionists & the Eiffel at night",
@@ -384,19 +384,19 @@ const DAYS = [
     desc:"La Petite Venise by the Grand Canal — or a picnic on the lawns.", badges:[]},
    {slot:"Timed slot", name:"Palace of Versailles", q:"Palace of Versailles", ll:[48.8049,2.1204], book:{label:"Passport timed slot",url:"https://en.chateauversailles.fr/"},
     desc:"Book a timed 'Passport' slot (~€35). State Apartments and the Hall of Mirrors. Security for everyone; closes 18:30.", badges:["🎫 Passport ~€35","⏰ timed slot"]},
-   {slot:"Evening", name:"Dinner near base", q:"Latin Quarter restaurants, Paris", ll:[48.8470,2.3490],
-    desc:"Back in the city by late afternoon. An easy dinner near base.", badges:["📍 near base"]}
+   {slot:"Evening", name:"Dinner near your hotel", q:"Latin Quarter restaurants, Paris", ll:[48.8470,2.3490],
+    desc:"Back in the city by late afternoon. An easy dinner near your hotel.", badges:["📍 near your hotel"]}
   ]},
 
  {id:"d6", label:"Day 6", date:"Home", title:"Easy morning, then home",
-  note:"Departure day. A relaxed last morning near base, then the airport — allow ~3 hours for check-in and security.",
+  note:"Departure day. A relaxed last morning near your hotel, then the airport — allow ~3 hours for check-in and security.",
   items:[
    {slot:"~10:00", name:"Panthéon (interior)", q:"Panthéon, Paris", ll:[48.8462,2.3464], book:{label:"Panthéon",url:"https://www.paris-pantheon.fr/en"},
     desc:"Foucault's pendulum and the crypt (Voltaire, Rousseau, Marie Curie). Opens at 10:00.", badges:["🎟️ ~€13","🕙 opens 10:00"]},
    {slot:"Morning", name:"Jardin du Luxembourg", q:"Jardin du Luxembourg, Paris", ll:[48.8462,2.3372],
     desc:"The most Parisian last morning with a coffee in hand — 5 min from the Panthéon.", badges:["🌿 free"]},
    {slot:"Before noon", name:"Last pastry — Rue Mouffetard", q:"Rue Mouffetard, Paris", ll:[48.8410,2.3500],
-    desc:"A pastry or cheese for the road. Leave bags at your hotel desk.", badges:["📍 near base"]},
+    desc:"A pastry or cheese for the road. Leave bags at your hotel desk.", badges:["📍 near your hotel"]},
    {slot:"Midday", name:"Taxi to CDG", q:"Charles de Gaulle Airport",
     desc:"Book via your hotel the night before. ~€65 flat rate from the Left Bank.", badges:["🚕 flat rate"]}
   ]}
@@ -460,7 +460,7 @@ const INFO = {
  "Gardens & Grand Canal":{time:"day",dur:"2–3 h",price:"gardens free / fountain days extra",hours:"08:00–20:30"},
  "Lunch by the canal":{time:"~13:30",dur:"1 h",price:"€30–60 for two"},
  "Palace of Versailles":{time:"timed slot",dur:"2–2.5 h",price:"Passport ~€35",hours:"09:00–18:30, closed Mon"},
- "Dinner near base":{time:"~20:00",dur:"1.5 h",price:"€60–100 for two"},
+ "Dinner near your hotel":{time:"~20:00",dur:"1.5 h",price:"€60–100 for two"},
  "Panthéon (interior)":{time:"~10:00",dur:"45 min",price:"~€13",hours:"10:00–18:30"},
  "Jardin du Luxembourg":{time:"~11:00",dur:"45 min",price:"free",hours:"~07:30–21:00 (summer)"},
  "Last pastry — Rue Mouffetard":{time:"~12:00",dur:"30 min",price:"€"},
@@ -586,19 +586,19 @@ document.getElementById("bookBar").innerHTML=QUICKBOOK.map(q=>
 
 // ---------- Dining / Bars / Night ----------
 const DINING=[
- {area:"⭐ Recommendations — you & friends (exempt from the 4.5★ filter · map: gold ★, our favourites: wine ★)", places:[
-   {n:"La Marine (Canal Saint-Martin, 10th)",rec:1,exc:1,d:"★ EXCELLENT — we loved it. Classic upscale bistro on the canal; best in the evening. Truffle lovers: the oeuf cocotte starter.",q:"La Marine, Quai de Valmy, Paris"},
-   {n:"Les Antiquaires (7th)",rec:1,exc:1,d:"★ EXCELLENT — we loved it. Left-Bank bistro, 13 Rue du Bac.",q:"Les Antiquaires, 13 Rue du Bac, Paris"},
-   {n:"MONBLEU Faubourg Montmartre (9th)",rec:1,exc:1,d:"★ EXCELLENT — we loved it. Outstanding cheese, just off the touristy Opéra area.",q:"MONBLEU Faubourg Montmartre, Paris"},
-   {n:"Au P'tit Grec (Rue Mouffetard market)",rec:1,d:"Friend's pick: savoury galettes (sweet ones too). Near base.",q:"Au P'tit Grec, Rue Mouffetard, Paris"},
-   {n:"Les Compères (Marais, near Place des Vosges)",rec:1,d:"Friend's pick: solid bistro — good with a Marais afternoon.",q:"Les Compères, Rue de Saintonge, Paris"},
-   {n:"Oscar's",rec:1,d:"We tried it — liked it (~4.3/5): great service, tasty, pricier.",q:"Oscar's restaurant Paris"},
+ {area:"⭐ Recommended favourites (map: gold ★ · top picks: wine ★)", places:[
+   {n:"La Marine (Canal Saint-Martin, 10th)",rec:1,exc:1,d:"★ EXCELLENT — a standout. Classic upscale bistro on the canal; best in the evening. Truffle lovers: the oeuf cocotte starter.",q:"La Marine, Quai de Valmy, Paris"},
+   {n:"Les Antiquaires (7th)",rec:1,exc:1,d:"★ EXCELLENT — a standout. Left-Bank bistro, 13 Rue du Bac.",q:"Les Antiquaires, 13 Rue du Bac, Paris"},
+   {n:"MONBLEU Faubourg Montmartre (9th)",rec:1,exc:1,d:"★ EXCELLENT — a standout. Outstanding cheese, just off the touristy Opéra area.",q:"MONBLEU Faubourg Montmartre, Paris"},
+   {n:"Au P'tit Grec (Rue Mouffetard market)",rec:1,d:"Savoury galettes (sweet ones too) on the Rue Mouffetard market.",q:"Au P'tit Grec, Rue Mouffetard, Paris"},
+   {n:"Les Compères (Marais, near Place des Vosges)",rec:1,d:"Reliable bistro near Place des Vosges — good with a Marais afternoon.",q:"Les Compères, Rue de Saintonge, Paris"},
+   {n:"Oscar's",rec:1,d:"Liked it (~4.3): great service, tasty, a bit pricier.",q:"Oscar's restaurant Paris"},
    {n:"Bouillon Chartier",rec:1,d:"Historic, cheap bouillon, Grands Boulevards.",q:"Bouillon Chartier Grands Boulevards, Paris"},
    {n:"Bouillon Julien",rec:1,d:"Art-nouveau hall, cheap.",q:"Bouillon Julien, Paris"},
-   {n:"Hugo & Co (5th)",rec:1,d:"From friends: modern bistro on Rue Monge.",q:"Hugo & Co, 48 Rue Monge, Paris"},
-   {n:"Café de Varenne (7th)",rec:1,d:"From friends: 36 Rue de Varenne, near the Rodin museum.",q:"Café de Varenne, 36 Rue de Varenne, Paris"},
-   {n:"Le Bizétro (16th, near the Eiffel)",rec:1,d:"From friends: 6 Rue Georges Bizet.",q:"Le Bizétro, 6 Rue Georges Bizet, Paris"},
-   {n:"Pierre Hermé (pâtisserie)",rec:1,d:"From friends: top macarons and pastries; 72 Rue Bonaparte.",q:"Pierre Hermé, 72 Rue Bonaparte, Paris"}
+   {n:"Hugo & Co (5th)",rec:1,d:"Modern bistro on Rue Monge (5th).",q:"Hugo & Co, 48 Rue Monge, Paris"},
+   {n:"Café de Varenne (7th)",rec:1,d:"36 Rue de Varenne, near the Rodin museum.",q:"Café de Varenne, 36 Rue de Varenne, Paris"},
+   {n:"Le Bizétro (16th, near the Eiffel)",rec:1,d:"6 Rue Georges Bizet (16th, near the Eiffel).",q:"Le Bizétro, 6 Rue Georges Bizet, Paris"},
+   {n:"Pierre Hermé (pâtisserie)",rec:1,d:"Top macarons and pastries; 72 Rue Bonaparte.",q:"Pierre Hermé, 72 Rue Bonaparte, Paris"}
  ]},
  {area:"✅ My picks — Google 4.5★+ only (map: green dots)", places:[
    {n:"Au Moulin à Vent (5th) · 4.7★",d:"Old-school bistro, no hype.",q:"Au Moulin a Vent, Paris"},
@@ -630,7 +630,7 @@ const NIGHT=[
  {n:"Museum late nights",d:"Louvre — Fri to 21:45; Orsay — Thu to 21:45: quiet and atmospheric.",q:"Louvre Museum, Paris",ll:[48.8606,2.3376]},
  {n:"Montmartre / Sacré-Cœur at night",d:"The lit city from the basilica steps.",q:"Sacré-Cœur, Paris",ll:[48.8867,2.3431]},
  {n:"Lit passages & Palais-Royal",d:"A quiet evening stroll through the covered galleries and arcades.",q:"Galerie Vivienne, Paris",ll:[48.8667,2.3403]},
- {n:"A nightcap near your base",d:"The Latin Quarter has cosy late bars a short walk from most 5th-arr. hotels.",q:"Latin Quarter bars, Paris",ll:[48.8470,2.3460]}
+ {n:"A nightcap near your hotel",d:"The Latin Quarter has cosy late bars a short walk from most 5th-arr. hotels.",q:"Latin Quarter bars, Paris",ll:[48.8470,2.3460]}
 ];
 document.getElementById("diningList").innerHTML=DINING.map(g=>
   '<div class="card" style="margin:9px 0"><div class="name" style="font-size:.92rem;color:var(--navy)">'+g.area+'</div>'+
