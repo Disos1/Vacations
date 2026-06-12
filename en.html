@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paris · Dima &amp; Natalia · 5–10 June 2026</title>
+<title>Paris — Dima &amp; Natalia · 6-day couple's template</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
@@ -51,12 +51,16 @@
   .flexic span{display:grid;place-items:center;width:24px;height:24px;background:var(--gold);
     color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
     font-size:.72rem;font-weight:700}
+  .excic span{display:grid;place-items:center;width:26px;height:26px;background:var(--wine);
+    color:#ffd76a;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.5);
+    font-size:.82rem;font-weight:700}
   .nightic span{display:grid;place-items:center;width:26px;height:26px;background:#5b3a7a;
     color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);
     font-size:.78rem;font-weight:700}
   .dotic span{display:block;width:13px;height:13px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45)}
   .dotic.food span{background:#2f6b4f}
   .dotic.bar span{background:#7a2e3a}
+  .hotelic span{font-size:24px;line-height:1;color:#d4af37;-webkit-text-stroke:1px #6b4e00;text-shadow:0 1px 2px rgba(0,0,0,.6)}
   .pin{font-size:.63rem;font-weight:700;padding:2px 7px;border-radius:20px}
   .pin-fixed{background:#fbe1e1;color:#9a2b2b}
   .pin-flex{background:#e2eee6;color:var(--green)}
@@ -86,7 +90,6 @@
     text-decoration:none;padding:7px 11px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink)}
   .btn.map{background:var(--navy);color:#fff;border-color:var(--navy)}
   .btn.book{background:var(--wine);color:#fff;border-color:var(--wine)}
-  .btn.reel{background:#eef0f4;color:#3b3f59}
   .btn.route{background:var(--green);color:#fff;border-color:var(--green);margin-top:8px}
   .options{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
   .options .olabel{font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;margin-bottom:6px}
@@ -106,332 +109,332 @@
   .reset{display:inline-block;margin-top:8px;font-size:.72rem;color:var(--sky);background:none;border:none;cursor:pointer;text-decoration:underline}
   details.flex{margin:10px 0}
   details.flex>summary{cursor:pointer;font-weight:700;font-size:.9rem;padding:6px 0}
-  .langbar{text-align:center;font-size:.72rem;padding:8px}
-  .langbar a{color:var(--sky)}
+  .locate-btn{background:#fff;border:1px solid var(--line);width:34px;height:34px;border-radius:8px;
+    font-size:16px;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .meic span{display:block;width:16px;height:16px;border-radius:50%;background:#1a73e8;
+    border:3px solid #fff;box-shadow:0 0 0 2px #1a73e8,0 1px 4px rgba(0,0,0,.5)}
+  .searchbox{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+    font-size:.92rem;margin:10px 0 4px;background:#fff}
+  .basebar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  .basebar button{font-size:.72rem;font-weight:600;border:1px solid var(--line);background:#fff;
+    border-radius:8px;padding:5px 10px;cursor:pointer;color:var(--navy)}
 </style>
 </head>
 <body>
 <header class="hero">
   <h1>Paris — Dima &amp; Natalia</h1>
-  <div class="sub">5–10 June 2026 · couple trip · base: Hôtel Monte Cristo, Latin Quarter (5th)</div>
+  <div class="sub">A 6-day couple's itinerary · a reusable template · set your own hotel below (defaults to the Latin Quarter, 5th)</div>
   <div class="meta">
-    <span>☀️ ~21°C day, ~13°C evening</span>
-    <span>🌧️ Light showers possible — bring an umbrella</span>
-    <span>🌇 Sunset ~21:53</span>
-    <span>🍳 Breakfast included</span>
-    <span>🧳 Luggage storage — arrival &amp; departure</span>
+    <span>☀️ Early June: ~21°C days, ~13°C evenings</span>
+    <span>🌇 Sunset ~21:53 (June)</span>
+    <span>🗺️ Set your base for accurate maps</span>
+    <span>♻️ Reusable — clone for any trip</span>
   </div>
 </header>
 
 <nav class="days" id="dayNav"></nav>
 
 <div class="wrap">
-  <div class="langbar">🌐 <a href="./index.html">Русская версия</a></div>
-  <div class="leg" style="margin:6px 0 0">📌 <b>fixed</b> — tied to a time or booking (can't just "drop in later") · 🔁 <b>flexible</b> — moves freely · 🟡 gold pins on the map — nearby options</div>
+  <div class="basebar leg" style="margin:12px 0 0" id="baseBar"></div>
+  <input id="searchBox" class="searchbox" placeholder="🔎 Search everything — sights, food, bars…" autocomplete="off">
+  <div id="searchResults" class="card" style="display:none;margin:0 0 8px"></div>
+
+  <div class="leg">📌 <b>fixed</b> — tied to a time or booking (can't just "come later") · 🔁 <b>flexible</b> — moves freely · 🟡 yellow markers on the map = nearby backups</div>
   <div id="app"></div>
 
   <section class="block" id="booking">
-    <h3>🎟️ Book ahead — the top three this week</h3>
-    <p>Your trip is days away, so the windows are open and the first three sell out fast. Tap to open the official site (you book — I never pay or reserve).</p>
+    <h3>🎟️ Book these ahead</h3>
+    <p>Anything with a timed entry sells out — book the official sites early. Everything else you can buy on the day. (You book; this page only links out.)</p>
     <div class="qbar" id="bookBar"></div>
-    <p style="margin-top:10px"><strong>Order:</strong> ① Eiffel summit (Sun eve) → ② Museum Pass + its slots (Louvre first, Mon 9:00) → ③ popular dinners. Notre-Dame is free and day-of only.</p>
-  </section>
-
-  <section class="block" id="discounts">
-    <h3>💳 Card-club / Viator discounts — worth it?</h3>
-    <p>From your screenshots: Isracard's attractions are the <strong>Viator</strong> marketplace; finiti is a similar reseller. Their price is a reseller ticket (often "skip-the-line"), and the "−7%" / "from €…" is off <em>their</em> price, not the box office.</p>
-    <div class="tip"><div class="ic">🏛️</div><div><strong>Museums via a reseller — not worth it.</strong> Prices match or exceed the box office: Orsay €20–23 vs €16, Louvre €68 (a guided Mona-Lisa tour), Orangerie/Panthéon/Arc at or above gate. Your <strong>Museum Pass already covers all 8 paid sites</strong> (€105 vs ~€122 at the gate) with skip-the-line.</div></div>
-    <div class="tip"><div class="ic">🗼</div><div><strong>Eiffel Tower:</strong> the club's €59 (2nd floor + summit option) is <strong>more</strong> than the official ~€36–37 for the summit. Book on the official site.</div></div>
-    <div class="tip"><div class="ic">⛵</div><div><strong>Where a reseller genuinely helps:</strong> the Seine cruise ~€15 (vs ~€17–20 direct) and things not in your plan — <strong>Disneyland Paris</strong> €66 vs €82, Versailles with transfer, Atelier des Lumières, food &amp; wine tours (~10–20% off).</div></div>
-    <div class="qbar">
-      <a class="btn" target="_blank" href="https://isracard-fun.co.il/">Isracard-Fun</a>
-      <a class="btn" target="_blank" href="https://cal-travel.co.il/">Cal-Travel</a>
-      <a class="btn" target="_blank" href="https://www.max-adventure.co.il/?SourceGA=abroad-lobby&property=Max">Max-Adventure</a>
-      <a class="btn" target="_blank" href="https://hvr.finiti.fun/?mid=91987&sig=a239f5117991a4fe7f2d9149b601569b">finiti.fun</a>
-    </div>
-    <div class="tip"><div class="ic">✅</div><div><strong>Bottom line:</strong> for your plan, get the <strong>Museum Pass</strong> and book the Eiffel officially — the reseller isn't cheaper. Use Viator/clubs only for the Seine cruise and extras outside the plan. Not a "tourist trap", just a ticket shop with a markup for flexibility and skip-the-line.</div></div>
-    <div style="overflow-x:auto;margin-top:10px"><table style="width:100%;border-collapse:collapse;font-size:.75rem">
-      <tr style="background:var(--chip)"><th style="text-align:left;padding:5px 7px">Item</th><th style="padding:5px">Reseller</th><th style="padding:5px">Box office</th><th style="padding:5px">Verdict</th></tr>
-      <tr><td style="padding:4px 7px">Louvre</td><td style="text-align:center">€68*</td><td style="text-align:center">€22</td><td style="text-align:center">Pass</td></tr>
-      <tr><td style="padding:4px 7px">Orsay</td><td style="text-align:center">€20–23</td><td style="text-align:center">€16</td><td style="text-align:center">Pass</td></tr>
-      <tr><td style="padding:4px 7px">Orangerie</td><td style="text-align:center">€13–15</td><td style="text-align:center">€12.5</td><td style="text-align:center">Pass</td></tr>
-      <tr><td style="padding:4px 7px">Panthéon</td><td style="text-align:center">€14</td><td style="text-align:center">€13</td><td style="text-align:center">Pass</td></tr>
-      <tr><td style="padding:4px 7px">Conciergerie</td><td style="text-align:center">~€14</td><td style="text-align:center">€13</td><td style="text-align:center">Pass</td></tr>
-      <tr><td style="padding:4px 7px">Arc de Triomphe</td><td style="text-align:center">€16–19</td><td style="text-align:center">€16</td><td style="text-align:center">Pass</td></tr>
-      <tr><td style="padding:4px 7px">Eiffel (summit)</td><td style="text-align:center">€59</td><td style="text-align:center">~€36</td><td style="text-align:center">official</td></tr>
-      <tr><td style="padding:4px 7px">Seine cruise</td><td style="text-align:center">€15</td><td style="text-align:center">€17–20</td><td style="text-align:center">✅ ok</td></tr>
-      <tr><td style="padding:4px 7px">Disneyland Paris</td><td style="text-align:center">€66</td><td style="text-align:center">€82</td><td style="text-align:center">✅ if going</td></tr>
-    </table><div style="font-size:.68rem;color:var(--muted);margin-top:4px">*Louvre €68 — guided tour, not standard entry. Prices from your screenshots; verify before paying.</div></div>
+    <p style="margin-top:10px"><strong>Priority:</strong> the <strong>Eiffel summit</strong> and the <strong>Versailles palace slot</strong> go first (they sell out, and the palace is closed Mondays) → then the <strong>Louvre</strong> and <strong>Orsay</strong> timed slots → Notre-Dame is free but take a timed slot in its official app (opens 2–3 days ahead). Sainte-Chapelle + Conciergerie and the Panthéon are buy-at-the-door. The <strong>RER C train to Versailles needs no reservation</strong> — buy at the machine (~€4 one-way, Zone 4).</p>
   </section>
 
   <section class="block" id="adapt">
-    <h3>🔄 Adapting the plan on the go</h3>
-    <p>Tick things off — progress saves on this device, so the page remembers where you are even after closing.</p>
-    <div class="tip"><div class="ic">🟢</div><div><strong>Outdoor streets and views forgive everything.</strong> Gardens, viewpoints, Montmartre, the Seine, Rue Mouffetard — no tickets, no schedule. Missed one? Slot it into any gap or the last morning — nothing's lost.</div></div>
-    <div class="tip"><div class="ic">🟠</div><div><strong>Timed museum slots are the one hard constraint.</strong> Louvre, Orsay, Orangerie, Sainte-Chapelle, Conciergerie need a booked time. Late or skipping — the slot is forfeit; just rebook a new time on the official site (same-day slots often appear). Not a "come back later".</div></div>
-    <div class="tip"><div class="ic">🍽️</div><div><strong>Food is flexible.</strong> If a bistro is full or you're not hungry yet — pick another option for the day or grab one from "Backup options" below. Book the one or two dinners that matter, leave the rest loose.</div></div>
-    <div class="tip"><div class="ic">🧭</div><div><strong>Swap rule:</strong> days are built by neighbourhood, so swap <em>like for like</em> — move a missed Left-Bank stop to another Left-Bank day, don't cross the city. One anchor per half-day, let the rest float.</div></div>
-    <div class="tip"><div class="ic">🌧️</div><div><strong>Weather turned?</strong> Switch to an indoor anchor (a museum, the Opéra, a passage, the Marais) and push the outdoor plan to the next clear half-day.</div></div>
-    <div class="tip"><div class="ic">🔀</div><div><strong>Can you reorder the major sights?</strong> Yes — before booking you're free to put any museum on any day. Only two hard rules: <em>closure days</em> (Louvre &amp; Orangerie — Tue; Orsay — Mon) and a <em>booked timed slot</em> (📌 — can't move, only rebook). Anything marked 🔁 moves freely.</div></div>
-    <div class="tip"><div class="ic">🏰</div><div><strong>Versailles (if you add it):</strong> a full day out of town (~40 min by RER C / SNCF) — not in the current 5-day Paris plan, and it eats a whole day. If you go: Wed or Thu, at the 9:00 opening or after 15:00 (avoid 11:00–14:00); closed Mondays, crowded Tue &amp; weekends.</div></div>
+    <h3>🔄 Adjusting on the fly</h3>
+    <p>Tick off what you've done — progress is saved on this device, so the page remembers where you left off.</p>
+    <div class="tip"><div class="ic">🟢</div><div><strong>Outdoors forgives everything.</strong> Gardens, viewpoints, Montmartre, the Seine, market streets — no tickets, no schedule. Missed something? Slot it into any gap or the last morning.</div></div>
+    <div class="tip"><div class="ic">🟠</div><div><strong>Timed slots are the only hard constraint.</strong> The Louvre, Orsay and Versailles need a booked time. Sainte-Chapelle, Conciergerie, Notre-Dame and the Panthéon are buy-at-the-door. Miss a slot and it's gone — just rebook on the official site.</div></div>
+    <div class="tip"><div class="ic">🍽️</div><div><strong>Food is flexible.</strong> If a bistro is full or you're not hungry, pick another option or grab one from the backups below. Book the one or two dinners that really matter; leave the rest open.</div></div>
+    <div class="tip"><div class="ic">🧭</div><div><strong>Swap like for like.</strong> Days are built by neighbourhood, so move a missed Left-Bank stop to another Left-Bank day rather than crossing the city. One anchor per half-day, the rest floats.</div></div>
+    <div class="tip"><div class="ic">🌧️</div><div><strong>Rain?</strong> Switch to an indoor anchor (a museum, the Opéra, a covered passage, the Marais) and push the outdoor plan to the next dry half-day.</div></div>
+    <div class="tip"><div class="ic">🗓️</div><div><strong>Closing days — the thing people miss.</strong> The Louvre &amp; Orangerie close <strong>Tuesdays</strong>; Orsay closes <strong>Mondays</strong>; Versailles closes <strong>Mondays</strong>. Map these six days onto your dates around the closures before you lock any slots.</div></div>
+    <div class="tip"><div class="ic">🏰</div><div><strong>Versailles is a full day out</strong> (~40 min by RER C, closed Mondays). If palace slots are afternoon-only, do the gardens and a canal lunch first, palace after.</div></div>
 
     <details class="flex" open>
-      <summary>🎒 Backup options — swaps and spots from your Reels</summary>
-      <p style="font-size:.82rem;color:var(--muted)">Missed something or have a free hour? Add one of these. Most are from your saved Reels.</p>
+      <summary>🎒 Backups &amp; extras</summary>
+      <p style="font-size:.82rem;color:var(--muted)">Missed something, or have a free hour? Drop one of these in.</p>
       <div id="flexList"></div>
     </details>
   </section>
 
   <section class="block" id="dining">
-    <h3>🍽️ Where to eat — more options</h3>
-    <p>By neighbourhood, so you can pick near the day's route. Dinner for two ~€60–100 unless noted; bouillon is cheaper. Book popular spots a day or two ahead.</p>
+    <h3>🍽️ Where to eat</h3>
+    <p>By area, so you can pick near your day. Dinner for two ~€60–100 unless noted; bouillons are cheaper. Book popular places a day or two ahead.</p>
     <div class="daymap" id="diningmap"></div>
-    <div class="leg">🍽️ All food spots (green dots) — tap a dot for its map link.</div>
+    <div class="leg">🍽️ Map: <b>wine ★</b> = our favourites (excellent) · <b>gold ★</b> = you &amp; friends' picks · <b>green dot</b> = my curated 4.5★+ picks. Tap a marker.</div>
     <div id="diningList"></div>
   </section>
 
   <section class="block" id="bars">
-    <h3>🍸 Cocktail bars &amp; speakeasies (hidden bars)</h3>
-    <p><strong>Speakeasies are hidden bars</strong> with a concealed entrance (behind a freezer door, a laundromat, no sign) — a Prohibition-era legacy, and Paris loves them. <strong>Yes, you can get in on your own</strong> — they're real bars: book a table and find the door. A "secret-bars tour" just adds a guide who knows the doors and "passwords", plus company — but it's not required. Bars are small and popular — book a day or two ahead.</p>
+    <h3>🍸 Cocktail bars &amp; speakeasies</h3>
+    <p><strong>Speakeasies are hidden bars</strong> with a concealed entrance (behind a freezer door, a launderette, no sign) — a Prohibition-era throwback Paris loves. <strong>You can absolutely go on your own</strong> — they're real bars: book a table and find the door. Small and popular — book a day or two ahead.</p>
     <div class="daymap" id="barsmap"></div>
-    <div class="leg">🍸 All bars (wine-red dots) — tap a dot for its map link.</div>
+    <div class="leg">🍸 All bars (wine dots) — tap a marker for the map.</div>
     <div id="barsList"></div>
   </section>
 
   <section class="block" id="night">
-    <h3>🌙 Things to do in the evening &amp; at night</h3>
+    <h3>🌙 Evening &amp; night ideas</h3>
     <div class="daymap" id="nightmap"></div>
-    <div class="leg">🌙 Night spots across the city — numbers match the list below; tap a pin for the map link.</div>
+    <div class="leg">🌙 City-wide night spots — numbers match the list below; tap a marker.</div>
     <div id="nightList"></div>
   </section>
 
   <section class="block" id="guides">
-    <h3>🎧 Audio guides & free walking tours</h3>
-    <p>Self-guided audio for inside the museums and big sights; tip-based walking tours for the neighbourhoods. They map onto your days: free tours fit <strong>Day 2</strong> (islands/Marais) and <strong>Day 5</strong> (Montmartre); audio guides earn their keep on <strong>Day 3</strong> (Orsay/Orangerie) and <strong>Day 4</strong> (Louvre).</p>
+    <h3>🎧 Audioguides &amp; walking tours</h3>
+    <p>Audioguides for museum and monument interiors; tip-based walks for neighbourhoods. Good fits: free walks for the islands/Marais and Montmartre; audioguides for Orsay, the Louvre and Versailles.</p>
     <div class="card" style="margin:9px 0">
-      <div class="name" style="font-size:.92rem;color:var(--navy)">🎧 Audio guides (self-guided)</div>
-      <div class="opt"><div><div class="on">Rick Steves Audio Europe — best free (EN) ★</div><div class="od">Top-quality free tours: Louvre, Orsay, Historic Paris walk, Versailles. Use inside the museums.</div></div><a target="_blank" href="https://www.ricksteves.com/watch-read-listen/audio/audio-europe">Open</a></div>
-      <div class="opt"><div><div class="on">izi.TRAVEL — best free (RU) ★</div><div class="od">Largest library, Russian Paris walks + free in-museum audioguides, offline. Quality varies — pick the highly-rated tours.</div></div><a target="_blank" href="https://izi.travel/en/france">Open</a></div>
-      <div class="opt"><div><div class="on">WeGoTrip — museums (RU, paid)</div><div class="od">Russian self-guided audio for the Louvre & Orsay, works offline.</div></div><a target="_blank" href="https://wegotrip.com/en/paris">Open</a></div>
-      <div class="opt"><div><div class="on">VoiceMap — best storytelling (EN, paid)</div><div class="od">Local-narrated neighbourhood walks (Marais, Latin Quarter, Montmartre).</div></div><a target="_blank" href="https://voicemap.me/city/paris">Open</a></div>
+      <div class="name" style="font-size:.92rem;color:var(--navy)">🎧 Audioguides (self-guided)</div>
+      <div class="opt"><div><div class="on">TouringBee — our pick ★</div><div class="od">Travellers' note: TouringBee guides (via Tripster, plus more bought in the TouringBee app) were the favourite.</div></div><a target="_blank" href="https://tripster.com/">Open</a></div>
+      <div class="opt"><div><div class="on">izi.TRAVEL — hit or miss</div><div class="od">Some good guides, but several (especially the free ones) are weak. Use only high-rated tours.</div></div><a target="_blank" href="https://izi.travel/en/france">Open</a></div>
+      <div class="opt"><div><div class="on">Rick Steves Audio Europe — best free (EN) ★</div><div class="od">Excellent free tours of the Louvre, Orsay, the historic centre and Versailles.</div></div><a target="_blank" href="https://www.ricksteves.com/watch-read-listen/audio/audio-europe">Open</a></div>
+      <div class="opt"><div><div class="on">WeGoTrip — museum audioguides (paid)</div><div class="od">Offline museum guides for the Louvre and Orsay.</div></div><a target="_blank" href="https://wegotrip.com/en/paris">Open</a></div>
     </div>
     <div class="card" style="margin:9px 0">
-      <div class="name" style="font-size:.92rem;color:var(--navy)">🚶 Free (tip-based) walking tours · ~€10–50 pp</div>
-      <div class="opt"><div><div class="on">GuruWalk — best for a Russian-language tour ★</div><div class="od">Marketplace you can filter by language (incl. Russian). Marais → Day 2, Montmartre → Day 5.</div></div><a target="_blank" href="https://www.guruwalk.com/paris">Open</a></div>
-      <div class="opt"><div><div class="on">Walkative! — best for history depth</div><div class="od">Licensed guides, deeper storytelling. Historic Centre, Marais, Montmartre.</div></div><a target="_blank" href="https://freewalkingtour.com/paris/">Open</a></div>
-      <div class="opt"><div><div class="on">SANDEMANs — most fun for first-timers (EN)</div><div class="od">Entertaining guides, humour + history. Notre-Dame, Sainte-Chapelle, Montmartre.</div></div><a target="_blank" href="https://www.neweuropetours.eu/paris-walking-tours/">Open</a></div>
+      <div class="name" style="font-size:.92rem;color:var(--navy)">🚶 Free walking tours (tip-based) · ~€10–50 pp</div>
+      <div class="opt"><div><div class="on">GuruWalk — filter by language ★</div><div class="od">Marketplace with a language filter. Marais and Montmartre walks.</div></div><a target="_blank" href="https://www.guruwalk.com/paris">Open</a></div>
+      <div class="opt"><div><div class="on">Walkative! — deeper history</div><div class="od">Licensed guides, detailed stories. Centre, Marais, Montmartre.</div></div><a target="_blank" href="https://freewalkingtour.com/paris/">Open</a></div>
+      <div class="opt"><div><div class="on">SANDEMANs — lively for first-timers</div><div class="od">Energetic guides, humour + history. Notre-Dame, Sainte-Chapelle, Montmartre.</div></div><a target="_blank" href="https://www.neweuropetours.eu/paris-walking-tours/">Open</a></div>
     </div>
-    <div class="card" style="margin:9px 0">
-      <div class="name" style="font-size:.92rem;color:var(--navy)">🇷🇺 Russian guided tours — «Туры в 15:15» (4.95–5.0★, mini-group, since 2013)</div>
-      <div class="od" style="margin-bottom:6px">Russian-language paid walks that line up beautifully with your days — booked online, small groups.</div>
-      <div class="opt"><div><div class="on">Marais, off the tourist track · €39 → Day 2</div><div class="od">2h30 mini-group walk through the Marais.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/parizh-vne-turisticheskih-marshrutov-kvartal-mare/">Open</a></div>
-      <div class="opt"><div><div class="on">Orsay masterpieces in 2h · €55 → Day 3</div><div class="od">Guided highlights of the Impressionist collection.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/shedevry-kollekczij-muzeya-orse-za-2-chasa/">Open</a></div>
-      <div class="opt"><div><div class="on">Louvre highlights, 2h, skip-the-line · €69 → Day 4 ★</div><div class="od">Guided + group entrance; the strongest single fit for your plan.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/glavnye-shedevry-luvra-za-2-chasa-s-gidom-bez-ocheredi/">Open</a></div>
-      <div class="opt"><div><div class="on">Charm of Montmartre · €32 → Day 5</div><div class="od">2h walk through the most bohemian quarter.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/ocharovanie-monmartra/">Open</a></div>
-      <div class="opt"><div><div class="on">Evening Paris in lights, Champs→Eiffel (19:00) · €35 → Day 3 eve ★</div><div class="od">Romantic 2h evening walk — pairs with the Eiffel sparkle.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/vechernij-parizh-v-ognyah-ot-elisejskih-polej-k-ejfelevoj-bashne/">Open</a></div>
-      <div class="opt"><div><div class="on">Paris by taste: snails, frogs, cheese · €60</div><div class="od">Food walk — any free afternoon.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/parizh-na-vkus-ulitki-lyagushki-i-syrnaya-klassika/">Open</a></div>
-      <div class="opt"><div><div class="on">Overview "Red route" (daily 15:15) · €30 → Day 1 intro</div><div class="od">2h15 city intro — a gentle first afternoon.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/parizh-v-1515-krasnyj-marshrut/">Open</a></div>
-      <div class="opt"><div><div class="on">Versailles from Paris (3h30, train) · €87</div><div class="od">If you decide to add the Versailles day.</div></div><a target="_blank" href="https://www.tours15-15.com/paris/excursions/bolshoe-znakomstvo-s-versalem/">Open</a></div>
-    </div>
-    <p style="font-size:.8rem;color:var(--muted)">Tip: the Russian "15:15" Louvre tour (€69, skip-line) and the evening Champs→Eiffel walk (€35) are the best fits. Note the €69 Louvre tour includes group entry — with your Museum Pass you mainly pay for the guide. Free GuruWalk tours are the budget alternative; izi.TRAVEL (RU) / Rick Steves (EN) for inside the museums. Hebrew audio is scarce — for Hebrew, a private guide is the realistic option.</p>
   </section>
 
   <div class="footer">
-    Built from your plan and saved Reels · prices and hours are estimates — verify on the official sites before paying.<br>
-    <button class="reset" onclick="if(confirm('Clear all your ticks?')){localStorage.removeItem(LSKEY);location.reload();}">Reset my progress</button>
+    Built as a reusable Paris template · prices and hours are estimates — check official sites before paying.<br>
+    <button class="reset" onclick="if(confirm('Reset all check-marks?')){localStorage.removeItem(LSKEY);location.reload();}">Reset progress</button>
   </div>
 </div>
 
 <script>
-const LSKEY = "paris_jun2026_progress_en";
+const LSKEY = "paris_template_progress";
 const done = JSON.parse(localStorage.getItem(LSKEY) || "{}");
 function mapUrl(q){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
+
+// ---------- Configurable home base (not pre-defined) ----------
+const HKEY="paris_template_base";
+let BASE = JSON.parse(localStorage.getItem(HKEY) || "null"); // {name,lat,lon} or null
+const DEFAULT_BASE=[48.8430,2.3496]; // Latin Quarter (5th) fallback
+function baseLL(){ return BASE ? [BASE.lat,BASE.lon] : DEFAULT_BASE; }
+function renderBaseBar(){
+  const el=document.getElementById("baseBar"); if(!el) return;
+  el.innerHTML = "🏨 <b>Your base:</b> " + (BASE ? esc(BASE.name) : "<i>not set — using the Latin Quarter (5th)</i>")
+    + " <button onclick='setBase()'>Set / change</button>"
+    + (BASE ? " <button onclick='clearBase()'>Reset</button>" : "");
+}
+function setBase(){
+  const q=prompt("Your hotel name or address (include the city, e.g. 'Hôtel X, 12 Rue Y, Paris'):", BASE?BASE.name:"");
+  if(!q) return;
+  fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&q="+encodeURIComponent(q))
+    .then(r=>r.json()).then(a=>{
+      if(!a||!a.length){alert("Couldn't find that. Add the street and city and try again.");return;}
+      BASE={name:q,lat:parseFloat(a[0].lat),lon:parseFloat(a[0].lon)};
+      localStorage.setItem(HKEY,JSON.stringify(BASE));
+      location.reload();
+    }).catch(()=>alert("Geocoding failed (network). Try again."));
+}
+function clearBase(){ localStorage.removeItem(HKEY); location.reload(); }
+function addHotel(m){ if(typeof L==="undefined") return;
+  const label = BASE ? BASE.name : "Set your base — tap “Set / change” above";
+  L.marker(baseLL(),{icon:L.divIcon({className:"hotelic",html:"<span>★</span>",iconSize:[26,26],iconAnchor:[13,13]}),zIndexOffset:1000})
+    .addTo(m).bindPopup("<b>★ "+esc(label)+"</b>");
+}
+function addLocate(m){ if(typeof L==="undefined") return;
+  const Ctl=L.Control.extend({options:{position:"topright"},onAdd:function(){
+    const b=L.DomUtil.create("button","locate-btn"); b.type="button"; b.innerHTML="📍"; b.title="Show my location";
+    L.DomEvent.disableClickPropagation(b);
+    b.addEventListener("click",function(){
+      if(!navigator.geolocation){alert("Geolocation is not available in this browser");return;}
+      b.innerHTML="…";
+      navigator.geolocation.getCurrentPosition(function(p){
+        const ll=[p.coords.latitude,p.coords.longitude]; b.innerHTML="📍";
+        if(m._me){m._me.setLatLng(ll);}else{m._me=L.marker(ll,{icon:L.divIcon({className:"meic",html:"<span></span>",iconSize:[18,18],iconAnchor:[9,9]}),zIndexOffset:2000}).addTo(m).bindPopup("You are here");}
+        m.setView(ll,15); m._me.openPopup();
+      },function(){b.innerHTML="📍";alert("Couldn't get your location. Allow location access in the browser.");},{enableHighAccuracy:true,timeout:10000});
+    });
+    return b;
+  }});
+  m.addControl(new Ctl());
+}
 
 const DAYS = [
- {id:"d1", label:"Fri", date:"5 Jun", title:"Arrive & settle into your quarter",
-  note:"Land 09:40 → taxi to the hotel (~11:00), drop bags, ease in. A gentle day after the early start.",
+ {id:"d1", label:"Day 1", date:"Arrival", title:"Your neighbourhood",
+  note:"Arrival day. Drop bags, settle in, and ease into the rhythm — a relaxed first afternoon close to base.",
   items:[
    {slot:"Lunch", name:"Rue Mouffetard", q:"Rue Mouffetard, Paris", ll:[48.8410,2.3500],
-    desc:"Old market street 2 min from the hotel — galettes, jambon-beurre, cheese, café terraces.", badges:["📍 by hotel"]},
+    desc:"Old market street near base — galettes, jambon-beurre, cheese, café terraces.", badges:["📍 near base"]},
    {slot:"Afternoon", name:"Jardin des Plantes", q:"Jardin des Plantes, Paris", ll:[48.8443,2.3597],
-    desc:"Calm botanical garden right next to the hotel — reset.", badges:["🌿 free"]},
+    desc:"Calm botanical garden a few minutes from base — catch your breath.", badges:["🌿 free"]},
    {slot:"Afternoon", name:"Panthéon", q:"Panthéon, Paris", ll:[48.8462,2.3464], book:{label:"Panthéon",url:"https://www.paris-pantheon.fr/en"},
-    desc:"Climb to the colonnade for a view over the Latin Quarter.", badges:["🎟️ on Pass"]},
+    desc:"Climb to the colonnade for a Latin Quarter view (interior optional).", badges:["🎟️ ticket ~€13"]},
    {slot:"Evening", name:"Shakespeare & Company + Seine", q:"Shakespeare and Company, Paris", ll:[48.8526,2.3470],
-    desc:"Famous bookshop and the riverside opposite Notre-Dame.", badges:["🌿 free"]},
-   {slot:"Dinner", name:"Latin Quarter bistro", q:"Le Reminet, Paris", ll:[48.8516,2.3492],
-    desc:"Easy walk back to the hotel. Two good options:",
+    desc:"Famous bookshop and the quay opposite Notre-Dame.", badges:["🌿 free"]},
+   {slot:"Dinner", name:"Latin Quarter bistro", q:"Le Perraudin, Paris", ll:[48.8468,2.3432],
+    desc:"Easy stroll back to base. Two verified options:",
     options:[
-     {n:"Le Reminet",d:"Candlelit, local crowd — book ahead",q:"Le Reminet, Paris"},
-     {n:"La Rôtisserie d'Argent",d:"Lyonnaise classics, Seine views",q:"La Rotisserie d'Argent, Paris"}
+     {n:"Au Moulin à Vent · 4.7★",d:"Old-school bistro, no hype",q:"Au Moulin a Vent, Paris"},
+     {n:"Le Perraudin · 4.6★",d:"Home cooking, warm welcome",q:"Le Perraudin, Paris"}
     ]}
   ]},
 
- {id:"d2", label:"Sat", date:"6 Jun", title:"The islands & the Marais",
-  note:"Morning on Île de la Cité, afternoon through the Marais. Grab the first Sainte-Chapelle slot.",
+ {id:"d2", label:"Day 2", date:"Islands", title:"Islands & Le Marais",
+  note:"Île de la Cité's Gothic interiors, then the Marais. Sainte-Chapelle and the Conciergerie share one security line — do them together at opening on a combined ticket.",
   items:[
-   {slot:"Morning", name:"Sainte-Chapelle", q:"Sainte-Chapelle, Paris", ll:[48.8554,2.3450], book:{label:"Sainte-Chapelle",url:"https://www.sainte-chapelle.fr/en"},
-    desc:"The most stunning stained-glass interior in Paris. Go early.", badges:["🎟️ on Pass","⏰ timed slot"]},
-   {slot:"Morning", name:"Conciergerie", q:"Conciergerie, Paris", ll:[48.8560,2.3457], book:{label:"Conciergerie",url:"https://www.paris-conciergerie.fr/en"},
-    desc:"Revolution-era prison, next to Sainte-Chapelle.", badges:["🎟️ on Pass","⏰ timed slot"]},
-   {slot:"Late morning", name:"Notre-Dame", q:"Notre-Dame de Paris", ll:[48.8530,2.3499], book:{label:"Slot (day-of)",url:"https://www.notredamedeparis.fr/en/"},
-    desc:"Reopened, free. Book a slot in the app over breakfast — opens a couple of hours ahead.", badges:["🆓 free","📱 day-of only"]},
-   {slot:"Lunch", name:"Lunch in the Marais", q:"Place des Vosges, Paris", ll:[48.8556,2.3655],
-    desc:"Lunch by Place des Vosges, or crêpes/galettes in the Marais.",
+   {slot:"09:00", name:"Sainte-Chapelle", q:"Sainte-Chapelle, Paris", ll:[48.8554,2.3450], book:{label:"Sainte-Chapelle",url:"https://www.sainte-chapelle.fr/en"},
+    desc:"The most dazzling stained-glass interior in Paris. The main wait is the shared security check (30–60 min in peak season) — arrive at opening. Buy the combined ticket with the Conciergerie (~€30).", badges:["🎟️ combo ~€30","🚶 walk-up — at opening"]},
+   {slot:"~10:15", name:"Conciergerie", q:"Conciergerie, Paris", ll:[48.8560,2.3457], book:{label:"Conciergerie",url:"https://www.paris-conciergerie.fr/en"},
+    desc:"Next door, on the same combined ticket — Revolution-era prison and Marie-Antoinette's cell.", badges:["🎟️ in the combo","🚶 walk-up"]},
+   {slot:"~11:30", name:"Notre-Dame", q:"Notre-Dame de Paris", ll:[48.8530,2.3499], book:{label:"Free timed slot (app)",url:"https://www.notredamedeparis.fr/en/"},
+    desc:"Free. Reserve a timed slot in the official app (opens 2–3 days ahead) to skip the queue, or walk in — shortest at opening or after ~18:00. The restored interior is stunning.", badges:["🆓 free","📱 free timed slot"]},
+   {slot:"Lunch", name:"Lunch on Île Saint-Louis", q:"Île Saint-Louis, Paris", ll:[48.8517,2.3570],
+    desc:"Cross to the smaller island — lunch and Berthillon ice cream. Or café terraces under the Place des Vosges arcades.",
     options:[
-     {n:"Breizh Café",d:"Famous Breton crêpes & galettes",q:"Breizh Café Marais, Paris"},
-     {n:"Place des Vosges",d:"Most elegant square — cafés under the arcades",q:"Place des Vosges, Paris"}
+     {n:"Berthillon",d:"The city's most famous ice cream",q:"Berthillon, Paris"},
+     {n:"Bistrot des Tournelles · 4.6★",d:"Marais bistro for a sit-down lunch",q:"Bistrot des Tournelles, Paris"}
     ]},
-   {slot:"Afternoon", name:"Marais walk", q:"Le Marais, Paris", ll:[48.8575,2.3626],
-    desc:"Boutiques, courtyards, arcades. Want more art — add a museum:",
+   {slot:"Afternoon", name:"Le Marais", q:"Le Marais, Paris", ll:[48.8575,2.3626],
+    desc:"Place des Vosges, courtyards, boutiques, arcades. Add a museum if you like — Picasso, or Carnavalet (free, city history).",
     options:[
      {n:"Musée Picasso",d:"In a grand Marais mansion",q:"Musée Picasso Paris"},
-     {n:"Musée Carnavalet",d:"City history museum — free",q:"Musée Carnavalet, Paris"},
-     {n:"LES FOODIES (your Reel)",d:"Food spot/bakery in the Marais",q:"Les Foodies, Le Marais, Paris"}
+     {n:"Musée Carnavalet",d:"History of Paris — free",q:"Musée Carnavalet, Paris"}
     ]},
-   {slot:"Dinner", name:"Dinner in the Marais", q:"Le Marais restaurants, Paris",
-    desc:"Lots of bistros and wine bars; stay in the Marais or head back to the river.", badges:[]}
+   {slot:"Dinner", name:"Dinner in the Marais", q:"Les Compères, Rue de Saintonge, Paris", ll:[48.8559,2.3622],
+    desc:"Friend's pick: Les Compères. Or verified: Bistrot des Tournelles (4.6★).", badges:["⭐ friend's pick"]}
   ]},
 
- {id:"d3", label:"Sun", date:"7 Jun", title:"Impressionists & an evening at the Eiffel Tower",
-  note:"Orsay → Orangerie → a romantic evening at the tower. Book the Orsay slot and an evening summit slot.",
+ {id:"d3", label:"Day 3", date:"Orsay", title:"Impressionists & the Eiffel at night",
+  note:"Orsay on a timed slot, an easy Left-Bank afternoon, then the Eiffel summit in the evening for golden light and the hourly sparkle.",
   items:[
-   {slot:"Morning", name:"Musée d'Orsay", q:"Musée d'Orsay, Paris", ll:[48.8600,2.3266], book:{label:"Orsay",url:"https://www.musee-orsay.fr/en"},
-    desc:"Impressionists in the old railway station. Timed slot required.", badges:["🎟️ on Pass","⏰ timed slot"]},
-   {slot:"Afternoon", name:"Tuileries → Orangerie", q:"Musée de l'Orangerie, Paris", ll:[48.8638,2.3226], book:{label:"Orangerie",url:"https://www.musee-orangerie.fr/en"},
-    desc:"Walk through the garden to Monet's oval Water-Lilies rooms. Small, calm.", badges:["🎟️ on Pass","⏰ timed slot"]},
-   {slot:"Afternoon", name:"Hôtel de la Marine (your Reel)", q:"Hôtel de la Marine, Paris", ll:[48.8676,2.3214], book:{label:"Hôtel de la Marine",url:"https://www.hotel-de-la-marine.paris/en"},
-    desc:"Loggia terrace over Place de la Concorde with Eiffel Tower views.", badges:["🎟️ on Pass"]},
-   {slot:"Evening", name:"Eiffel Tower — summit", q:"Eiffel Tower, Paris", ll:[48.8584,2.2945], book:{label:"Eiffel (book now!)",url:"https://www.toureiffel.paris/en"},
-    desc:"Pre-booked evening summit slot (~19:30–20:30) for the long golden light.", badges:["🎟️ separate ticket","⏰ timed slot","⭐ sells out fast"]},
-   {slot:"Evening", name:"Sparkle from Trocadéro / Champ de Mars", q:"Trocadéro, Paris", ll:[48.8617,2.2885],
-    desc:"Golden lights at dusk (~22:00); 5-minute sparkle at the top of each hour (22/23/00/01). Be in place just before the hour.", badges:["✨ every hour"]},
-   {slot:"Dinner", name:"Dinner in the 7th", q:"restaurants near Eiffel Tower, Paris",
-    desc:"Before or after the tower.", badges:[]}
+   {slot:"11:30 (timed)", name:"Musée d'Orsay", q:"Musée d'Orsay, Paris", ll:[48.8600,2.3266], book:{label:"Orsay timed slot",url:"https://www.musee-orsay.fr/en"},
+    desc:"Book a timed slot. Enter via Entrance C (Rue de Lille side) to skip the main queue. Go straight to the top floor for the Impressionists (Monet, Renoir, Van Gogh).", badges:["⏰ timed slot"]},
+   {slot:"Optional", name:"Tuileries → Orangerie", q:"Musée de l'Orangerie, Paris", ll:[48.8638,2.3226], book:{label:"Orangerie",url:"https://www.musee-orangerie.fr/en"},
+    desc:"Monet's Water Lilies in the oval rooms — a small, calm museum across the Tuileries.", badges:["🎟️ ~€14","🟡 optional"]},
+   {slot:"Afternoon", name:"Saint-Germain-des-Prés", q:"Saint-Germain-des-Pres, Paris", ll:[48.8540,2.3340],
+    desc:"An unhurried Left Bank: Les Deux Magots / Café de Flore, the church, the riverside booksellers. Lunch nearby: Chez Fernand (4.5★).", badges:["🚶 walk"]},
+   {slot:"Evening (timed)", name:"Eiffel Tower summit", q:"Eiffel Tower, Paris", ll:[48.8584,2.2945], book:{label:"Eiffel — book ahead",url:"https://www.toureiffel.paris/en"},
+    desc:"Book the summit on the official site (sells out, especially weekends). A late slot catches golden light — sunset is ~21:53 in June. Bring a layer.", badges:["⏰ timed slot","⭐ book early"]},
+   {slot:"After dark", name:"Sparkle from Trocadéro / Champ de Mars", q:"Trocadéro, Paris", ll:[48.8617,2.2885],
+    desc:"The tower sparkles for 5 minutes on the hour after dark. Best shot from Trocadéro or Champ de Mars below.", badges:["✨ on the hour"]},
+   {slot:"Dinner", name:"Dinner near the Eiffel", q:"Rue Cler restaurants, Paris", ll:[48.8556,2.3045],
+    desc:"Around Rue Cler / Champ de Mars, before or after the climb. Verified: Le Florimond (4.6★, 10 min).", badges:["🍽️ by the tower"]}
   ]},
 
- {id:"d4", label:"Mon", date:"8 Jun", title:"The Louvre & the grand boulevards",
-  note:"A good Louvre day (Orsay closed Mondays). Book a 9:00 Louvre slot.",
+ {id:"d4", label:"Day 4", date:"Louvre", title:"The Louvre & Montmartre at sunset",
+  note:"The Louvre needs a timed slot and is closed Tuesdays. Montmartre is best in the evening — sunset from the basilica steps.",
   items:[
-   {slot:"Morning", name:"Louvre", q:"Louvre Museum, Paris", ll:[48.8606,2.3376], book:{label:"Louvre — slot (first)",url:"https://www.louvre.fr/en/visit"},
-    desc:"Quietest windows — the 9:00 slot (opening) or the last ~2 hours (~16:00; Mon it closes 18:00, no late night). Price doesn't matter for you — entry on the Museum Pass. Pick 2–3 wings (Denon — the icons) and leave before fatigue.", badges:["🎟️ on Pass","⏰ timed slot","⭐ slots vanish"]},
-   {slot:"Lunch", name:"Palais-Royal", q:"Palais-Royal, Paris", ll:[48.8636,2.3370],
-    desc:"Quiet garden and arcades just north of the Louvre.", badges:["🌿 lovely"]},
-   {slot:"Afternoon", name:"Opéra Garnier", q:"Palais Garnier, Paris", ll:[48.8719,2.3316], book:{label:"Opéra Garnier",url:"https://www.operadeparis.fr/en/visits/palais-garnier"},
-    desc:"Step inside — the staircase and hall are spectacular.", badges:["🎟️ ticket"]},
-   {slot:"Afternoon", name:"Free rooftop view", q:"Printemps Haussmann, Paris", ll:[48.8740,2.3290],
-    desc:"Same view, your pick — Lafayette's dome or the quieter Printemps terrace (your Reel).",
-    options:[
-     {n:"Printemps rooftop (your Reel)",d:"Free, quieter — fewer people",q:"Printemps Haussmann rooftop, Paris"},
-     {n:"Galeries Lafayette rooftop",d:"Free, the famous glass dome",q:"Galeries Lafayette Haussmann, Paris"}
-    ]},
-   {slot:"Dinner", name:"Brasserie near the Opéra or back on the Left Bank", q:"brasserie Grands Boulevards Paris",
-    desc:"Decide which side of the river to end the evening.", badges:[]}
+   {slot:"Timed slot", name:"Louvre", q:"Louvre Museum, Paris", ll:[48.8606,2.3376], book:{label:"Louvre timed slot",url:"https://www.louvre.fr/en/visit"},
+    desc:"Book a timed slot. Enter via the Carrousel du Louvre (99 Rue de Rivoli), not the Pyramid — same security, shorter queue. Denon wing for the headliners; save the Mona Lisa room for late afternoon when the coaches thin out. Closed Tuesdays.", badges:["⏰ timed slot","🚪 Carrousel entrance"]},
+   {slot:"Lunch", name:"Lunch near the Louvre", q:"Palais-Royal restaurants, Paris", ll:[48.8636,2.3370],
+    desc:"Cafés around the Palais-Royal garden or Rue Saint-Honoré.", badges:[]},
+   {slot:"Optional", name:"Opéra Garnier", q:"Palais Garnier, Paris", ll:[48.8719,2.3316], book:{label:"Opéra Garnier",url:"https://www.operadeparis.fr/en/visits/palais-garnier"},
+    desc:"If you want one more grand interior — the staircase and the Chagall ceiling.", badges:["🎟️ ~€15","🟡 optional"]},
+   {slot:"Evening", name:"Sacré-Cœur & Montmartre", q:"Sacré-Cœur, Paris", ll:[48.8867,2.3431],
+    desc:"Métro to Anvers, up by the funicular or the steps. Sunset from the basilica steps is the best view; the basilica stays open late. Place du Tertre, Rue de l'Abreuvoir, La Maison Rose.", badges:["🌿 basilica free","🌅 sunset"]},
+   {slot:"Dinner", name:"Dinner in Montmartre", q:"Abbesses restaurants, Paris", ll:[48.8845,2.3380],
+    desc:"Bistros around Rue des Abbesses — nicer and less touristy than the summit.", badges:[]}
   ]},
 
- {id:"d5", label:"Tue", date:"9 Jun", title:"Montmartre & one last big view",
-  note:"Outdoor day (Louvre & Orangerie closed Tuesdays). Head to Montmartre early.",
+ {id:"d5", label:"Day 5", date:"Versailles", title:"Versailles — full day",
+  note:"A full day out (~40 min by RER C). The palace is closed Mondays. If palace slots are afternoon-only, do the gardens and a canal lunch first, palace after.",
   items:[
-   {slot:"Morning", name:"Sacré-Cœur & Montmartre", q:"Sacré-Cœur, Paris", ll:[48.8867,2.3431],
-    desc:"The view, Place du Tertre, the vineyard and quiet back lanes. Beat the tour buses. The dome (€8) gives the best 360° view of Paris — stunning at sunset, so consider going up in the morning for fewer crowds, or returning at sunset for the view.", badges:["🌿 church free","🎫 dome €8"]},
-   {slot:"Lunch", name:"Bistro near Abbesses", q:"Abbesses, Paris", ll:[48.8845,2.3380],
-    desc:"Streets below the hill are nicer and less touristy than the summit.", badges:[]},
-   {slot:"Afternoon", name:"Arc de Triomphe — rooftop", q:"Arc de Triomphe, Paris", ll:[48.8738,2.2950], book:{label:"Arc de Triomphe",url:"https://www.paris-arc-de-triomphe.fr/en"},
-    desc:"Best central view (the one where you can see the Eiffel Tower).", badges:["🎟️ on Pass"]},
-   {slot:"Afternoon", name:"Champs-Élysées walk", q:"Champs-Élysées, Paris", ll:[48.8698,2.3079],
-    desc:"Down to Concorde if you have the energy.", badges:[]},
-   {slot:"Early evening", name:"Seine cruise (optional)", q:"Vedettes du Pont Neuf, Paris", ll:[48.8565,2.3410], book:{label:"Seine cruise",url:"https://www.vedettesdupontneuf.com/en/"},
-    desc:"~1 hour, lit-up monuments — easy on tired legs for the last evening.", badges:["🎟️ optional"]},
-   {slot:"Dinner", name:"Final Left-Bank bistro", q:"Le Perraudin, Paris", ll:[48.8485,2.3437],
-    desc:"Near the hotel. Classic bistros or a cheap, beautiful bouillon:",
-    options:[
-     {n:"Le Perraudin",d:"Home cooking, welcoming",q:"Le Perraudin, Paris"},
-     {n:"Au Moulin à Vent",d:"Tiny, old-school, no hype",q:"Au Moulin à Vent, Paris"},
-     {n:"Chez Gladines",d:"Generous South-West cooking",q:"Chez Gladines Paris"},
-     {n:"Bouillon Julien (your Reel)",d:"Art Nouveau hall, mains ~€10–15, no booking — expect a queue",q:"Bouillon Julien, Paris"}
-    ]}
+   {slot:"Morning", name:"RER C to Versailles", q:"Versailles Chateau Rive Gauche", ll:[48.8014,2.1349],
+    desc:"From a Left-Bank station (e.g. Saint-Michel–Notre-Dame), RER C to the terminus 'Versailles Château Rive Gauche' (~40 min), then ~10 min on foot. No reservation — buy at the machine (~€4 each way, Zone 4).", badges:["🚆 RER C","🎫 buy round-trip"]},
+   {slot:"Day", name:"Gardens & Grand Canal", q:"Gardens of Versailles", ll:[48.8085,2.1100],
+    desc:"Open from the morning, no palace slot needed. Musical-fountain / musical-garden days in season. Stroll the parterres, a rowboat or golf cart on the Grand Canal, the Trianon and the Hamlet.", badges:["🌿 gardens"]},
+   {slot:"Lunch", name:"Lunch by the canal", q:"La Petite Venise Versailles", ll:[48.8157,2.1218],
+    desc:"La Petite Venise by the Grand Canal — or a picnic on the lawns.", badges:[]},
+   {slot:"Timed slot", name:"Palace of Versailles", q:"Palace of Versailles", ll:[48.8049,2.1204], book:{label:"Passport timed slot",url:"https://en.chateauversailles.fr/"},
+    desc:"Book a timed 'Passport' slot (~€35). State Apartments and the Hall of Mirrors. Security for everyone; closes 18:30.", badges:["🎫 Passport ~€35","⏰ timed slot"]},
+   {slot:"Evening", name:"Dinner near base", q:"Latin Quarter restaurants, Paris", ll:[48.8470,2.3490],
+    desc:"Back in the city by late afternoon. An easy dinner near base.", badges:["📍 near base"]}
   ]},
 
- {id:"d6", label:"Wed", date:"10 Jun", title:"A slow morning — then home",
-  note:"Flight 17:35 → leave the hotel ~13:30 (at CDG by ~14:30, El Al — 3 hours ahead).",
+ {id:"d6", label:"Day 6", date:"Home", title:"Easy morning, then home",
+  note:"Departure day. A relaxed last morning near base, then the airport — allow ~3 hours for check-in and security.",
   items:[
+   {slot:"~10:00", name:"Panthéon (interior)", q:"Panthéon, Paris", ll:[48.8462,2.3464], book:{label:"Panthéon",url:"https://www.paris-pantheon.fr/en"},
+    desc:"Foucault's pendulum and the crypt (Voltaire, Rousseau, Marie Curie). Opens at 10:00.", badges:["🎟️ ~€13","🕙 opens 10:00"]},
    {slot:"Morning", name:"Jardin du Luxembourg", q:"Jardin du Luxembourg, Paris", ll:[48.8462,2.3372],
-    desc:"The most Parisian last morning, coffee in hand. Near the hotel.", badges:["🌿 free"]},
-   {slot:"Morning", name:"Rue Madame (your Reel)", q:"Rue Madame, Paris", ll:[48.8485,2.3300],
-    desc:"Runs along the garden's west side — 'a street you mustn't miss'.", badges:["🚶 walk"]},
-   {slot:"Before noon", name:"Last pastries — Rue Mouffetard", q:"Rue Mouffetard, Paris", ll:[48.8410,2.3500],
-    desc:"Pastries or cheese for the road. Bags can stay at reception.", badges:["📍 by hotel"]},
-   {slot:"~13:30", name:"Taxi to CDG", q:"Charles de Gaulle Airport",
-    desc:"Arrange via the hotel the night before. ~€65 fixed fare, Left Bank.", badges:["🚕 fixed fare"]}
+    desc:"The most Parisian last morning with a coffee in hand — 5 min from the Panthéon.", badges:["🌿 free"]},
+   {slot:"Before noon", name:"Last pastry — Rue Mouffetard", q:"Rue Mouffetard, Paris", ll:[48.8410,2.3500],
+    desc:"A pastry or cheese for the road. Leave bags at your hotel desk.", badges:["📍 near base"]},
+   {slot:"Midday", name:"Taxi to CDG", q:"Charles de Gaulle Airport",
+    desc:"Book via your hotel the night before. ~€65 flat rate from the Left Bank.", badges:["🚕 flat rate"]}
   ]}
 ];
 
 const FLEX = [
- {n:"Bouillon Chartier (Grands Boulevards)", d:"Historic cheap bouillon — the saucisse-purée Reel. Confirmed by you.", q:"Bouillon Chartier Grands Boulevards, Paris", book:{label:"Bouillon Chartier",url:"https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/"}, reel:"https://www.facebook.com/share/r/1EyLwE7HEU/"},
- {n:"Bouillon Julien", d:"Art Nouveau hall, dinner ~€10–15, no booking.", q:"Bouillon Julien, Paris", reel:"https://www.facebook.com/share/r/16SQJfoKfX/"},
- {n:"Petit Palais", d:"Beautiful FREE fine-arts museum — art at no cost.", q:"Petit Palais, Paris", book:{label:"Petit Palais",url:"https://www.petitpalais.paris.fr/en"}},
- {n:"Printemps rooftop", d:"Free, quiet viewpoint by Galeries Lafayette.", q:"Printemps Haussmann rooftop, Paris", reel:"https://www.facebook.com/share/r/17TF5QMF6g/"},
- {n:"Secret luxury second-hand shop", d:"Vintage/consignment, 'best in the city' — a browse.", q:"luxury second hand consignment Paris", reel:"https://www.facebook.com/share/r/1PRzWYQmSR/"},
- {n:"La Galerie Dior", d:"Dior fashion museum, Avenue Montaigne.", q:"La Galerie Dior, Paris", book:{label:"Galerie Dior",url:"https://www.galeriedior.com/en"}, reel:"https://www.facebook.com/share/r/17XGvhMPSW/"},
- {n:"Place des Vosges / Marais walk", d:"Overlaps with Day 2.", q:"Place des Vosges, Paris", reel:"https://www.facebook.com/share/r/176Ki4ZH1i/"},
- {n:"Fondation Louis Vuitton", d:"Frank Gehry building, modern art — in the Bois de Boulogne (16th). Timed ticket, NOT on the Museum Pass (~€16). A half-day west.", q:"Fondation Louis Vuitton, Paris", book:{label:"Fondation LV",url:"https://www.fondationlouisvuitton.fr/en"}},
- {n:"Bois de Boulogne", d:"Huge park west of the city — lakes, gardens; pairs with the Fondation Louis Vuitton (it's inside the park).", q:"Bois de Boulogne, Paris"}
+ {n:"Bouillon Chartier (Grands Boulevards)", d:"Historic, cheap bouillon — classic saucisse-purée.", q:"Bouillon Chartier Grands Boulevards, Paris", book:{label:"Bouillon Chartier",url:"https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/"}},
+ {n:"Bouillon Julien", d:"Art-nouveau hall, dinner ~€10–15, no booking.", q:"Bouillon Julien, Paris"},
+ {n:"Petit Palais", d:"Lovely FREE fine-arts museum — art at no cost.", q:"Petit Palais, Paris", book:{label:"Petit Palais",url:"https://www.petitpalais.paris.fr/en"}},
+ {n:"Printemps rooftop", d:"Free, quieter rooftop view near Galeries Lafayette.", q:"Printemps Haussmann rooftop, Paris"},
+ {n:"Vintage & consignment shopping", d:"Second-hand / consignment boutiques around the Marais and the 6th.", q:"vintage consignment shopping Marais Paris"},
+ {n:"La Galerie Dior", d:"Dior fashion museum, Avenue Montaigne.", q:"La Galerie Dior, Paris", book:{label:"Galerie Dior",url:"https://www.galeriedior.com/en"}},
+ {n:"Place des Vosges / Marais walk", d:"Overlaps with Day 2.", q:"Place des Vosges, Paris"},
+ {n:"Fondation Louis Vuitton", d:"Frank Gehry building, modern art — in the Bois de Boulogne (16th). Timed slot (~€16). Half-day west.", q:"Fondation Louis Vuitton, Paris", book:{label:"Fondation LV",url:"https://www.fondationlouisvuitton.fr/en"}},
+ {n:"Bois de Boulogne", d:"Huge park to the west — lakes, gardens; pairs with the Fondation Louis Vuitton.", q:"Bois de Boulogne, Paris"}
 ];
 
+// Nearby optional spots shown as gold lettered pins on the relevant day's map
 const FLEXPINS = {
  d4:[
-  {n:"Bouillon Chartier", ll:[48.8718,2.3428], q:"Bouillon Chartier Grands Boulevards, Paris", book:{url:"https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/"}, reel:"https://www.facebook.com/share/r/1EyLwE7HEU/"},
-  {n:"Bouillon Julien", ll:[48.8703,2.3541], q:"Bouillon Julien, Paris", reel:"https://www.facebook.com/share/r/16SQJfoKfX/"}
- ],
- d5:[
-  {n:"Petit Palais (free)", ll:[48.8661,2.3145], q:"Petit Palais, Paris"},
-  {n:"La Galerie Dior", ll:[48.8662,2.3036], q:"La Galerie Dior, Paris", reel:"https://www.facebook.com/share/r/17XGvhMPSW/"}
+  {n:"Bouillon Chartier", ll:[48.8718,2.3428], q:"Bouillon Chartier Grands Boulevards, Paris", book:{url:"https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/"}},
+  {n:"Bouillon Julien", ll:[48.8703,2.3541], q:"Bouillon Julien, Paris"}
  ]
 };
 
 const QUICKBOOK = [
- {label:"① Eiffel (summit)",url:"https://www.toureiffel.paris/en", cls:"book"},
- {label:"② Paris Museum Pass",url:"https://www.parismuseumpass.fr/en", cls:"book"},
- {label:"② Louvre — slot",url:"https://www.louvre.fr/en/visit", cls:""},
- {label:"② Orsay — slot",url:"https://www.musee-orsay.fr/en", cls:""},
- {label:"② Sainte-Chapelle",url:"https://www.sainte-chapelle.fr/en", cls:""},
- {label:"③ Notre-Dame (day-of)",url:"https://www.notredamedeparis.fr/en/", cls:""},
- {label:"Seine cruise",url:"https://www.vedettesdupontneuf.com/en/", cls:""}
+ {label:"Eiffel Tower (summit) — official",url:"https://www.toureiffel.paris/en", cls:"book"},
+ {label:"Versailles — Passport timed slot",url:"https://en.chateauversailles.fr/", cls:"book"},
+ {label:"Louvre — timed slot",url:"https://www.louvre.fr/en/visit", cls:""},
+ {label:"Orsay — timed slot",url:"https://www.musee-orsay.fr/en", cls:""},
+ {label:"Notre-Dame — free timed slot",url:"https://www.notredamedeparis.fr/en/", cls:""},
+ {label:"Sainte-Chapelle + Conciergerie",url:"https://www.sainte-chapelle.fr/en", cls:""},
+ {label:"Panthéon",url:"https://www.paris-pantheon.fr/en", cls:""}
 ];
 
+// Suggested time of day, duration, price, opening hours (estimates — check official sites).
 const INFO = {
- "Rue Mouffetard":{time:"~13:00",dur:"1 h",price:"free",hours:"market: Tue–Sun"},
- "Jardin des Plantes":{time:"~14:30",dur:"45 min",price:"garden free",hours:"~08:00–20:00"},
- "Panthéon":{time:"~15:30",dur:"1 h",price:"€13 (on Pass)",hours:"10:00–18:30"},
- "Shakespeare & Company + Seine":{time:"~17:30",dur:"45 min",price:"free",hours:"bookshop ~10:00–20:00"},
+ "Rue Mouffetard":{time:"lunch",dur:"1 h",price:"free",hours:"market: Tue–Sun"},
+ "Jardin des Plantes":{time:"afternoon",dur:"45 min",price:"garden free",hours:"~08:00–20:00"},
+ "Panthéon":{time:"afternoon",dur:"1 h",price:"~€13",hours:"10:00–18:30"},
+ "Shakespeare & Company + Seine":{time:"~17:30",dur:"45 min",price:"free",hours:"shop ~10:00–20:00"},
  "Latin Quarter bistro":{time:"~20:00",dur:"1.5 h",price:"€60–100 for two"},
- "Sainte-Chapelle":{time:"09:00 (first slot)",dur:"45 min",price:"€13 (on Pass)",hours:"09:00–19:00"},
- "Conciergerie":{time:"~10:00",dur:"45 min",price:"€13 (on Pass)",hours:"09:30–18:00"},
- "Notre-Dame":{time:"~11:00",dur:"30–45 min",price:"free",hours:"~08:00–19:00"},
- "Lunch in the Marais":{time:"~13:00",dur:"1 h",price:"€30–50 for two"},
- "Marais walk":{time:"afternoon",dur:"2 h",price:"streets free; museums €12–16"},
+ "Sainte-Chapelle":{time:"09:00 (at opening)",dur:"45 min + security",price:"€30 combo w/ Conciergerie",hours:"09:00–19:00"},
+ "Conciergerie":{time:"~10:15 (with Sainte-Chapelle)",dur:"45 min",price:"in the combo ticket",hours:"09:30–18:00"},
+ "Notre-Dame":{time:"~18:00 or at opening",dur:"30–45 min",price:"free",hours:"Sat–Sun 08:00–19:15"},
+ "Lunch on Île Saint-Louis":{time:"~13:00",dur:"1 h",price:"€30–50 for two"},
+ "Le Marais":{time:"afternoon",dur:"2 h",price:"streets free; museums €12–16"},
  "Dinner in the Marais":{time:"~20:00",dur:"1.5 h",price:"€60–100 for two"},
- "Musée d'Orsay":{time:"~10:00",dur:"2 h",price:"€16 (on Pass)",hours:"09:30–18:00, Thu to 21:45, closed Mon"},
- "Tuileries → Orangerie":{time:"~14:30",dur:"1–1.5 h",price:"€12.50 (on Pass)",hours:"09:00–18:00, closed Tue"},
- "Hôtel de la Marine (your Reel)":{time:"~16:30",dur:"1 h (loggia quick)",price:"€17 (on Pass)",hours:"10:30–19:00, Fri to 21:30"},
- "Eiffel Tower — summit":{time:"~19:30–20:30",dur:"2–2.5 h with queue",price:"€36.70/person (NOT on Pass)",hours:"~09:30–23:00 (summer to 00:45)"},
- "Sparkle from Trocadéro / Champ de Mars":{time:"by 22:00",dur:"30 min",price:"free",hours:"sparkle 22/23/00/01, 5 min"},
- "Dinner in the 7th":{time:"~21:00",dur:"1.5 h",price:"€60–100 for two"},
- "Louvre":{time:"09:00 or ~16:00",dur:"2.5–3 h",price:"€22 (on Pass)",hours:"09:00–18:00, Wed/Fri to 21:45, closed Tue"},
- "Palais-Royal":{time:"~12:30",dur:"45 min",price:"free",hours:"garden ~08:00–22:30"},
- "Opéra Garnier":{time:"~14:30",dur:"1 h",price:"€15 (NOT on Pass)",hours:"10:00–17:00 (to 16:00 on show days)"},
- "Free rooftop view":{time:"~16:30",dur:"30 min",price:"free",hours:"stores ~10:00–20:00, shorter Sun"},
- "Brasserie near the Opéra or back on the Left Bank":{time:"~20:00",dur:"1.5 h",price:"€60–100 for two"},
- "Sacré-Cœur & Montmartre":{time:"~09:30 (early) or sunset",dur:"2 h",price:"basilica free; dome €8 (best 360° view, sunset)",hours:"basilica ~06:30–22:30; dome ~10:30–20:30"},
- "Bistro near Abbesses":{time:"~13:00",dur:"1 h",price:"€30–60 for two"},
- "Arc de Triomphe — rooftop":{time:"~15:30",dur:"45 min",price:"€16 (on Pass)",hours:"10:00–22:30 (last entry ~22:00)"},
- "Champs-Élysées walk":{time:"afternoon",dur:"45 min",price:"free"},
- "Seine cruise (optional)":{time:"~18:30",dur:"~1 h",price:"€17–20/person (NOT on Pass)",hours:"departures every 30–45 min"},
- "Final Left-Bank bistro":{time:"~20:00",dur:"1.5 h",price:"€60–100; bouillon ~€25–35 for two"},
- "Jardin du Luxembourg":{time:"morning",dur:"1 h",price:"free",hours:"~07:30–21:00 (summer)"},
- "Rue Madame (your Reel)":{time:"morning",dur:"20 min",price:"free"},
- "Last pastries — Rue Mouffetard":{time:"~11:30",dur:"30 min",price:"€"},
- "Taxi to CDG":{time:"13:30",dur:"~50 min",price:"~€65 fixed"}
+ "Musée d'Orsay":{time:"11:30 (timed)",dur:"2–2.5 h",price:"€16",hours:"09:30–18:00, closed Mon"},
+ "Tuileries → Orangerie":{time:"optional",dur:"1–1.5 h",price:"€14",hours:"09:00–18:00, closed Tue"},
+ "Saint-Germain-des-Prés":{time:"afternoon",dur:"1–2 h",price:"free"},
+ "Eiffel Tower summit":{time:"evening (timed)",dur:"2–2.5 h",price:"€36.70 pp",hours:"~09:30–23:45 (summer)"},
+ "Sparkle from Trocadéro / Champ de Mars":{time:"after dark",dur:"30 min",price:"free",hours:"on the hour, 5 min"},
+ "Dinner near the Eiffel":{time:"~20:00",dur:"1.5 h",price:"€60–100 for two"},
+ "Louvre":{time:"timed slot",dur:"~4 h",price:"€32",hours:"09:00–18:00, closed Tue"},
+ "Lunch near the Louvre":{time:"~12:30",dur:"1 h",price:"€30–50 for two"},
+ "Opéra Garnier":{time:"optional",dur:"1 h",price:"€15",hours:"10:00–17:00"},
+ "Sacré-Cœur & Montmartre":{time:"evening, sunset",dur:"2 h",price:"basilica free; dome ~€8",hours:"basilica ~06:30–22:30"},
+ "Dinner in Montmartre":{time:"~21:00",dur:"1.5 h",price:"€50–90 for two"},
+ "RER C to Versailles":{time:"morning",dur:"~40 min",price:"€4 each way (Zone 4)"},
+ "Gardens & Grand Canal":{time:"day",dur:"2–3 h",price:"gardens free / fountain days extra",hours:"08:00–20:30"},
+ "Lunch by the canal":{time:"~13:30",dur:"1 h",price:"€30–60 for two"},
+ "Palace of Versailles":{time:"timed slot",dur:"2–2.5 h",price:"Passport ~€35",hours:"09:00–18:30, closed Mon"},
+ "Dinner near base":{time:"~20:00",dur:"1.5 h",price:"€60–100 for two"},
+ "Panthéon (interior)":{time:"~10:00",dur:"45 min",price:"~€13",hours:"10:00–18:30"},
+ "Jardin du Luxembourg":{time:"~11:00",dur:"45 min",price:"free",hours:"~07:30–21:00 (summer)"},
+ "Last pastry — Rue Mouffetard":{time:"~12:00",dur:"30 min",price:"€"},
+ "Taxi to CDG":{time:"midday",dur:"~50 min",price:"~€65 flat rate"}
 };
 
 // ---------- RENDER ----------
@@ -452,13 +455,13 @@ DAYS.forEach((d,i)=>{
   const p=document.createElement("div");
   p.className="panel"+(i===0?" active":"");
   p.id="panel-"+d.id;
-  let h='<div class="dayhead"><h2>'+d.label+' '+d.date+' · '+d.title+'</h2><p>'+d.note+'</p>'
+  let h='<div class="dayhead"><h2>'+d.label+' · '+d.title+'</h2><p>'+d.note+'</p>'
        +'<div class="progress" id="prog-'+d.id+'"></div></div>';
   let legFlex="";
   if(FLEXPINS[d.id]) legFlex = '  ·  🟡 nearby: ' + FLEXPINS[d.id].map((f,k)=>String.fromCharCode(65+k)+". "+f.n).join(", ");
   h+='<div class="daymap" id="map-'+d.id+'"></div>';
   h+='<div class="leg">🗺️ Day route: '+legHtml+legFlex+'</div>';
-  h+='<a class="btn route" target="_blank" href="'+routeUrl+'">🧭 Open the whole day route in Google Maps</a>';
+  h+='<a class="btn route" target="_blank" href="'+routeUrl+'">🧭 Open the whole day in Google Maps</a>';
 
   d.items.forEach((it,j)=>{
     const key=d.id+"-"+j;
@@ -511,27 +514,12 @@ function buildMap(id){
     const letter=String.fromCharCode(65+i);
     let pop="<b>"+letter+". "+f.n+"</b><br><a target='_blank' href='"+mapUrl(f.q)+"'>📍 Map</a>";
     if(f.book) pop+=" · <a target='_blank' href='"+f.book.url+"'>🎟️ book</a>";
-    if(f.reel) pop+=" · <a target='_blank' href='"+f.reel+"'>📹 Reel</a>";
     L.marker(f.ll,{icon:L.divIcon({className:"flexic",html:"<span>"+letter+"</span>",iconSize:[24,24],iconAnchor:[12,12]})}).addTo(m).bindPopup(pop);
     coords.push(f.ll);
   });
-  m.fitBounds(L.latLngBounds(coords).pad(0.25));
+  addHotel(m); coords.push(baseLL()); addLocate(m);
+  m.fitBounds(L.latLngBounds(coords).pad(0.22));
   maps[id]=m;
-}
-
-let nightMap=null;
-function buildNightMap(){
-  const el=document.getElementById("nightmap");
-  if(!el || typeof L==="undefined" || nightMap) return;
-  const m=L.map(el,{scrollWheelZoom:false});
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
-  const coords=[];
-  NIGHT.forEach((n,i)=>{ if(!n.ll) return; coords.push(n.ll);
-    L.marker(n.ll,{icon:L.divIcon({className:"nightic",html:"<span>"+(i+1)+"</span>",iconSize:[26,26],iconAnchor:[13,13]})})
-      .addTo(m).bindPopup("<b>"+(i+1)+". "+n.n+"</b><br><a target='_blank' href='"+mapUrl(n.q)+"'>📍 Map</a>");
-  });
-  if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
-  nightMap=m;
 }
 
 function show(id,btn){
@@ -559,7 +547,6 @@ DAYS.forEach(d=>updateProg(d.id));
 document.getElementById("flexList").innerHTML=FLEX.map(f=>{
   let a='<a class="btn map" target="_blank" href="'+mapUrl(f.q)+'">📍 Map</a>';
   if(f.book)a+='<a class="btn book" target="_blank" href="'+f.book.url+'">🎟️ '+f.book.label+'</a>';
-  if(f.reel)a+='<a class="btn reel" target="_blank" href="'+f.reel+'">📹 Reel</a>';
   return '<div class="card" style="margin:8px 0"><div class="name">'+f.n+'</div><div class="desc">'+f.d+'</div><div class="actions">'+a+'</div></div>';
 }).join("");
 
@@ -569,84 +556,90 @@ document.getElementById("bookBar").innerHTML=QUICKBOOK.map(q=>
 
 // ---------- Dining / Bars / Night ----------
 const DINING=[
- {area:"Latin Quarter — by the hotel", places:[
-   {n:"Le Reminet",d:"Candlelit, local crowd",q:"Le Reminet, Paris"},
-   {n:"La Rôtisserie d'Argent",d:"Lyonnaise classics, Seine views",q:"La Rotisserie d'Argent, Paris"},
-   {n:"Le Perraudin",d:"Home cooking, welcoming",q:"Le Perraudin, Paris"},
-   {n:"Au Moulin à Vent",d:"Old-school bistro, no hype",q:"Au Moulin a Vent, Paris"},
-   {n:"La Mosquée de Paris — tea room",d:"Mint tea and baklava, atmospheric break",q:"La Grande Mosquee de Paris tea room"},
-   {n:"Les Pipos",d:"Wine bar-bistro by the Panthéon",q:"Les Pipos, Paris"}
+ {area:"⭐ Recommendations — you & friends (exempt from the 4.5★ filter · map: gold ★, our favourites: wine ★)", places:[
+   {n:"La Marine (Canal Saint-Martin, 10th)",rec:1,exc:1,d:"★ EXCELLENT — we loved it. Classic upscale bistro on the canal; best in the evening. Truffle lovers: the oeuf cocotte starter.",q:"La Marine, Quai de Valmy, Paris"},
+   {n:"Les Antiquaires (7th)",rec:1,exc:1,d:"★ EXCELLENT — we loved it. Left-Bank bistro, 13 Rue du Bac.",q:"Les Antiquaires, 13 Rue du Bac, Paris"},
+   {n:"MONBLEU Faubourg Montmartre (9th)",rec:1,exc:1,d:"★ EXCELLENT — we loved it. Outstanding cheese, just off the touristy Opéra area.",q:"MONBLEU Faubourg Montmartre, Paris"},
+   {n:"Au P'tit Grec (Rue Mouffetard market)",rec:1,d:"Friend's pick: savoury galettes (sweet ones too). Near base.",q:"Au P'tit Grec, Rue Mouffetard, Paris"},
+   {n:"Les Compères (Marais, near Place des Vosges)",rec:1,d:"Friend's pick: solid bistro — good with a Marais afternoon.",q:"Les Compères, Rue de Saintonge, Paris"},
+   {n:"Oscar's",rec:1,d:"We tried it — liked it (~4.3/5): great service, tasty, pricier.",q:"Oscar's restaurant Paris"},
+   {n:"Bouillon Chartier",rec:1,d:"Historic, cheap bouillon, Grands Boulevards.",q:"Bouillon Chartier Grands Boulevards, Paris"},
+   {n:"Bouillon Julien",rec:1,d:"Art-nouveau hall, cheap.",q:"Bouillon Julien, Paris"},
+   {n:"Hugo & Co (5th)",rec:1,d:"From friends: modern bistro on Rue Monge.",q:"Hugo & Co, 48 Rue Monge, Paris"},
+   {n:"Café de Varenne (7th)",rec:1,d:"From friends: 36 Rue de Varenne, near the Rodin museum.",q:"Café de Varenne, 36 Rue de Varenne, Paris"},
+   {n:"Le Bizétro (16th, near the Eiffel)",rec:1,d:"From friends: 6 Rue Georges Bizet.",q:"Le Bizétro, 6 Rue Georges Bizet, Paris"},
+   {n:"Pierre Hermé (pâtisserie)",rec:1,d:"From friends: top macarons and pastries; 72 Rue Bonaparte.",q:"Pierre Hermé, 72 Rue Bonaparte, Paris"}
  ]},
- {area:"Saint-Germain (6th)", places:[
-   {n:"Chez Fernand",d:"Local, under the radar",q:"Chez Fernand Saint-Germain Paris"},
-   {n:"Allard",d:"Classic since 1932 (cassoulet, coq au vin)",q:"Allard restaurant Paris"},
-   {n:"Bouillon Racine",d:"Art Nouveau, cheap",q:"Bouillon Racine, Paris"}
- ]},
- {area:"Marais (3rd–4th)", places:[
-   {n:"Bistrot des Tournelles",d:"Tradition + careful plating",q:"Bistrot des Tournelles, Paris"},
-   {n:"Parcelles",d:"Modern classics, wine list",q:"Parcelles restaurant, Paris"},
-   {n:"Breizh Café",d:"Famous Breton crêpes & galettes",q:"Breizh Café Marais, Paris"},
-   {n:"Marché des Enfants Rouges",d:"Covered market — lunch for every taste",q:"Marché des Enfants Rouges, Paris"}
- ]},
- {area:"Near the Eiffel Tower (7th)", places:[
-   {n:"La Fontaine de Mars",d:"Classic, a sliver of the tower from the terrace",q:"La Fontaine de Mars, Paris"},
-   {n:"Le Petit Cler",d:"Local on Rue Cler market street",q:"Le Petit Cler, Paris"},
-   {n:"Le Florimond",d:"Cosy, 10 min from the tower",q:"Le Florimond, Paris"}
- ]},
- {area:"Opéra / grand boulevards", places:[
-   {n:"Bouillon Chartier",d:"Historic cheap bouillon (your Reel)",q:"Bouillon Chartier Grands Boulevards, Paris"},
-   {n:"Bouillon Julien",d:"Art Nouveau, cheap (your Reel)",q:"Bouillon Julien, Paris"},
-   {n:"Le Bon Georges",d:"Beloved 9th bistro, market produce",q:"Le Bon Georges, Paris"}
- ]},
- {area:"✨ Special / splurge dinners (€100+ — recommended to you)", places:[
-   {n:"Pertinence (7th, near Eiffel)",d:"Fine dining, 4.8★ — pairs with the Day 3 Eiffel evening. Reserve.",q:"Pertinence restaurant, Paris"},
-   {n:"La Truffière (5th, by the hotel)",d:"Refined French in a stone-vaulted cellar, 4.5★. Reserve.",q:"La Truffière, Paris"},
-   {n:"Le Christine (6th, Saint-Germain)",d:"Creative French + tasting menus, 4.6★. Reserve.",q:"Le Christine, Paris"}
+ {area:"✅ My picks — Google 4.5★+ only (map: green dots)", places:[
+   {n:"Au Moulin à Vent (5th) · 4.7★",d:"Old-school bistro, no hype.",q:"Au Moulin a Vent, Paris"},
+   {n:"Le Perraudin (5th, Latin Quarter) · 4.6★",d:"Home cooking, warm welcome.",q:"Le Perraudin, Paris"},
+   {n:"Les Pipos (5th, by the Panthéon) · 4.6★",d:"Wine bar-bistro.",q:"Les Pipos, Paris"},
+   {n:"Chez Fernand (6th, Saint-Germain) · 4.5★",d:"Local classic, under the tourist radar.",q:"Chez Fernand Saint-Germain Paris"},
+   {n:"Bistrot des Tournelles (4th, Marais) · 4.6★",d:"Tradition, careful cooking — good with a Marais day.",q:"Bistrot des Tournelles, Paris"},
+   {n:"Le Florimond (7th, near the Eiffel) · 4.6★",d:"Cosy, 10 min from the tower.",q:"Le Florimond, Paris"},
+   {n:"Pertinence (7th) · 4.8★ · splurge €100+",d:"Fine dining, book ahead.",q:"Pertinence restaurant, Paris"},
+   {n:"Le Christine (6th) · 4.6★ · splurge",d:"Creative cooking and tasting menus, book ahead.",q:"Le Christine, Paris"},
+   {n:"La Truffière (5th) · 4.5★ · splurge",d:"Refined cooking in a stone cellar, book ahead.",q:"La Truffière, Paris"}
  ]}
 ];
 const BARS=[
- {n:"Little Red Door",d:"Marais, 60 Rue Charlot — behind the 'red door'; on the world's-best list. Book.",q:"Little Red Door bar, Rue Charlot, Paris"},
- {n:"Moonshiner",d:"Behind a freezer door in Da Vito pizzeria (Bastille); whisky and 1920s cocktails.",q:"Moonshiner bar, Rue Sedaine, Paris"},
- {n:"Candelaria",d:"Behind a taqueria in the Marais — a hidden cocktail bar.",q:"Candelaria bar, Rue de Saintonge, Paris"},
- {n:"Lavomatic",d:"Entrance through a self-service laundromat (10th).",q:"Lavomatic bar, Paris"},
- {n:"Le Syndicat",d:"French spirits only, unmarked facade (10th).",q:"Le Syndicat bar, Paris"},
- {n:"Castor Club",d:"Saint-Germain — tiny basement cocktail bar, near you.",q:"Castor Club, Paris"},
+ {n:"Little Red Door",d:"Marais, 60 Rue Charlot — behind the 'red door'; on the world's-best lists. Book.",q:"Little Red Door bar, Rue Charlot, Paris"},
+ {n:"Moonshiner",d:"Behind the walk-in freezer of Da Vito pizzeria (Bastille); 1920s whisky & cocktails.",q:"Moonshiner bar, Rue Sedaine, Paris"},
+ {n:"Candelaria",d:"Behind a Marais taqueria — a hidden cocktail bar.",q:"Candelaria bar, Rue de Saintonge, Paris"},
+ {n:"Lavomatic",d:"Entrance through… a launderette (10th).",q:"Lavomatic bar, Paris"},
+ {n:"Le Syndicat",d:"French spirits only, unmarked façade (10th).",q:"Le Syndicat bar, Paris"},
+ {n:"Castor Club",d:"Saint-Germain — tiny basement cocktail bar.",q:"Castor Club, Paris"},
  {n:"Prescription Cocktail Club",d:"Saint-Germain, stylish and lively.",q:"Prescription Cocktail Club, Paris"},
- {n:"Combat",d:"Belleville — craft cocktails, female-led.",q:"Combat bar, Belleville, Paris"},
- {n:"Le Caveau de la Huchette",d:"Latin Quarter, near the hotel — historic jazz club with dancing.",q:"Le Caveau de la Huchette, Paris"}
+ {n:"Combat",d:"Belleville — inventive cocktails, female-led team.",q:"Combat bar, Belleville, Paris"},
+ {n:"Le Caveau de la Huchette",d:"Latin Quarter — historic jazz club with dancing.",q:"Le Caveau de la Huchette, Paris"}
 ];
 const NIGHT=[
- {n:"Eiffel Tower sparkle",d:"From Champ de Mars or Trocadéro — 5 minutes at the top of each hour until 01:00.",q:"Champ de Mars, Paris",ll:[48.8556,2.2986]},
- {n:"Night walk / Seine cruise",d:"Lit-up monuments; the quays by Notre-Dame are especially lovely.",q:"Pont Neuf, Paris",ll:[48.8570,2.3410]},
- {n:"Jazz at Le Caveau de la Huchette",d:"Live jazz and dancing in a medieval cellar, 5 min from the hotel.",q:"Le Caveau de la Huchette, Paris",ll:[48.8530,2.3458]},
- {n:"Late museum evenings",d:"Louvre — Fri to 21:45, Orsay — Thu to 21:45: quiet and atmospheric.",q:"Louvre Museum, Paris",ll:[48.8606,2.3376]},
- {n:"Montmartre / Sacré-Cœur at night",d:"View over the lit-up city from the basilica steps.",q:"Sacré-Cœur, Paris",ll:[48.8867,2.3431]},
- {n:"Lit passages & Palais-Royal",d:"A quiet evening stroll through covered galleries and arcades.",q:"Galerie Vivienne, Paris",ll:[48.8667,2.3403]},
- {n:"Your hotel's rum bar",d:"Hôtel Monte Cristo — cocktail bar downstairs, a calm end to the day.",q:"Hôtel Monte Cristo, Rue Pascal, Paris",ll:[48.8385,2.3490]}
+ {n:"Eiffel Tower sparkle",d:"From Champ de Mars or Trocadéro — 5 min on the hour until 01:00.",q:"Champ de Mars, Paris",ll:[48.8556,2.2986]},
+ {n:"Night walk / Seine cruise",d:"Floodlit monuments; the quays by Notre-Dame are especially good.",q:"Pont Neuf, Paris",ll:[48.8570,2.3410]},
+ {n:"Jazz at Le Caveau de la Huchette",d:"Live jazz and dancing in a medieval cellar.",q:"Le Caveau de la Huchette, Paris",ll:[48.8530,2.3458]},
+ {n:"Museum late nights",d:"Louvre — Fri to 21:45; Orsay — Thu to 21:45: quiet and atmospheric.",q:"Louvre Museum, Paris",ll:[48.8606,2.3376]},
+ {n:"Montmartre / Sacré-Cœur at night",d:"The lit city from the basilica steps.",q:"Sacré-Cœur, Paris",ll:[48.8867,2.3431]},
+ {n:"Lit passages & Palais-Royal",d:"A quiet evening stroll through the covered galleries and arcades.",q:"Galerie Vivienne, Paris",ll:[48.8667,2.3403]},
+ {n:"A nightcap near your base",d:"The Latin Quarter has cosy late bars a short walk from most 5th-arr. hotels.",q:"Latin Quarter bars, Paris",ll:[48.8470,2.3460]}
 ];
 document.getElementById("diningList").innerHTML=DINING.map(g=>
   '<div class="card" style="margin:9px 0"><div class="name" style="font-size:.92rem;color:var(--navy)">'+g.area+'</div>'+
-  g.places.map(p=>'<div class="opt"><div><div class="on">'+p.n+'</div><div class="od">'+p.d+'</div></div><a target="_blank" href="'+mapUrl(p.q)+'">📍 Map</a></div>').join("")+
+  g.places.map(p=>'<div class="opt"><div><div class="on">'+(p.exc?"★ ":"")+p.n+'</div><div class="od">'+p.d+'</div></div><a target="_blank" href="'+mapUrl(p.q)+'">📍 Map</a></div>').join("")+
   '</div>').join("");
 document.getElementById("barsList").innerHTML='<div class="card" style="margin:9px 0">'+BARS.map(b=>
   '<div class="opt"><div><div class="on">'+b.n+'</div><div class="od">'+b.d+'</div></div><a target="_blank" href="'+mapUrl(b.q)+'">📍 Map</a></div>').join("")+'</div>';
 document.getElementById("nightList").innerHTML=NIGHT.map((n,i)=>
   '<div class="tip"><div class="ic">'+(i+1)+'</div><div><strong>'+n.n+'</strong> — '+n.d+' · <a target="_blank" href="'+mapUrl(n.q)+'">📍 map</a></div></div>').join("");
 
+let nightMap=null;
+function buildNightMap(){
+  const el=document.getElementById("nightmap");
+  if(!el || typeof L==="undefined" || nightMap) return;
+  const m=L.map(el,{scrollWheelZoom:false});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
+  const coords=[];
+  NIGHT.forEach((n,i)=>{ if(!n.ll) return; coords.push(n.ll);
+    L.marker(n.ll,{icon:L.divIcon({className:"nightic",html:"<span>"+(i+1)+"</span>",iconSize:[26,26],iconAnchor:[13,13]})})
+      .addTo(m).bindPopup("<b>"+(i+1)+". "+n.n+"</b><br><a target='_blank' href='"+mapUrl(n.q)+"'>📍 Map</a>");
+  });
+  addHotel(m); coords.push(baseLL()); addLocate(m);
+  if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
+  nightMap=m;
+}
+
 // ---------- Food & bars overview maps ----------
 const PLACECOORDS={
- "Le Reminet, Paris":[48.8516,2.3492],"La Rotisserie d'Argent, Paris":[48.8503,2.3547],"Le Perraudin, Paris":[48.8468,2.3432],
- "Au Moulin a Vent, Paris":[48.8478,2.3548],"La Grande Mosquee de Paris tea room":[48.8420,2.3553],"Les Pipos, Paris":[48.8476,2.3470],
- "Chez Fernand Saint-Germain Paris":[48.8527,2.3349],"Allard restaurant Paris":[48.8537,2.3398],"Bouillon Racine, Paris":[48.8509,2.3417],
- "Bistrot des Tournelles, Paris":[48.8546,2.3660],"Parcelles restaurant, Paris":[48.8634,2.3596],"Breizh Café Marais, Paris":[48.8602,2.3637],
- "Marché des Enfants Rouges, Paris":[48.8628,2.3625],"La Fontaine de Mars, Paris":[48.8585,2.3011],"Le Petit Cler, Paris":[48.8567,2.3030],
- "Le Florimond, Paris":[48.8558,2.3036],"Bouillon Chartier Grands Boulevards, Paris":[48.8718,2.3428],"Bouillon Julien, Paris":[48.8703,2.3541],
- "Le Bon Georges, Paris":[48.8773,2.3367],
+ "Le Perraudin, Paris":[48.8468,2.3432],"Au Moulin a Vent, Paris":[48.8478,2.3548],"Les Pipos, Paris":[48.8476,2.3470],
+ "Chez Fernand Saint-Germain Paris":[48.8527,2.3349],"Bistrot des Tournelles, Paris":[48.8546,2.3660],"Le Florimond, Paris":[48.8558,2.3036],
+ "Bouillon Chartier Grands Boulevards, Paris":[48.8718,2.3428],"Bouillon Julien, Paris":[48.8703,2.3541],
  "Little Red Door bar, Rue Charlot, Paris":[48.8626,2.3658],"Moonshiner bar, Rue Sedaine, Paris":[48.8555,2.3722],"Candelaria bar, Rue de Saintonge, Paris":[48.8635,2.3645],
  "Lavomatic bar, Paris":[48.8689,2.3622],"Le Syndicat bar, Paris":[48.8705,2.3535],"Castor Club, Paris":[48.8519,2.3431],
  "Prescription Cocktail Club, Paris":[48.8540,2.3389],"Combat bar, Belleville, Paris":[48.8721,2.3790],"Le Caveau de la Huchette, Paris":[48.8530,2.3458],
  "La Truffière, Paris":[48.8445,2.3489],"Pertinence restaurant, Paris":[48.8571,2.3035],"Le Christine, Paris":[48.8543,2.3402],
- "Fondation Louis Vuitton, Paris":[48.8766,2.2633],"Bois de Boulogne, Paris":[48.8620,2.2520]
+ "Fondation Louis Vuitton, Paris":[48.8766,2.2633],"Bois de Boulogne, Paris":[48.8620,2.2520],
+ "Les Antiquaires, 13 Rue du Bac, Paris":[48.8585,2.3270],"Café de Varenne, 36 Rue de Varenne, Paris":[48.8548,2.3216],"Le Bizétro, 6 Rue Georges Bizet, Paris":[48.8668,2.2967],
+ "Hugo & Co, 48 Rue Monge, Paris":[48.8447,2.3517],"Pierre Hermé, 72 Rue Bonaparte, Paris":[48.8530,2.3340],
+ "Au P'tit Grec, Rue Mouffetard, Paris":[48.8428,2.3496],"Les Compères, Rue de Saintonge, Paris":[48.8556,2.3716],"MONBLEU Faubourg Montmartre, Paris":[48.8741,2.3421],"La Marine, Quai de Valmy, Paris":[48.8706,2.3654]
 };
 function buildPointsMap(elId,items,cls){
   const el=document.getElementById(elId);
@@ -655,10 +648,43 @@ function buildPointsMap(elId,items,cls){
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
   const coords=[];
   items.forEach(it=>{const c=PLACECOORDS[it.q]; if(!c) return; coords.push(c);
-    L.marker(c,{icon:L.divIcon({className:"dotic "+cls,html:"<span></span>",iconSize:[14,14],iconAnchor:[7,7]})}).addTo(m).bindPopup("<b>"+it.n+"</b><br><a target='_blank' href='"+mapUrl(it.q)+"'>📍 Map</a>");
+    const icon = it.exc
+      ? L.divIcon({className:"excic",html:"<span>★</span>",iconSize:[26,26],iconAnchor:[13,13]})
+      : it.rec
+      ? L.divIcon({className:"flexic",html:"<span>★</span>",iconSize:[24,24],iconAnchor:[12,12]})
+      : L.divIcon({className:"dotic "+cls,html:"<span></span>",iconSize:[14,14],iconAnchor:[7,7]});
+    L.marker(c,{icon}).addTo(m).bindPopup("<b>"+(it.exc?"★ Excellent — ":(it.rec?"⭐ ":""))+it.n+"</b><br><a target='_blank' href='"+mapUrl(it.q)+"'>📍 Map</a>");
   });
+  addHotel(m); coords.push(baseLL()); addLocate(m);
   if(coords.length) m.fitBounds(L.latLngBounds(coords).pad(0.2));
 }
+
+// ---------- Global search (everything) ----------
+function buildSearchIndex(){
+  const idx=[];
+  DAYS.forEach(d=>d.items.forEach(it=>{
+    idx.push({n:it.name,sub:d.label+" · "+d.title,q:it.q});
+    if(it.options) it.options.forEach(o=>idx.push({n:o.n,sub:"option · "+it.name,q:o.q}));
+  }));
+  DINING.forEach(g=>g.places.forEach(p=>idx.push({n:p.n,sub:p.exc?"Dining · ★ excellent":(p.rec?"Dining · recommended":"Dining · 4.5★+"),q:p.q})));
+  BARS.forEach(b=>idx.push({n:b.n,sub:"Cocktail bar",q:b.q}));
+  NIGHT.forEach(n=>idx.push({n:n.n,sub:"Night",q:n.q}));
+  FLEX.forEach(f=>idx.push({n:f.n,sub:"Backup / extra",q:f.q}));
+  return idx;
+}
+const SEARCH_INDEX=buildSearchIndex();
+function runSearch(){
+  const v=document.getElementById("searchBox").value.trim().toLowerCase();
+  const out=document.getElementById("searchResults");
+  if(!v){out.style.display="none";out.innerHTML="";return;}
+  const hits=SEARCH_INDEX.filter(x=>(x.n+" "+x.sub).toLowerCase().includes(v)).slice(0,30);
+  out.style.display="block";
+  out.innerHTML = hits.length
+    ? hits.map(x=>'<div class="opt"><div><div class="on">'+x.n+'</div><div class="od">'+x.sub+'</div></div><a target="_blank" href="'+mapUrl(x.q)+'">📍 Map</a></div>').join("")
+    : '<div class="od" style="padding:8px">No matches.</div>';
+}
+document.getElementById("searchBox").addEventListener("input",runSearch);
+renderBaseBar();
 
 // build maps once Leaflet is ready
 window.addEventListener("load",()=>{ buildMap(DAYS[0].id); buildNightMap(); buildPointsMap("diningmap",DINING.flatMap(g=>g.places),"food"); buildPointsMap("barsmap",BARS,"bar"); });
