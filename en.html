@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paris — Dima &amp; Natalia · 6-day couple's template</title>
+<title>Paris — a 6-day couple's itinerary template</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
@@ -122,12 +122,12 @@
 </head>
 <body>
 <header class="hero">
-  <h1>Paris — Dima &amp; Natalia</h1>
-  <div class="sub">A 6-day couple's itinerary · a reusable template · set your own hotel below (defaults to the Latin Quarter, 5th)</div>
+  <h1>Paris — a 6-day couple's itinerary</h1>
+  <div class="sub">A reusable template · set your own hotel and trip dates below (base defaults to the Latin Quarter, 5th)</div>
   <div class="meta">
-    <span>☀️ Early June: ~21°C days, ~13°C evenings</span>
-    <span>🌇 Sunset ~21:53 (June)</span>
-    <span>🗺️ Set your base for accurate maps</span>
+    <span>🗓️ Set your trip dates below</span>
+    <span>🏨 Set your base for accurate maps</span>
+    <span>📍 "My location" on every map</span>
     <span>♻️ Reusable — clone for any trip</span>
   </div>
 </header>
@@ -136,6 +136,7 @@
 
 <div class="wrap">
   <div class="basebar leg" style="margin:12px 0 0" id="baseBar"></div>
+  <div class="basebar leg" style="margin:6px 0 0" id="dateBar"></div>
   <input id="searchBox" class="searchbox" placeholder="🔎 Search everything — sights, food, bars…" autocomplete="off">
   <div id="searchResults" class="card" style="display:none;margin:0 0 8px"></div>
 
@@ -209,7 +210,7 @@
   </section>
 
   <div class="footer">
-    Built as a reusable Paris template · prices and hours are estimates — check official sites before paying.<br>
+    Built as a reusable Paris template · created by Disos · prices and hours are estimates — check official sites before paying.<br>
     <button class="reset" onclick="if(confirm('Reset all check-marks?')){localStorage.removeItem(LSKEY);location.reload();}">Reset progress</button>
   </div>
 </div>
@@ -219,6 +220,35 @@ const LSKEY = "paris_template_progress";
 const done = JSON.parse(localStorage.getItem(LSKEY) || "{}");
 function mapUrl(q){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
 function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
+
+// ---------- Configurable trip dates / month ----------
+const DKEY="paris_template_start";
+let START = localStorage.getItem(DKEY) || ""; // "YYYY-MM-DD" or ""
+const WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MO=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function dayDateObj(i){ const d=new Date(START+"T00:00:00"); d.setDate(d.getDate()+i); return d; }
+function dayDate(i){ if(!START) return ""; const d=dayDateObj(i); return WD[d.getDay()]+" "+d.getDate()+" "+MO[d.getMonth()]; }
+function dayDOW(i){ if(!START) return -1; return dayDateObj(i).getDay(); }
+function clearStart(){ START=""; localStorage.removeItem(DKEY); location.reload(); }
+function renderDateBar(){
+  const el=document.getElementById("dateBar"); if(!el) return;
+  el.innerHTML="📅 <b>Trip dates:</b> <input type='date' id='startDate' value='"+START+"' style='font-size:.8rem;padding:3px 6px;border:1px solid var(--line);border-radius:7px'> "
+    +(START?"<button onclick='clearStart()'>Clear</button>":"<span style='color:var(--muted)'>set a start date to show day-by-day dates &amp; closure warnings</span>")
+    +"<div id='closureWarn' style='width:100%;margin-top:5px;font-weight:600'></div>";
+  document.getElementById("startDate").addEventListener("change",function(){ const v=this.value; if(v){localStorage.setItem(DKEY,v);}else{localStorage.removeItem(DKEY);} location.reload(); });
+  checkClosures();
+}
+function checkClosures(){
+  const w=document.getElementById("closureWarn"); if(!w) return;
+  if(!START){w.textContent="";return;}
+  const msgs=[];
+  if(dayDOW(2)===1) msgs.push("Day 3 is a Monday — Orsay is closed. Move it to another day.");
+  if(dayDOW(2)===2) msgs.push("Day 3 is a Tuesday — the Orangerie (optional) is closed.");
+  if(dayDOW(3)===2) msgs.push("Day 4 is a Tuesday — the Louvre is closed. Move it off Tuesday.");
+  if(dayDOW(4)===1) msgs.push("Day 5 is a Monday — Versailles is closed. Move it off Monday.");
+  if(msgs.length){ w.innerHTML="⚠️ "+msgs.join("<br>⚠️ "); w.style.color="#9a2b2b"; }
+  else{ w.innerHTML="✓ No museum-closure clashes on these dates."; w.style.color="var(--green)"; }
+}
 
 // ---------- Configurable home base (not pre-defined) ----------
 const HKEY="paris_template_base";
@@ -321,7 +351,7 @@ const DAYS = [
    {slot:"Afternoon", name:"Saint-Germain-des-Prés", q:"Saint-Germain-des-Pres, Paris", ll:[48.8540,2.3340],
     desc:"An unhurried Left Bank: Les Deux Magots / Café de Flore, the church, the riverside booksellers. Lunch nearby: Chez Fernand (4.5★).", badges:["🚶 walk"]},
    {slot:"Evening (timed)", name:"Eiffel Tower summit", q:"Eiffel Tower, Paris", ll:[48.8584,2.2945], book:{label:"Eiffel — book ahead",url:"https://www.toureiffel.paris/en"},
-    desc:"Book the summit on the official site (sells out, especially weekends). A late slot catches golden light — sunset is ~21:53 in June. Bring a layer.", badges:["⏰ timed slot","⭐ book early"]},
+    desc:"Book the summit on the official site (sells out, especially weekends). A late slot catches golden light — check the sunset time for your month. Bring a layer.", badges:["⏰ timed slot","⭐ book early"]},
    {slot:"After dark", name:"Sparkle from Trocadéro / Champ de Mars", q:"Trocadéro, Paris", ll:[48.8617,2.2885],
     desc:"The tower sparkles for 5 minutes on the hour after dark. Best shot from Trocadéro or Champ de Mars below.", badges:["✨ on the hour"]},
    {slot:"Dinner", name:"Dinner near the Eiffel", q:"Rue Cler restaurants, Paris", ll:[48.8556,2.3045],
@@ -443,7 +473,7 @@ const app = document.getElementById("app");
 
 DAYS.forEach((d,i)=>{
   const b=document.createElement("button");
-  b.innerHTML = d.label+"<small>"+d.date+"</small>";
+  b.innerHTML = d.label+"<small>"+(START?dayDate(i):d.date)+"</small>";
   b.onclick=()=>show(d.id,b);
   if(i===0) b.classList.add("active");
   nav.appendChild(b);
@@ -455,7 +485,7 @@ DAYS.forEach((d,i)=>{
   const p=document.createElement("div");
   p.className="panel"+(i===0?" active":"");
   p.id="panel-"+d.id;
-  let h='<div class="dayhead"><h2>'+d.label+' · '+d.title+'</h2><p>'+d.note+'</p>'
+  let h='<div class="dayhead"><h2>'+d.label+(START?' · '+dayDate(i):'')+' · '+d.title+'</h2><p>'+d.note+'</p>'
        +'<div class="progress" id="prog-'+d.id+'"></div></div>';
   let legFlex="";
   if(FLEXPINS[d.id]) legFlex = '  ·  🟡 nearby: ' + FLEXPINS[d.id].map((f,k)=>String.fromCharCode(65+k)+". "+f.n).join(", ");
@@ -684,7 +714,7 @@ function runSearch(){
     : '<div class="od" style="padding:8px">No matches.</div>';
 }
 document.getElementById("searchBox").addEventListener("input",runSearch);
-renderBaseBar();
+renderBaseBar(); renderDateBar();
 
 // build maps once Leaflet is ready
 window.addEventListener("load",()=>{ buildMap(DAYS[0].id); buildNightMap(); buildPointsMap("diningmap",DINING.flatMap(g=>g.places),"food"); buildPointsMap("barsmap",BARS,"bar"); });
